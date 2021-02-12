@@ -1,0 +1,175 @@
+<!-- jQuery -->
+<script src="/admin/plugins/jquery/jquery.min.js"></script>
+<!-- Bootstrap -->
+<script src="/admin/plugins/bootstrap/js/bootstrap.bundle.min.js"></script>
+<!-- jquery-validation -->
+<script src="/admin/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/admin/plugins/jquery-validation/additional-methods.min.js"></script>
+<!-- Select2 -->
+<script src="/admin/plugins/select2/js/select2.full.min.js"></script>
+<!-- overlayScrollbars -->
+<script src="/admin/plugins/overlayScrollbars/js/jquery.overlayScrollbars.min.js"></script>
+<script src="/admin/plugins/bs-custom-file-input/bs-custom-file-input.min.js"></script>
+<script src="/admin/plugins/moment/moment.min.js"></script>
+<script src="/admin/plugins/inputmask/min/jquery.inputmask.bundle.min.js"></script>
+<!-- date-range-picker -->
+<script src="/admin/plugins/daterangepicker/daterangepicker.js"></script>
+<!-- AdminLTE App -->
+<script src="/admin/dist/js/adminlte.js"></script>
+
+<!-- DataTables -->
+<script src="/admin/plugins/datatables/jquery.dataTables.min.js"></script>
+<script src="/admin/plugins/datatables-bs4/js/dataTables.bootstrap4.min.js"></script>
+<script src="/admin/plugins/datatables-responsive/js/dataTables.responsive.min.js"></script>
+<script src="/admin/plugins/datatables-responsive/js/responsive.bootstrap4.min.js"></script>
+
+<!-- Toastr -->
+<script src="/admin/plugins/notify.js"></script>
+<script type="text/javascript">
+    if(typeof $('.flash-msg').html() != 'undefined'){
+        var flash = JSON.parse($('.flash-msg').html());
+        $.notify(flash.message, { className:flash.type, position:"bottom right" });
+    }
+
+    //Initialize Select2 Elements
+    $('.select2').select2()
+
+    $(document).on("click", ".deleteEntry", function (e) {
+        e.preventDefault();
+
+        var txt;
+        var r = confirm("Are you sure ?");
+        if (r == true) {
+
+        } else {
+            return false;
+        }
+
+        var thisObj = $(this);
+        var statusUpdated = $(this).attr('statusUpdated');
+        console.log('statusUpdated');
+        console.log(statusUpdated);
+        $.ajax({
+            url: $(thisObj).attr('action'),
+            data: {statusUpdated: statusUpdated, allowChk: true},
+            //contentType: false,
+            //processData: false,
+            method: "POST",
+            cache: false,
+            success: function (response) {
+                if (response.status) {
+                    window.location.href = response.url;
+                } else {
+                    bootstrapNotify.showMessage(response.message);
+                }
+            }, error: function (resData) {
+                $.each(resData.responseJSON.data, function (key, val) {
+                    bootstrapNotify.showMessageOnField(val.message, val.path);
+                });
+            }
+        });
+    });
+
+    $(document).on("change", "#stateId", function () {
+        // e.preventDefault();
+
+        let thisObj = $(this);
+        let id = thisObj.val();
+        console.log('statusUpdated');
+        $.ajax({
+            url: "/admin/cities/citiesById",
+            data: {id: id},
+            //contentType: false,
+            //processData: false,
+            method: "POST",
+            cache: false,
+            success: function (response) {
+                let optionsHtml = "<option value=''>Select City</option>";
+                response.map(function(data){
+                    optionsHtml += "<option value='"+data.id+"'>"+data.name+"</option>"
+                });
+                $("#cityId").html(optionsHtml);
+            }, error: function (resData) {
+                console.log(resData);
+                // $.each(resData.responseJSON.data, function (key, val) {
+                //     // bootstrapNotify.showMessageOnField(val.message, val.path);
+                // });
+            }
+        });
+    });
+    
+    $(document).on("change", ".selectItem", function () {
+
+        let thisObj = $(this);
+        let id = thisObj.val();
+        let indexValue = thisObj.attr('indexValue');
+        $.ajax({
+            url: "/admin/items/subItemById",
+            data: {id},
+            //contentType: false,
+            //processData: false,
+            method: "POST",
+            cache: false,
+            success: function (response) {
+                let optionsHtml = "<option value=''>Select Sub Item</option>";
+                response.map(function(data){
+                    optionsHtml += "<option value='"+data.id+"'>"+data.name+"</option>"
+                });
+                console.log('@@',optionsHtml, "selectSubItem_"+indexValue)
+                $(".selectSubItem_"+indexValue).html(optionsHtml);
+            }, error: function (resData) {
+                console.log(resData);
+                // $.each(resData.responseJSON.data, function (key, val) {
+                //     // bootstrapNotify.showMessageOnField(val.message, val.path);
+                // });
+            }
+        });
+    });
+
+    function setDimentionForImage(thisObj, imgContainerId){
+        // var file = $('#featured_image').prop("files")[0];
+        var file = thisObj.files[0];
+        var $featured_image = $(thisObj);
+        var $imgContainer = $('#'+imgContainerId);
+        $imgContainer.hide().empty();
+
+        if (file && file.type.match(/image\/.*/)) {
+            var reader = new FileReader();
+
+            reader.onload = function() {
+                var $img = $('<img />').attr({ src: reader.result });
+
+                $img.on('load', function() {
+                    $imgContainer.append($img).show();
+                    var imageWidth = $img.width();
+                    var imageHeight = $img.height();
+                    $img.css({ width: '10%'});
+                    $imgContainer.css({ 'max-height': '150px', 'overflow-y': 'auto'});
+
+                    $featured_image.data('imageWidth', imageWidth);
+                    $featured_image.data('imageHeight', imageHeight);
+                });
+            }
+
+            reader.readAsDataURL(file);
+        } else {
+            $featured_image.removeData('imageWidth');
+            $featured_image.removeData('imageHeight');
+        }
+    }
+    
+    $.validator.addMethod('minImageWidthHeight', function(value, element, minWidthHeight) {
+        if(!value){
+            return true;
+        }
+        return ($(element).data('imageWidth') == minWidthHeight[0] && $(element).data('imageHeight') == minWidthHeight[1]);
+    }, function(minWidth, element, minWidthHeight) {
+        if($(element).data('imageWidth') && $(element).data('imageHeight')){
+            return "Image's dimention must be " + minWidth[0] + 'px * ' + minWidth[1] + "px";
+        } else {
+            return "Only image files are allowed!";
+        }        
+    });
+    
+
+</script>

@@ -1,0 +1,11 @@
+.error-message {
+  width: 100%;
+  margin-top: 0.25rem;
+  font-size: 80%;
+  color: #dc3545;
+}
+.gridTable {
+  max-height: 155px;
+  overflow-y: auto;
+  overflow-x: hidden;
+}

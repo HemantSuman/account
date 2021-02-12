@@ -1,0 +1,15 @@
+<div class="content_bottom">
+  <div class="col-lg-8 col-md-8">
+    <div class="content_bottom_left">
+      <div class="single_page_area">
+        <h2 class="post_titile"><%= extraVar.results.posts.title.replace(/(<([^>]+)>)/gi, ""); %> </h2>
+        <div class="single_page_content">
+          <div class="post_commentbox"> <a href="#"><i class="fa fa-user"></i>Wpfreeware</a> <span><i class="fa fa-calendar"></i>6:49 AM</span> <a href="#"><i class="fa fa-tags"></i>Technology</a> </div>
+          <img class="img-center" src="../images/550x330x3.jpg" alt="">
+          <p><%= extraVar.results.posts.description.replace(/(<([^>]+)>)/gi, ""); %></p>          
+        </div>
+      </div>
+    </div>    
+  </div>
+  <% include elements/sideBar.ejs %>
+</div>

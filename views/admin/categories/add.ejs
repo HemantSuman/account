@@ -1,0 +1,119 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Add <%=extraVar['modelName']%></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        
+        <div class="card card-primary">
+          
+          <!-- <div class="card-header">
+            <h3 class="card-title">Add <%=extraVar['modelName']%></h3>
+          </div> -->
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" id="formId" action="/admin/categories/add">
+            <div class="card-body">
+              <div class="form-group">
+                <label for="exampleInputEmail1">Category Name</label>
+                <input name="name" type="text" class="form-control" id="exampleInputEmail1" placeholder="">
+                <div class="name-error-message error-message"></div>
+              </div>
+              <!-- <div class="form-check">
+                <input name="status" type="checkbox" checked class="form-check-input" id="">
+                <label class="form-check-label" for="exampleCheck1">Check me out</label>
+              </div> -->
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+
+<script type="text/javascript">
+  $(document).ready(function() {
+    // $.notify(data.message, { className:"success",position:"bottom right" });
+    var formId = 'formId';
+    $(document).on('click', '.submitBtn', function(){
+      $('.error-message').html('');
+      $('#'+formId).validate({
+        rules: {
+          name: {
+            // required: true,
+          }
+        },
+        messages: {
+          name: {
+            required: "This field is required!",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+
+          var form = $('#'+formId);
+          errorFieldObj = [];
+          $.ajax({
+            url: $('#'+formId).attr('action'),
+            type: 'POST',
+            dataType: "json",
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status)
+            {
+              if (data.status) {
+                window.location.href = data.url;
+              }
+            },
+            error: function (xhr, desc, err)
+            {
+              xhr.responseJSON.data.map(function(val){
+                console.log(val)
+                if(!errorFieldObj.includes(val.path)){
+                  
+                  $('.'+val.path+'-error-message').html(val.message)
+                  errorFieldObj.push(val.path)
+                }
+              })
+
+            }
+          })
+        }
+      });
+    });
+  });
+</script>

@@ -1,0 +1,226 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Edit <%=extraVar['modelName']%></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-left">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard v2</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- <div class="card-header">
+            <h3 class="card-title">Edit <%=extraVar['modelName']%></h3>
+          </div> -->
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/edit">
+            <input type='hidden' name='id' value='<%= extraVar.results.my_model.id %>'>
+            <div class="card-body">
+              <div class="form-group">
+                <label>Select Category</label>
+                <select name="category_id" class="form-control select2">
+                  <% extraVar.results.categories.forEach(function(data){ %>
+                    <option <%= (data.id === extraVar.results.my_model.category_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
+                  <% }); %>                  
+                </select>
+                <div class="category_id-error-message error-message"></div>
+              </div>
+              <div class="form-group">
+                <label>Select Parent Item</label>
+                <select name="parent_id" class="form-control select2">
+                  <% extraVar.results.items.forEach(function(data){ %>
+                    <option <%= (data.id === extraVar.results.my_model.parent_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
+                  <% }); %>                  
+                </select>
+                <div class="parent_id-error-message error-message"></div>
+              </div>
+              <div class="form-group">
+                <label for="">Item Name</label>
+                <input name="item_name" type="text" value="<%= extraVar.results.my_model.item_name %>" class="form-control" id="" placeholder="">
+                <div class="item_name-error-message error-message"></div>
+              </div>
+              <div class="form-group">
+                <label for="">item code</label>
+                <input name="item_code" type="text" value="<%= extraVar.results.my_model.item_code %>" class="form-control" id="" placeholder="">
+                <div class="item_code-error-message error-message"></div>
+              </div>
+              <div class="form-group">
+                <label for="">HSN code</label>
+                <input name="hsn_code" type="text" value="<%= extraVar.results.my_model.hsn_code %>" class="form-control" id="" placeholder="">
+                <div class="hsn_code-error-message error-message"></div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Quantity</label>
+                    <input name="quantity" type="text" value="<%= extraVar.results.my_model.quantity %>" class="form-control" id="" placeholder="">
+                    <div class="quantity-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Unit</label>
+                    <input name="unit" type="text" value="<%= extraVar.results.my_model.unit %>" class="form-control" id="" placeholder="">
+                    <div class="unit-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Rate</label>
+                    <input name="rate" type="text" value="<%= extraVar.results.my_model.rate %>" class="form-control" id="" placeholder="">
+                    <div class="rate-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Size-Pkt</label>
+                    <input name="size_pkt" type="text" value="<%= extraVar.results.my_model.size_pkt %>" class="form-control" id="" placeholder="">
+                    <div class="size_pkt-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Amount</label>
+                    <input name="amount" type="text" value="<%= extraVar.results.my_model.amount %>" class="form-control" id="" placeholder="">
+                    <div class="amount-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">Size-Case</label>
+                    <input name="size_case" type="text" value="<%= extraVar.results.my_model.size_case %>" class="form-control" id="" placeholder="">
+                    <div class="size_case-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <label for="">GST Rate</label>
+                    <input name="gst_rate" type="text" value="<%= extraVar.results.my_model.gst_rate %>" class="form-control" id="" placeholder="">
+                    <div class="gst_rate-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input name="status" type="checkbox" <%= (extraVar.results.my_model.status === 1) ? 'checked' : '' %> class="custom-control-input" id="statusCheck">
+                      <label for="statusCheck" class="custom-control-label" >Status</label>
+                      <div class="ecc_no-error-message error-message"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
+<script type="text/javascript">
+
+  $(function () {
+    $('.ckEditor').summernote({
+      height: 300
+    })
+  })
+    
+  $(document).ready(function() {
+    // $.notify(data.message, { className:"success",position:"bottom right" });
+    var formId = 'formId';
+    $(document).on('click', '.submitBtn', function(){
+      $('.error-message').html('');
+      $('#'+formId).validate({
+        rules: {
+          name: {
+            // required: true,
+          }
+        },
+        messages: {
+          name: {
+            required: "This field is required!",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+
+          var form = $('#'+formId);
+          errorFieldObj = [];
+          $.ajax({
+            url: $('#'+formId).attr('action'),
+            type: 'POST',
+            dataType: "json",
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status)
+            {
+              if (data.status) {
+                window.location.href = data.url;
+              }
+            },
+            error: function (xhr, desc, err)
+            {
+              xhr.responseJSON.data.map(function(val){
+                console.log(val)
+                if(!errorFieldObj.includes(val.path)){
+                  
+                  $('.'+val.path+'-error-message').html(val.message)
+                  errorFieldObj.push(val.path)
+                }
+              })
+
+            }
+          })
+        }
+      });
+    });
+  });
+</script>

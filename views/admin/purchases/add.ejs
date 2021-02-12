@@ -1,0 +1,650 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Add <%=extraVar['modelName']%></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        
+        <div class="card card-primary">
+          
+          <!-- <div class="card-header">
+            <h3 class="card-title">Add <%=extraVar['modelName']%></h3>
+          </div> -->
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/add">
+            <input type="hidden" class="itemIndexValue" value="0">
+            <div class="card-body">
+              <div class="row">
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Buyer Account</label>
+                    <select name="account_id" class="form-control select2">
+                      <option value="">Select Account</option>
+                      <% extraVar.results.accounts.forEach(function(data){ %>
+                        <option value="<%= data.id %>"><%= data.account_name %></option>
+                      <% }); %>                  
+                    </select>
+                    <div class="account_id-error-message error-message"></div>
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice No.</label>
+                    <input name="purchase_invoice_no" type="text" class="form-control" id="" placeholder="">
+                    <div class="purchase_invoice_no-error-message error-message"></div>
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice Date</label>
+                    <input name="purchase_invoice_date" type="text" class="form-control date1" placeholder="">
+                    <div class="purchase_invoice_date-error-message error-message"></div>
+                  </div>
+                </div>              
+              </div>
+              <div class="row">
+                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Frieght Type</label>
+                    <input name="frieght_type" type="text" class="form-control" placeholder="">
+                    <div class="frieght_type-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Mode of Transport</label>
+                    <input name="mode_of_transport" type="text" class="form-control" placeholder="">
+                    <div class="mode_of_transport-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Vehicle No.</label>
+                    <input name="vehicle_no" type="text" class="form-control" placeholder="">
+                    <div class="vehicle_no-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+
+              <div class="row">
+                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Dispatched Through</label>
+                    <input name="dispatched_through" type="text" class="form-control" placeholder="">
+                    <div class="dispatched_through-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Term of Payment</label>
+                    <input name="term_of_payment" type="text" class="form-control" placeholder="">
+                    <div class="term_of_payment-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">To Be Pay Upto Date</label>
+                    <input name="to_be_pay_upto_date" type="text" class="form-control date2" placeholder="">
+                    <div class="to_be_pay_upto_date-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+
+              <!-- <div class="row">
+                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Payment Date</label>
+                    <input name="pay_date" type="text" class="form-control date1" placeholder="">
+                    <div class="pay_date-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Payment Amount</label>
+                    <input name="pay_amount" type="text" class="form-control" placeholder="">
+                    <div class="pay_amount-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Payment Mode</label>
+                    <input name="pay_mode" type="text" class="form-control" placeholder="">
+                    <div class="pay_mode-error-message error-message"></div>
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- <div class="row">
+                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Description</label>
+                    <input name="description" type="text" class="form-control" placeholder="">
+                    <div class="description-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Settlement</label>
+                    <input name="settlement" type="text" class="form-control" placeholder="">
+                    <div class="settlement-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Discount</label>
+                    <input name="discount" type="text" class="form-control" placeholder="">
+                    <div class="discount-error-message error-message"></div>
+                  </div>
+                </div>
+              </div> -->
+
+              <!-- <div class="ItemCantainer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Item Detail</h3>
+                      </div>
+                      <div class="card-body itemDiv">
+                        <div class="row itemRow">
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">Item</label>
+                              <select name="item[0][item_id]" class="form-control select2 selectItem" indexValue="0">
+                                <option value="">Select Items</option>
+                                <% extraVar.results.items.forEach(function(data){ %>
+                                  <option value="<%= data.id %>"><%= data.item_name %></option>
+                                <% }); %>                  
+                              </select>
+                              <div class="item_item_id_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">Sub Item</label>
+                              <select name="item[0][sub_item_id]" class="form-control select2 selectSubItem_0">                                              
+                              </select>
+                              <div class="item_item_id_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-1">
+                            <div class="form-group">
+                              <label for="">No. of Pkt.</label>
+                              <input name="item[0][no_of_pkg]" type="text" class="form-control" placeholder="">
+                              <div class="item_no_of_pkg_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-1">
+                            <div class="form-group">
+                              <label for="">Quantity</label>
+                              <input name="item[0][quantity]" type="text" class="form-control" placeholder="">
+                              <div class="item_quantity_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-1">
+                            <div class="form-group">
+                              <label for="">Rate</label>
+                              <input name="item[0][rate]" type="text" class="form-control" placeholder="">
+                              <div class="item_rate_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-1">
+                            <div class="form-group">
+                              <label for="">GST</label>
+                              <input name="item[0][gst]" type="text" class="form-control" placeholder="">
+                              <div class="item_gst_0-error-message error-message"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="itemBtnDiv">
+                            <button onclick="addMoreItems()" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>
+                        </div>
+                      </div>
+                    </div>                               
+                  </div>                    
+                </div>
+              </div> -->
+
+              <div class="itemCantainer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Item Detail</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row itemHead">
+                          <div class="col-sm-2">
+                            <label for="">Item</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Sub Item</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">No. of Pkt.</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Quantity</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Rate</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">GST</label>
+                          </div>
+                          <div class="col-sm-2">
+                          </div>
+                        </div>
+                        <div class="gridTable itemDiv">                          
+                        </div>
+                      </div>
+                      <div class="card-footer">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <select class="form-control select2 selectItem item_item_id_" indexValue="0">
+                                    <option value="">Select Items</option>
+                                    <% extraVar.results.items.forEach(function(data){ %>
+                                      <option value="<%= data.id %>"><%= data.item_name %></option>
+                                    <% }); %>                  
+                                  </select>
+                                  <div class="item_item_id_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
+                                  </select>
+                                  <div class="item_sub_item_id_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
+                                    <div class="item_no_of_pkg_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                    <div class="item_quantity_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemRate item_rate_" placeholder="">
+                                    <div class="item_rate_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemGst item_gst_" placeholder="">
+                                    <div class="item_gst_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <div class="itemBtnDiv">
+                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>                                
+                                  </div>
+                                </div>
+                            </div>                
+                        </div>                        
+                      </div>
+                    </div>                               
+                  </div>                    
+                </div>
+              </div>
+
+              <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-6">
+                  <div class="card card-primary">
+                    <div class="card-header">
+                      <h3 class="card-title"></h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">Taxable value</label>
+                            <input readonly name="taxable_value" type="text" class="form-control taxableValue" placeholder="">
+                            <div class="taxable_value-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">GST Amount</label>
+                            <input name="gst_amt" type="text" class="form-control totalGST" placeholder="">
+                            <div class="gst_amt-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">TCS</label>
+                            <input name="tcs" type="text" class="form-control" placeholder="">
+                            <div class="tcs-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                  <div class="form-group">
+                    <div class="custom-control custom-checkbox">
+                      <input name="status" type="checkbox" checked class="custom-control-input" id="statusCheck">
+                      <label for="statusCheck" class="custom-control-label" >Status</label>
+                      <div class="status-error-message error-message"></div>
+                    </div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+        <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<!-- Summernote -->
+<script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
+
+<script type="text/javascript">
+
+  $('.date1').daterangepicker({
+    singleDatePicker: true,
+    locale: {
+        format: 'DD-MM-YYYY'
+      }
+  });
+  $('.date2').daterangepicker({
+    singleDatePicker: true,
+    startDate: moment().add(1, "month"),
+    locale: {
+        format: 'DD-MM-YYYY'
+      }
+  });
+
+  function addMoreItems(){
+    emptyItemErrors();
+
+    let selectItem = $('.item_item_id_').val();
+    let itemNoOfPkt = $('.itemNoOfPkt').val();
+    let itemQuantity = $('.itemQuantity').val();
+    let itemRate = $('.itemRate').val();
+    let itemGst = $('.itemGst').val();
+    let valid = validateItems();
+
+    if(valid){
+      let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
+      $('.itemIndexValue').val(itemIndexValue); 
+      
+      let itemsObj = JSON.parse($("#itemsObj").html());
+      let itemOptions = "";
+      let selectedValue1 = "";
+      itemsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectItem){
+          selected = "selected";
+          selectedValue1 = data.id;
+        }
+        itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
+      });
+
+      let subItemOptions = "";
+      let selectedValue2 = "";
+      $(".selectSubItem  option").each(function(){
+        let selectedSubItem = "";
+        if(this.value == $(".selectSubItem").val()){
+          selectedSubItem = "selected";
+          selectedValue2 = this.value;
+        }
+        subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
+      });
+      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
+      selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
+      
+
+      let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
+      selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
+      
+      let itemHtml = "<div class='row itemRow'><div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][rate]' type='number' value='"+itemRate+"' class='form-control rate item_rate_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_rate_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][gst]' type='number' value='"+itemGst+"' class='form-control gst item_gst_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_gst_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+
+      itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";
+      itemHtml += "<button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
+      itemHtml += "<button onclick='editItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
+      itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateItems(this)' type='button' class='btn btn-info updateItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
+      $('.itemDiv').prepend(itemHtml);
+      $(".select2").each(function() {
+        $(this).select2();
+      });
+      emptyItemFields();
+      calculateTotal();
+    }
+  }
+
+  function emptyItemErrors(index = ""){
+    $(".item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message, .item_rate_"+index+"-error-message, .item_gst_"+index+"-error-message").html("");
+  }
+
+  function validateItems(itemIndexValue = ""){
+    let valid = true;
+    if($('.item_item_id_'+itemIndexValue).val() === ""){
+      $('.item_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    // if($('.item_sub_item_id_'+itemIndexValue).val() === ""){
+    //   $('.item_sub_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
+    // }
+    if($('.item_no_of_pkg_'+itemIndexValue).val() === ""){
+      $('.item_no_of_pkg_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_quantity_'+itemIndexValue).val() === ""){
+      $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_rate_'+itemIndexValue).val() === ""){
+      $('.item_rate_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_gst_'+itemIndexValue).val() === ""){
+      $('.item_gst_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    return valid;
+  }
+
+  function updateItems(thisVar){
+    
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    emptyItemErrors(itemIndexValue);
+    let valid = validateItems(itemIndexValue);
+    if(valid){
+      $('.item_item_id_'+itemIndexValue).attr("disabled", true);
+      $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
+      $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
+      $('.item_quantity_'+itemIndexValue).attr("readonly", true);
+      $('.item_rate_'+itemIndexValue).attr("readonly", true);
+      $('.item_gst_'+itemIndexValue).attr("readonly", true);
+      $('.editItemsBtn_'+itemIndexValue).show();
+      $('.updateItemsBtn_'+itemIndexValue).hide();
+      calculateTotal();
+      emptyItemFields();
+    }    
+  }
+
+  function itemName(thisObj, index){
+    $(".item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function subItemName(thisObj, index){
+    $(".sub_item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function editItems(thisVar){
+
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    $('.item_item_id_'+itemIndexValue).attr("disabled", false);
+    $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
+    $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
+    $('.item_quantity_'+itemIndexValue).attr("readonly", false);
+    $('.item_rate_'+itemIndexValue).attr("readonly", false);
+    $('.item_gst_'+itemIndexValue).attr("readonly", false);
+
+    $('.editItemsBtn_'+itemIndexValue).hide();
+    $('.updateItemsBtn_'+itemIndexValue).show();
+    $('.updateItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
+  }
+
+  function emptyItemFields(){
+    $('.item_item_id_').val("").trigger('change');
+    $('.item_sub_item_id_').val("").trigger('change');
+    $('.itemNoOfPkt').val("");
+    $('.itemQuantity').val("");
+    $('.itemRate').val("");
+    $('.itemGst').val("");
+  }
+
+  function removeItems(thisVar){
+    $(thisVar).parents('.itemRow').remove();
+    calculateTotal();
+  }
+
+  function calculateTotal(){
+    let totalPrice = 0;
+    let totalGST = 0;
+    $(".itemRow").each(function(index, val){
+      let rate = parseFloat($(".rate", val).val());
+      let qty = parseFloat($(".qty", val).val());
+      let gst = parseFloat($(".gst", val).val());
+      totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
+      let gstPerItem = ((rate * qty) * gst) / 100;
+      totalGST = totalGST + gstPerItem;
+      
+      console.log(totalPrice, gstPerItem, totalGST)
+    });
+    $(".taxableValue").val(totalPrice);
+    $(".totalGST").val(totalGST);
+  }
+
+  $(document).ready(function() {
+    // $.notify(data.message, { className:"success",position:"bottom right" });
+    var formId = 'formId';
+    $(document).on('click', '.submitBtn', function(){
+      $('.error-message').html('');
+      $('#'+formId).validate({
+        rules: {
+          title: {
+            // required: true,
+          }
+        },
+        messages: {
+          title: {
+            required: "This field is required!",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+
+          var form = $('#'+formId);
+          errorFieldObj = [];
+          $.ajax({
+            url: $('#'+formId).attr('action'),
+            type: 'POST',
+            dataType: "json",
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status)
+            {
+              if (data.status) {
+                window.location.href = data.url;
+              } else {
+                $.notify("Somthing went wrong, Please try again!", { className:"error", position:"bottom right" });
+              }
+            },
+            error: function (xhr, desc, err)
+            {
+              xhr.responseJSON.data.map(function(val){
+                console.log(val)
+                if(!errorFieldObj.includes(val.path)){
+                  
+                  $('.'+val.path+'-error-message').html(val.message)
+                  errorFieldObj.push(val.path)
+                }
+              })
+
+            }
+          })
+        }
+      });
+    });
+  });
+</script>

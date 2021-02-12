@@ -1,0 +1,75 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">List <%=extraVar['viewDirectory']%></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>/add" class="btn btn-primary float-right">Add</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    
+    <div class="row">
+      <div class="col-12">
+
+        <div class="card">          
+          <!-- <div class="card-header">
+            <h3 class="card-title">DataTable with default features</h3>
+          </div>-->
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>Account Name</th>
+                <th>Brand</th>
+                <th>Actions</th>
+              </tr>
+              </thead>
+                <tbody>
+                  <% if(results.length > 0) { %>
+                    <% results.forEach(function(rows, index){ %>
+                    <tr>
+                      <td><%= ++index %></td>
+                      <td><%= rows.Account.account_name %></td>
+                      <td><%= rows.Brand.name %></td>
+                      <td>
+                        <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a>
+                        <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a>
+                      </td>
+                    </tr>                
+                    <% }); %>
+                  <% } else { %>
+                    <td colspan="13" class="text-center">No Record Found.</td>
+                  <% } %>
+                </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+  });
+</script>

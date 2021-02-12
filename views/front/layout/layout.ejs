@@ -1,0 +1,28 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <% include ../elements/head.ejs %>
+</head>
+<body>
+<div id="preloader">
+  <div id="status">&nbsp;</div>
+</div>
+<a class="scrollToTop" href="#"><i class="fa fa-angle-up"></i></a>
+<div class="container">
+  <header id="header">
+    <% include ../elements/topMenu.ejs %>
+  </header>
+  <div id="navarea">
+    <% include ../elements/mainMenu.ejs %>
+  </div>
+  <section id="mainContent">    
+    <%-body%>
+  </section>
+</div>
+<footer id="footer">
+  <% include ../elements/footer.ejs %>
+</footer>
+<% include ../elements/js.ejs %>
+<%- script %>
+</body>
+</html>
