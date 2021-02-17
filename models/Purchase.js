@@ -147,18 +147,18 @@ module.exports = function (sequelize, DataTypes) {
         },
         tcs: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
     },
     {
       tableName: 'purchases',
   });  
   myModel.getAllValues = function (req, res) {
-    this.findAll({where: req.where})
+    var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
+    this.findAll({where: req.where,
+        include: [
+            accountToPurchae
+        ]
+    })
         .then(function(results){
             res(results);
         })

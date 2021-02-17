@@ -56,6 +56,16 @@ module.exports = function (sequelize, DataTypes) {
             res(results);
         });
     }
+    myModel.getValuesByItem = function (req, res) {
+        var itemTofinishedItem = myModel.belongsTo(sequelize.models.Item, {foreignKey: 'finished_item_id'});
+        this.findAll({where: req.where, 
+            include: [
+                itemTofinishedItem
+            ]
+        }).then(function (results) {
+            res(results);
+        });
+    }
     myModel.getAllValuesPaging = function (req, res) {
         this.findAndCountAll({
             where: req.where,

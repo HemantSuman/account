@@ -45,12 +45,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         wastage: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            type: DataTypes.STRING,            
         },
         status: {
             type: DataTypes.INTEGER,
@@ -60,7 +55,12 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'items',
   });  
   myModel.getAllValues = function (req, res) {
-    this.findAll({where: req.where})
+    var itemToCategory = myModel.belongsTo(sequelize.models.Category, {foreignKey: 'category_id'});
+    this.findAll({where: req.where, 
+        include: [
+            itemToCategory
+        ]
+    })
         .then(function(results){
             res(results);
         })

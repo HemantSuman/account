@@ -29,11 +29,10 @@
               <thead>
               <tr>
                 <th>No.</th>
-                <th>Item Name</th>
-                <th>Item code</th>
-                <th>Hsn code</th>
-                <th>Unit</th>
-                <th>Wastage</th>
+                <th>Account Name</th>
+                <th>Purchase Invoice No.</th>
+                <th>Mode of Transport</th>
+                <th>Vehicle No.</th>
                 <th>Actions</th>
               </tr>
               </thead>
@@ -42,11 +41,10 @@
                     <% results.forEach(function(rows, index){ %>
                     <tr>
                       <td><%= ++index %></td>
-                      <td><%= rows.item_name %></td>
-                      <td><%= rows.item_code %></td>
-                      <td><%= rows.hsn_code %></td>
-                      <td><%= rows.unit %></td>
-                      <td><%= rows.wastage %></td>
+                      <td><%= rows.Account.account_name %></td>
+                      <td><%= rows.purchase_invoice_no %></td>
+                      <td><%= rows.mode_of_transport %></td>
+                      <td><%= rows.vehicle_no %></td>
                       <td>
                         <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a>
                         <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a>

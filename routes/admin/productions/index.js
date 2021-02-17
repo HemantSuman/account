@@ -4,6 +4,7 @@ var helper = require('../../helper');
 var models = require('../../../models');
 var ImageUpload = require('../../../middlewares/ImageUpload');
 var async = require("async");
+const { Op } = require('sequelize')
 
 var extraVar = [];
 
@@ -63,22 +64,179 @@ router.get('/add', function(req, res, next) {
     res.render('admin/'+viewDirectory+'/add', { extraVar,helper, layout:'admin/layout/layout' });
   })  
 });
+router.get('/add1', function(req, res, next) {
+  async.parallel({
+    items: function (callback) {
+        req.where = {}
+        models.Item.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    accounts: function (callback) {
+        req.where = {}
+        models.Account.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    brands: function (callback) {
+        req.where = {}
+        models.Brand.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    units: function (callback) {
+        req.where = {}
+        models.Unit.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+  }, function (err, results) {
+    extraVar['results'] = results;
+    res.render('admin/'+viewDirectory+'/add1', { extraVar,helper, layout:'admin/layout/layout' });
+  })  
+});
 
 router.post('/add', function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     
     let errors = [];
     let newSaveData = [];
-    if(req.body.status && req.body.status === 'on'){
-      req.body.status = 1;
-    } else {
-      req.body.status = 0;
-    }
+    // if(req.body.status && req.body.status === 'on'){
+    //   req.body.status = 1;
+    // } else {
+    //   req.body.status = 0;
+    // }
+    // return;
+    req.body.date_of_production = helper.changeDateFormate(req.body.date_of_production.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+    async.parallel([
+      function (callback) {
+        let modelBuild = models[modelName].build(req.body);
+        modelBuild.validate()
+        .then(function(){
+          callback(null);
+        })
+        .catch(function (err){
+          if (err != null) {
+              errors = errors.concat(err.errors);
+              callback(null, errors);
+          } else {
+              callback(null, errors);
+          }
+        })
+      },
+      // function (callback) {
+      //   if(typeof req.body.item === "undefined"){
+      //     errorsItem = 
+      //       {
+      //         message: 'Atleast one item is required!',
+      //         type: 'Validation error',
+      //         path: 'items',
+      //         value: '',
+      //     };
+      //     errors = errors.concat(errorsItem);
+      //   }
+      //   callback(null, errors);
+      // },
+      function (callback) {
+        async.forEachOf(req.body.items, function (value1, key, callback1) {
+          let reqS1 = {};
+          reqS1.where = {
+            item_id: value1.item_id,
+            quantity: {
+              [Op.gte]: value1.quantity
+            }
+          }
+          models.Stock.getFirstValues(reqS1, function (data1) {
+            if(!data1){
+              console.log('##', data1);
+              errorsItem = {
+                  message: 'Insufficient Stock!',
+                  type: 'Validation error',
+                  path: "quantity_"+ key,
+                  value: '',
+              };
+              errors = errors.concat(errorsItem);
+            }
+            callback1();
+          });
+
+        }, function (err) {
+            callback(null, errors);
+        });  
+      }      
+    ], function (err) {
+      console.log("errorss", errors);
+      
+      if (errors.length > 0) {
+        res.status(400).send({status: false, msg: ' saved d failed', data: errors});
+      } else {
+        models[modelName].saveAllValues(req, function (results) {
+
+          async.parallel([
+            function(callback) {
+
+              async.forEachOf(req.body.items, function (value1, key, callback1) {
+                let reqS1 = {};
+                reqS1.where = {
+                  item_id: value1.item_id,
+                  quantity: {
+                    [Op.gte]: value1.quantity
+                  }
+                }
+                models.Stock.getFirstValues(reqS1, function (data1) {
+                  if(data1){
+                    let stockDataUpdate = {};
+                    stockDataUpdate.body = {
+                      id: data1.id,
+                      quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
+                    };
+                    models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                      callback1();
+                    });
+                  } else {
+                    callback1();
+                  }
+                });
+              }, function (err) {
+                  callback(null, errors);
+              });              
+            }
+          ],
+          function(err, results) {
+            if(err === null){
+              req.session.sessionFlash = {
+                type: 'success',
+                message: 'New record created successfully!'
+              }
+              res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+            } else {
+              req.session.sessionFlash = {
+                type: 'error',
+                message: 'errorrr ............'
+              }
+              res.status(200).send({status: false, url: '/admin/' + viewDirectory});
+            }
+          });
+        });
+      }
+    })
+  });  
+});
+
+router.post('/add1', function(req, res, next) {
+  ImageUpload.uploadFile(req, res, function (err) {
+    
+    let errors = [];
+    let newSaveData = [];
+    // if(req.body.status && req.body.status === 'on'){
+    //   req.body.status = 1;
+    // } else {
+    //   req.body.status = 0;
+    // }
     req.body.date_of_production = helper.changeDateFormate(req.body.date_of_production.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     async.parallel([
       function (callback) {
         let temData = {}
-        temData["account_id"] = req.body.account_id;
         temData["brand_id"] = req.body.brand_id;
         temData["date_of_production"] = req.body.date_of_production;
         let modelBuild = models[modelName].build(temData);
@@ -112,9 +270,11 @@ router.post('/add', function(req, res, next) {
         async.forEachOf(req.body.item, function (value1, key, callback1) {
           if(typeof  value1 != "undefined"){
 
-            value1["account_id"] = req.body.account_id;
             value1["brand_id"] = req.body.brand_id;
             value1["date_of_production"] = req.body.date_of_production;
+            if(value1.sub_item_id === ""){
+              value1.sub_item_id = null;
+            }
             newSaveData.push(value1);
             var modelBuild = models[modelName].build(value1);
 
@@ -126,15 +286,15 @@ router.post('/add', function(req, res, next) {
               console.log("errorss1", err);
               if (err != null) {
                   async.forEachOf(err.errors, function (errObj, callback2) {
-                    if(!["account_id", "brand_id", "date_of_production"].includes(errObj.path)){
+                    if(!["brand_id", "date_of_production"].includes(errObj.path)){
                       errObj.path = "item"+"_"+errObj.path+"_" + key;
                     }
                     console.log("###", errors, errObj);
                     errors = errors.concat(errObj);
                   });
-                  callback(null, errors);
+                  callback2();
               } else {
-                  callback(null, errors);
+                callback1();
               }
             });
           }
@@ -149,19 +309,95 @@ router.post('/add', function(req, res, next) {
       } else {
         models[modelName].saveAllBulkValues(newSaveData, function (results) {
 
-          if(results.headerStatus){
-            req.session.sessionFlash = {
-              type: 'success',
-              message: 'New record created successfully!'
+          async.parallel([
+            function(callback) {
+              async.forEachOf(req.body.item, function (value1, key, callback1) {
+                if(typeof  value1 != "undefined"){
+                  
+
+                  if(value1.sub_item_id && value1.sub_item_id != ""){
+                    let reqS1 = {};
+                    reqS1.where = {sub_item_id: value1.sub_item_id}
+                    models.Stock.getFirstValues(reqS1, function (data1) {
+
+                      if(data1){
+                        console.log("sub exist");
+                        let stockDataUpdate = {};
+                        stockDataUpdate.body = {
+                          id: data1.id,
+                          quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
+                        };
+                        models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                          callback1();
+                        });
+                      } else {
+                        callback1();
+                      }
+                      // callback(null, data);
+                    });
+                  } else {
+                    let reqS = {};
+                    console.log('value1value1', value1);
+                    reqS.where = {item_id: value1.item_id, sub_item_id: null}
+                    models.Stock.getFirstValues(reqS, function (data) {
+                      if(data){
+                        console.log('exist', data);
+                        
+                        let stockDataUpdate = {};
+                        stockDataUpdate.body = {
+                          id: data.id,
+                          quantity: parseInt(data.quantity) - parseInt(value1.quantity),
+                        };
+                        models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                          callback1();
+                        });
+                      } else {
+                        callback1();
+                      }
+                    });
+                  }
+                } else {
+                  callback1();
+                }
+              }, function (err) {
+                if (err) {
+                  callback();
+                  console.error(err.message);
+                } else {
+                  callback();
+                }
+              });
             }
-            res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-          } else {
-            req.session.sessionFlash = {
-              type: 'error',
-              message: 'errorrr ............'
+          ],
+          function(err, results) {
+            if(err === null){
+              req.session.sessionFlash = {
+                type: 'success',
+                message: 'New record created successfully!'
+              }
+              res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+            } else {
+              req.session.sessionFlash = {
+                type: 'error',
+                message: 'errorrr ............'
+              }
+              res.status(200).send({status: false, url: '/admin/' + viewDirectory});
             }
-            res.status(200).send({status: false, url: '/admin/' + viewDirectory});
-          }
+          });
+
+          // if(results.headerStatus){
+          //   req.session.sessionFlash = {
+          //     type: 'success',
+          //     message: 'New record created successfully!'
+          //   }
+          //   res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+          // } else {
+          //   req.session.sessionFlash = {
+          //     type: 'error',
+          //     message: 'errorrr ............'
+          //   }
+          //   res.status(200).send({status: false, url: '/admin/' + viewDirectory});
+          // }
         });
       }
     })

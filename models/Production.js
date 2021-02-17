@@ -9,14 +9,6 @@ i18n_Validation.setLocale('en_valiation');
 module.exports = function (sequelize, DataTypes) {
   var myModel = sequelize.define("Production",
     {
-        account_id: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
         item_id: {
             type: DataTypes.INTEGER,
             validate: {
@@ -71,11 +63,9 @@ module.exports = function (sequelize, DataTypes) {
   });  
   myModel.getAllValues = function (req, res) {
     var brandToProduction = myModel.belongsTo(sequelize.models.Brand, {foreignKey: 'brand_id'});
-    var accountToProduction = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     this.findAll({where: req.where, 
             include: [
-                brandToProduction,
-                accountToProduction
+                brandToProduction
             ]
         })
         .then(function(results){

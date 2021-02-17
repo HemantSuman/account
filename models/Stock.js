@@ -17,14 +17,6 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        purchase_id: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
         sub_item_id: {
             type: DataTypes.INTEGER,
             validate: {
@@ -34,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         quantity: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
@@ -48,7 +40,10 @@ module.exports = function (sequelize, DataTypes) {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },        
+        },   
+        type: {
+            type: DataTypes.STRING,
+        },     
     },
     {
       tableName: 'stocks',
@@ -98,9 +93,10 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
     myModel.updateAllValues = function (req, res) {
-        if(req.body.order === ''){
-            req.body.order = 0;
-        }
+        // if(req.body.order === ''){
+        //     req.body.order = 0;
+        // }
+        console.log("update", req.body)
         myModel.update(req.body, {where: {id: req.body.id}}).then(function (results) {
             results.headerStatus = true;
             res(results);

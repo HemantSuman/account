@@ -109,7 +109,7 @@
                         <div class="gridTable subItemDiv">                          
                         </div>
                       </div>
-                      <div class="card-footer">
+                      <div class="card-footer itemAddRow">
                         <div class="row">
                           <div class="col-sm-4">
                             <div class="form-group">
@@ -174,7 +174,7 @@
 
                         </div>
                       </div>
-                      <div class="card-footer">
+                      <div class="card-footer itemAddRow">
                         <div class="row">
                           <div class="col-sm-4">
                             <div class="form-group">
@@ -394,8 +394,8 @@
 
       let selectHtml = "<select disabled onchange='finishedItemName(this, "+itemIndexValue+")' class='form-control select2 finishedItem_name_"+itemIndexValue+"'>"+itemOptions+"</select>";
       let itemHtml = "<div class='row itemRow'><div class='col-sm-4'><div class='form-group'>"+selectHtml+"<div class='finishedItem_finished_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      itemHtml += "<div class='col-sm-2'><div class='form-group'><select disabled onchange='finishedItemUnit(this, "+itemIndexValue+")' class='form-control select2 finishedItem_unit_name_"+itemIndexValue+"'>"+unitOptions+"</select><div class='finishedItem_unit_1-error-message error-message'></div></div></div>";
-      itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='finishedItem["+itemIndexValue+"][quantity]' type='text' class='form-control finishedItem_quantity_name_"+itemIndexValue+"' value='"+itemFinishedQuantity+"' placeholder=''><div class='finishedItem_quantity_1-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><select disabled onchange='finishedItemUnit(this, "+itemIndexValue+")' class='form-control select2 finishedItem_unit_name_"+itemIndexValue+"'>"+unitOptions+"</select><div class='finishedItem_unit_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='finishedItem["+itemIndexValue+"][quantity]' type='text' class='form-control finishedItem_quantity_name_"+itemIndexValue+"' value='"+itemFinishedQuantity+"' placeholder=''><div class='finishedItem_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-3 ' style='display: flex;align-items: center;'><button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
       itemHtml += "<button onclick='editFinishedItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editFinishedItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
       itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateFinishedItems(this)' type='button' class='btn btn-info updateFinishedItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";

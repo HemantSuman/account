@@ -29,19 +29,7 @@
             <input type="hidden" class="itemIndexValue" value="0">
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Account</label>
-                    <select name="account_id" class="form-control select2">
-                      <option value="">Select Account</option>
-                      <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option value="<%= data.id %>"><%= data.account_name %></option>
-                      <% }); %>                  
-                    </select>
-                    <div class="account_id-error-message error-message"></div>
-                  </div>
-                </div>              
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">Brands</label>
                     <select name="brand_id" class="form-control select2">
@@ -53,7 +41,7 @@
                     <div class="brand_id-error-message error-message"></div>
                   </div>
                 </div>              
-                <div class="col-sm-4">
+                <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">Production Date</label>
                     <input name="date_of_production" type="text" class="form-control date1" placeholder="">
@@ -61,8 +49,38 @@
                   </div>
                 </div>              
               </div>
+
+              <div class="row">
+                <div class="col-sm-2">
+                    <div class="form-group">
+                      <label for="">Items</label>
+                      <select name='item_id' class="form-control select2 selectItem" indexValue="0">
+                        <option value="">Select Items</option>
+                        <% extraVar.results.items.forEach(function(data){ %>
+                          <option category="<%= data.Category.slug %>" value="<%= data.id %>"><%= data.item_name %></option>
+                        <% }); %>                  
+                      </select>
+                      <div class="item_id-error-message error-message"></div>
+                    </div>
+                </div>
+                <div class="col-sm-2">
+                    <div class="form-group">
+                      <label for="">Sub items</label>
+                      <select name="sub_item_id" class="form-control select2 selectSubItem" indexValue="0">                                              
+                      </select>
+                      <div class="sub_item_id-error-message error-message"></div>
+                    </div>
+                </div>              
+                <div class="col-sm-2">
+                  <label for="">Quantity</label>
+                  <div class="form-group">
+                    <input name="quantity" type="number" value="1" class="form-control qty">
+                    <div class="quantity-error-message error-message"></div>
+                  </div>
+                </div>              
+              </div>
               
-              <div class="itemCantainer">
+              <div class="itemCantainer" style="display: none;">
                 <div class="row">
                   <div class="col-sm-12">
                     <div class="card card-primary">
@@ -74,74 +92,21 @@
                           <div class="col-sm-2">
                             <label for="">Item</label>
                           </div>
-                          <div class="col-sm-2">
-                            <label for="">Sub Item</label>
-                          </div>
-                          <div class="col-sm-2">
-                            <label for="">Unit</label>
-                          </div>
                           <div class="col-sm-1">
                             <label for="">Quantity</label>
                           </div>
                           <div class="col-sm-2">
                           </div>
                         </div>
-                        <div class="gridTable itemDiv">                          
+                        <div class="itemDiv">                          
                         </div>
-                      </div>
-                      <div class="card-footer">
-                        <div class="row">
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                  <select class="form-control select2 selectItem item_item_id_" indexValue="0">
-                                    <option value="">Select Items</option>
-                                    <% extraVar.results.items.forEach(function(data){ %>
-                                      <option value="<%= data.id %>"><%= data.item_name %></option>
-                                    <% }); %>                  
-                                  </select>
-                                  <div class="item_item_id_-error-message error-message"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
-                                  </select>
-                                  <div class="item_sub_item_id_-error-message error-message"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-2">
-                              <div class="form-group">
-                                <select class="form-control item_unit_id_ select2 selectUnit">
-                                  <% extraVar.results.units.forEach(function(data){ %>
-                                    <option value="<%= data.id %>"><%= data.name %></option>
-                                  <% }); %>                  
-                                </select>
-                                <div class="item_unit_-error-message error-message"></div>
-                              </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
-                                    <div class="item_quantity_-error-message error-message"></div>
-                                </div>
-                            </div>                            
-                            <div class="col-sm-2">
-                                <div class="form-group">
-                                  <div class="itemBtnDiv">
-                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>
-                                    <div class="items-error-message error-message"></div>
-                                  </div>
-                                </div>
-                            </div>                
-                        </div>                        
-                      </div>
+                      </div>                      
                     </div>                               
                   </div>                    
                 </div>
               </div>
-
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-2">
                   <div class="form-group">
                     <label>Select Status</label>
                     <select name="status" class="form-control select2">
@@ -162,8 +127,6 @@
           </form>
         </div>
         <!-- /.card -->
-        <span style="display: none;" id="unitsObj"><%= JSON.stringify(extraVar.results.units); %></span>
-        <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
       </div>
       <!--/.col (left) -->
     </div>
@@ -181,170 +144,90 @@
         format: 'DD-MM-YYYY'
       }
   });
-  $('.date2').daterangepicker({
-    singleDatePicker: true,
-    startDate: moment().add(1, "month"),
-    locale: {
-        format: 'DD-MM-YYYY'
-      }
+  
+  
+  $(document).on("change", ".selectItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+    $('.itemDiv').html("");
+    $('.itemCantainer').show();
+    
+    if($('option:selected', thisObj).attr('category') === "finished_goods"){
+      $.ajax({
+        url: "/admin/finished_items/getByItemId",
+        data: {id},
+        //contentType: false,
+        //processData: false,
+        method: "POST",
+        cache: false,
+        success: function (response) {
+          if(response){
+            
+            let itemHtml = "";
+            response.map(function(v, itemIndexValue){
+              itemHtml += "<div class='row itemRow'>";
+              itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+              itemHtml += "<input disabled type='text' value='"+v.Item.item_name+"' class='form-control' >";
+              itemHtml += "<input name='items["+itemIndexValue+"][item_id]' type='hidden' value='"+v.Item.id+"' class='form-control' >";
+              itemHtml += "</div></div>";
+
+              itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+              itemHtml += "<input type='hidden' value='"+v.quantity+"' class='form-control quantity_hidden_"+itemIndexValue+"' >";
+              itemHtml += "<input readonly type='text' name='items["+itemIndexValue+"][quantity]' value='"+v.quantity+"' class='form-control quantity_"+itemIndexValue+"' >";
+              itemHtml += "<div class='quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+
+              itemHtml += "</div>";
+            });
+            
+            $('.itemDiv').append(itemHtml);
+            calculateStock();
+          }
+        }, error: function (resData) {
+            console.log(resData);
+        }
+      });
+    }
   });
 
-  function addMoreItems(){
-    emptyItemErrors();
+  $(document).on("keyup mouseup", ".qty", function () {
+    calculateStock();
+  });
 
-    let selectItem = $('.item_item_id_').val();
-    let selectUnit = $('.selectUnit').val();
-    let itemQuantity = $('.itemQuantity').val();
-    let valid = validateItems();
-
-    if(valid){
-      let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
-      $('.itemIndexValue').val(itemIndexValue); 
-      
-      let itemsObj = JSON.parse($("#itemsObj").html());
-      let itemOptions = "";
-      let selectedValue1 = "";
-      itemsObj.map(function(data) {
-        let selected = "";
-        if(data.id == selectItem){
-          selected = "selected";
-          selectedValue1 = data.id;
-        }
-        itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
-      });
-
-      let unitsObj = JSON.parse($("#unitsObj").html());
-      let unitOptions = "";
-      let selectedValue = "";
-      unitsObj.map(function(data) {
-        let selected = "";
-        if(data.id == selectUnit){
-          selected = "selected";
-          selectedValue = data.id;          
-        }
-        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
-      });
-      unitOptions += "<input class='item_unit_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue+"' name='item["+itemIndexValue+"][unit]' >";
-
-
-      let subItemOptions = "";
-      let selectedValue2 = "";
-      $(".selectSubItem  option").each(function(){
-        let selectedSubItem = "";
-        if(this.value == $(".selectSubItem").val()){
-          selectedSubItem = "selected";
-          selectedValue2 = this.value;
-        }
-        subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
-      });
-      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
-      selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
-      
-
-      let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
-      selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
-      
-      let itemHtml = "<div class='row itemRow'>";
-      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      
-      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
-      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
-      itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
-
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
-      itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      
-      itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";
-      itemHtml += "<button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
-      itemHtml += "<button onclick='editItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
-      itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateItems(this)' type='button' class='btn btn-info updateItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
-      $('.itemDiv').prepend(itemHtml);
-      $(".select2").each(function() {
-        $(this).select2();
-      });
-      $(".items-error-message").html("");
-      emptyItemFields();
-    }
+  function calculateStock(){
+    let qty = $(".qty").val();
+    $(".itemRow").each(function(index, value){
+      let tempQty = $(".quantity_hidden_"+index, value).val();
+      $(".quantity_"+index, value).val(tempQty * qty);
+    });
   }
 
-  function changeUnit(thisObj, index){
-    $(".item_unit_name_hidden_"+index).val($(thisObj).val());
-  }
+  // $(document).on("change", ".selectSubItem", function () {
 
-  function emptyItemErrors(index = ""){
-    $(".account_id-error-message, .brand_id-error-message, .date_of_production-error-message, .item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message").html("");
-  }
-
-  function validateItems(itemIndexValue = ""){
-    let valid = true;
-    if($('.item_item_id_'+itemIndexValue).val() === ""){
-      $('.item_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
-    // if($('.item_sub_item_id_'+itemIndexValue).val() === ""){
-    //   $('.item_sub_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
-    //   valid = false;
-    // }
-    if($('.item_unit_id_'+itemIndexValue).val() === ""){
-      $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
-    if($('.item_quantity_'+itemIndexValue).val() === ""){
-      $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
+  //   let thisObj = $(this);
+  //   let id = thisObj.val();
+  //   if(id){
+  //     let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
     
-    return valid;
-  }
-
-  function updateItems(thisVar){
-    
-    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
-    emptyItemErrors(itemIndexValue);
-    let valid = validateItems(itemIndexValue);
-    if(valid){
-      $('.item_item_id_'+itemIndexValue).attr("disabled", true);
-      $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
-      $('.item_unit_id_'+itemIndexValue).attr("disabled", true);
-      $('.item_quantity_'+itemIndexValue).attr("readonly", true);
-      $('.editItemsBtn_'+itemIndexValue).show();
-      $('.updateItemsBtn_'+itemIndexValue).hide();
-      emptyItemFields();
-    }    
-  }
-
-  function itemName(thisObj, index){
-    $(".item_name_hidden_"+index).val($(thisObj).val());
-  }
-
-  function subItemName(thisObj, index){
-    $(".sub_item_name_hidden_"+index).val($(thisObj).val());
-  }
-
-  function editItems(thisVar){
-
-    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
-    $('.item_item_id_'+itemIndexValue).attr("disabled", false);
-    $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
-    $('.item_unit_id_'+itemIndexValue).attr("disabled", false);
-    $('.item_quantity_'+itemIndexValue).attr("readonly", false);
-    
-    $('.editItemsBtn_'+itemIndexValue).hide();
-    $('.updateItemsBtn_'+itemIndexValue).show();
-    $('.updateItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
-  }
-
-  function emptyItemFields(){
-    $('.item_item_id_').val("").trigger('change');
-    $('.item_sub_item_id_').val("").trigger('change');
-    $('.itemQuantity').val("");    
-  }
-
-  function removeItems(thisVar){
-    $(thisVar).parents('.itemRow').remove();
-  }
+  //     $.ajax({
+  //         url: "/admin/stocks/getBySubItemId",
+  //         data: {id},
+  //         //contentType: false,
+  //         //processData: false,
+  //         method: "POST",
+  //         cache: false,
+  //         success: function (response) {
+  //           if(response){
+  //             $(".item_quantity_"+indexValue).val(response.quantity);
+  //           }
+  //         }, error: function (resData) {
+  //             console.log(resData);
+  //         }
+  //     });
+  //   } else {
+  //     // $(".selectItem").trigger("change");
+  //   }
+  // });
 
   $(document).ready(function() {
     // $.notify(data.message, { className:"success",position:"bottom right" });

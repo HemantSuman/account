@@ -112,22 +112,23 @@ router.post('/add', function(req, res, next) {
           async.parallel([
             function(callback) {
               if(results.id){
-                let bulkData = [];
+                let bulkData1 = [];
                 async.forEachOf(req.body.item, function (value1, key, callback1) {
                   if(typeof  value1 != "undefined"){
                     if(value1.sub_item_id === ""){
                       value1.sub_item_id = null;
                     }
                     value1.purchase_id = results.id;
-                    bulkData.push(value1);                  
+                    bulkData1.push(value1);                  
                   }
-                  callback1(null);
+                  callback1();
                 }, function (err) {
                   if (err) {
                     console.error(err.message);
+                    callback();
                   } else {
-                    models.PurchaseItems.saveAllBulkValues(bulkData, function (results){
-                      callback(null);
+                    models.PurchaseItems.saveAllBulkValues(bulkData1, function (results){
+                      callback();
                     });
                   }
                 });
@@ -137,27 +138,91 @@ router.post('/add', function(req, res, next) {
             },
             function(callback) {
               if(results.id){
-                let bulkData = [];
                 async.forEachOf(req.body.item, function (value1, key, callback1) {
                   if(typeof  value1 != "undefined"){
-                    
-                    let stockData = {
-                      item_id: value1.item_id,
-                      purchase_id: results.id,
-                      sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                      quantity: value1.quantity,
-                      no_of_pkg: value1.no_of_pkg,
-                    };
-                    bulkData.push(stockData);                  
+
+                    if(value1.sub_item_id && value1.sub_item_id != ""){
+                      let reqS1 = {};
+                      reqS1.where = {sub_item_id: value1.sub_item_id}
+                      models.Stock.getFirstValues(reqS1, function (data1) {
+
+                        if(data1){
+                          console.log("sub exist");
+                          let stockDataUpdate = {};
+                          stockDataUpdate.body = {
+                            id: data1.id,
+                            item_id: value1.item_id,
+                            type: "production",
+                            sub_item_id: value1.sub_item_id,
+                            quantity: parseInt(value1.quantity) + parseInt(data1.quantity),
+                            no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
+                          };
+                          models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                            callback1();
+                          });
+                        } else {
+                          console.log("sub Not");
+                          let stockData = {}
+                          stockData.body = {
+                            item_id: value1.item_id,
+                            type: "production",
+                            sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                            quantity: value1.quantity,
+                            no_of_pkg: value1.no_of_pkg,
+                          };
+                          models.Stock.saveAllValues(stockData, function (results){
+                            callback1();
+                          });
+                        }
+                        // callback(null, data);
+                      });
+                    } else {
+                      let reqS = {};
+                      console.log('value1value1', value1);
+                      reqS.where = {item_id: value1.item_id, sub_item_id: null}
+                      models.Stock.getFirstValues(reqS, function (data) {
+                        if(data){
+                          console.log('exist', data);
+                          
+                          let stockDataUpdate = {};
+                          stockDataUpdate.body = {
+                            id: data.id,
+                            item_id: value1.item_id,
+                            type: "production",
+                            sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                            quantity: parseInt(value1.quantity) + parseInt(data.quantity),
+                            no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                          };
+                          models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                            callback1();
+                          });
+                        } else {
+                          console.log("Not");
+                          let stockData = {};
+                          stockData.body = {
+                            item_id: value1.item_id,
+                            type: "production",
+                            sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                            quantity: value1.quantity,
+                            no_of_pkg: value1.no_of_pkg,
+                          };
+                          models.Stock.saveAllValues(stockData, function (results){
+                            callback1();
+                          });
+                        }
+                        // callback(null, data);
+                      });
+                    }
+                  } else {
+                    callback1();
                   }
-                  callback1(null);
+                  // callback(null);
                 }, function (err) {
                   if (err) {
+                    callback();
                     console.error(err.message);
                   } else {
-                    models.Stock.saveAllBulkValues(bulkData, function (results){
-                      callback(null);
-                    });
+                    callback();
                   }
                 });                              
               } else {

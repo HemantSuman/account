@@ -31,79 +31,23 @@
               <div class="row">
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Buyer Account</label>
-                    <select name="account_id" class="form-control select2">
-                      <option value="">Select Account</option>
-                      <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option value="<%= data.id %>"><%= data.account_name %></option>
+                    <label for="">Brands</label>
+                    <select name="brand_id" class="form-control select2">
+                      <option value="">Select Brand</option>
+                      <% extraVar.results.brands.forEach(function(data){ %>
+                        <option value="<%= data.id %>"><%= data.name %></option>
                       <% }); %>                  
                     </select>
-                    <div class="account_id-error-message error-message"></div>
+                    <div class="brand_id-error-message error-message"></div>
                   </div>
                 </div>              
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Purchase Invoice No.</label>
-                    <input name="purchase_invoice_no" type="text" class="form-control" id="" placeholder="">
-                    <div class="purchase_invoice_no-error-message error-message"></div>
+                    <label for="">Production Date</label>
+                    <input name="date_of_production" type="text" class="form-control date1" placeholder="">
+                    <div class="date_of_production-error-message error-message"></div>
                   </div>
                 </div>              
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Purchase Invoice Date</label>
-                    <input name="purchase_invoice_date" type="text" class="form-control date1" placeholder="">
-                    <div class="purchase_invoice_date-error-message error-message"></div>
-                  </div>
-                </div>              
-              </div>
-              <div class="row">
-                
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Frieght Type</label>
-                    <input name="frieght_type" type="text" class="form-control" placeholder="">
-                    <div class="frieght_type-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Mode of Transport</label>
-                    <input name="mode_of_transport" type="text" class="form-control" placeholder="">
-                    <div class="mode_of_transport-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Vehicle No.</label>
-                    <input name="vehicle_no" type="text" class="form-control" placeholder="">
-                    <div class="vehicle_no-error-message error-message"></div>
-                  </div>
-                </div>
-              </div>
-
-              <div class="row">
-                
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Dispatched Through</label>
-                    <input name="dispatched_through" type="text" class="form-control" placeholder="">
-                    <div class="dispatched_through-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">Term of Payment</label>
-                    <input name="term_of_payment" type="text" class="form-control" placeholder="">
-                    <div class="term_of_payment-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-4">
-                  <div class="form-group">
-                    <label for="">To Be Pay Upto Date</label>
-                    <input name="to_be_pay_upto_date" type="text" class="form-control date2" placeholder="">
-                    <div class="to_be_pay_upto_date-error-message error-message"></div>
-                  </div>
-                </div>
               </div>
               
               <div class="itemCantainer">
@@ -121,17 +65,11 @@
                           <div class="col-sm-2">
                             <label for="">Sub Item</label>
                           </div>
-                          <div class="col-sm-1">
-                            <label for="">No. of Pkt.</label>
+                          <div class="col-sm-2">
+                            <label for="">Unit</label>
                           </div>
                           <div class="col-sm-1">
                             <label for="">Quantity</label>
-                          </div>
-                          <div class="col-sm-1">
-                            <label for="">Rate</label>
-                          </div>
-                          <div class="col-sm-1">
-                            <label for="">GST</label>
                           </div>
                           <div class="col-sm-2">
                           </div>
@@ -146,7 +84,7 @@
                                   <select class="form-control select2 selectItem item_item_id_" indexValue="0">
                                     <option value="">Select Items</option>
                                     <% extraVar.results.items.forEach(function(data){ %>
-                                      <option value="<%= data.id %>"><%= data.item_name %></option>
+                                      <option category="<%= data.Category.slug %>" value="<%= data.id %>"><%= data.item_name %></option>
                                     <% }); %>                  
                                   </select>
                                   <div class="item_item_id_-error-message error-message"></div>
@@ -154,39 +92,32 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
+                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0" indexValue="0">                                              
                                   </select>
                                   <div class="item_sub_item_id_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
-                                    <div class="item_no_of_pkg_-error-message error-message"></div>
-                                </div>
+                            <div class="col-sm-2">
+                              <div class="form-group">
+                                <select class="form-control item_unit_id_ select2 selectUnit">
+                                  <% extraVar.results.units.forEach(function(data){ %>
+                                    <option value="<%= data.id %>"><%= data.name %></option>
+                                  <% }); %>                  
+                                </select>
+                                <div class="item_unit_-error-message error-message"></div>
+                              </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                    <input type="number" class="form-control itemQuantity item_quantity_" placeholder="">
                                     <div class="item_quantity_-error-message error-message"></div>
                                 </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <input type="text" class="form-control itemRate item_rate_" placeholder="">
-                                    <div class="item_rate_-error-message error-message"></div>
-                                </div>
-                            </div>
-                            <div class="col-sm-1">
-                                <div class="form-group">
-                                    <input type="text" class="form-control itemGst item_gst_" placeholder="">
-                                    <div class="item_gst_-error-message error-message"></div>
-                                </div>
-                            </div>
+                            </div>                            
                             <div class="col-sm-2">
                                 <div class="form-group">
                                   <div class="itemBtnDiv">
-                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>                                
+                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>
+                                    <div class="items-error-message error-message"></div>
                                   </div>
                                 </div>
                             </div>                
@@ -199,52 +130,14 @@
 
               <div class="row">
                 <div class="col-sm-6">
-                </div>
-                <div class="col-sm-6">
-                  <div class="card card-primary">
-                    <div class="card-header">
-                      <h3 class="card-title"></h3>
-                    </div>
-                    <div class="card-body">
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="">Taxable value</label>
-                            <input readonly name="taxable_value" type="text" class="form-control taxableValue" placeholder="">
-                            <div class="taxable_value-error-message error-message"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="">GST Amount</label>
-                            <input name="gst_amt" type="text" class="form-control totalGST" placeholder="">
-                            <div class="gst_amt-error-message error-message"></div>
-                          </div>
-                        </div>
-                      </div>
-                      <div class="row">
-                        <div class="col-sm-6">
-                          <div class="form-group">
-                            <label for="">TCS</label>
-                            <input name="tcs" type="text" class="form-control" placeholder="">
-                            <div class="tcs-error-message error-message"></div>
-                          </div>
-                        </div>
-                      </div>
-                    </div>
-                  </div>
-                </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-6">
                   <div class="form-group">
-                    <div class="custom-control custom-checkbox">
-                      <input name="status" type="checkbox" checked class="custom-control-input" id="statusCheck">
-                      <label for="statusCheck" class="custom-control-label" >Status</label>
-                      <div class="status-error-message error-message"></div>
-                    </div>
+                    <label>Select Status</label>
+                    <select name="status" class="form-control select2">
+                      <option value="active">Active</option>
+                      <option value="inactive">Inactive</option>
+                      <option value="suspend">Suspend</option>
+                    </select>
+                    <div class="status-error-message error-message"></div>
                   </div>
                 </div>
               </div>
@@ -257,6 +150,7 @@
           </form>
         </div>
         <!-- /.card -->
+        <span style="display: none;" id="unitsObj"><%= JSON.stringify(extraVar.results.units); %></span>
         <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
       </div>
       <!--/.col (left) -->
@@ -287,10 +181,8 @@
     emptyItemErrors();
 
     let selectItem = $('.item_item_id_').val();
-    let itemNoOfPkt = $('.itemNoOfPkt').val();
+    let selectUnit = $('.selectUnit').val();
     let itemQuantity = $('.itemQuantity').val();
-    let itemRate = $('.itemRate').val();
-    let itemGst = $('.itemGst').val();
     let valid = validateItems();
 
     if(valid){
@@ -309,6 +201,20 @@
         itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
       });
 
+      let unitsObj = JSON.parse($("#unitsObj").html());
+      let unitOptions = "";
+      let selectedValue = "";
+      unitsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectUnit){
+          selected = "selected";
+          selectedValue = data.id;          
+        }
+        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
+      });
+      unitOptions += "<input class='item_unit_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue+"' name='item["+itemIndexValue+"][unit]' >";
+
+
       let subItemOptions = "";
       let selectedValue2 = "";
       $(".selectSubItem  option").each(function(){
@@ -319,32 +225,25 @@
         }
         subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
       });
-      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
+      let selectSubItemHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
       selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
       
 
       let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
       selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
       
-      let itemHtml = "<div class='row itemRow'><div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      let itemHtml = "<div class='row itemRow'>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
-      itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
+
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][rate]' type='number' value='"+itemRate+"' class='form-control rate item_rate_"+itemIndexValue+"' placeholder=''>";
-      itemHtml += "<div class='item_rate_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][gst]' type='number' value='"+itemGst+"' class='form-control gst item_gst_"+itemIndexValue+"' placeholder=''>";
-      itemHtml += "<div class='item_gst_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-
       itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";
       itemHtml += "<button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
       itemHtml += "<button onclick='editItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
@@ -353,13 +252,17 @@
       $(".select2").each(function() {
         $(this).select2();
       });
+      $(".items-error-message").html("");
       emptyItemFields();
-      calculateTotal();
     }
   }
 
+  function changeUnit(thisObj, index){
+    $(".item_unit_name_hidden_"+index).val($(thisObj).val());
+  }
+
   function emptyItemErrors(index = ""){
-    $(".item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message, .item_rate_"+index+"-error-message, .item_gst_"+index+"-error-message").html("");
+    $(".brand_id-error-message, .date_of_production-error-message, .item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message").html("");
   }
 
   function validateItems(itemIndexValue = ""){
@@ -372,22 +275,15 @@
     //   $('.item_sub_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
     //   valid = false;
     // }
-    if($('.item_no_of_pkg_'+itemIndexValue).val() === ""){
-      $('.item_no_of_pkg_'+itemIndexValue+'-error-message').html("This field is required!");
+    if($('.item_unit_id_'+itemIndexValue).val() === ""){
+      $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
     }
     if($('.item_quantity_'+itemIndexValue).val() === ""){
       $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
     }
-    if($('.item_rate_'+itemIndexValue).val() === ""){
-      $('.item_rate_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
-    if($('.item_gst_'+itemIndexValue).val() === ""){
-      $('.item_gst_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
+    
     return valid;
   }
 
@@ -399,13 +295,10 @@
     if(valid){
       $('.item_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
-      $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
+      $('.item_unit_id_'+itemIndexValue).attr("disabled", true);
       $('.item_quantity_'+itemIndexValue).attr("readonly", true);
-      $('.item_rate_'+itemIndexValue).attr("readonly", true);
-      $('.item_gst_'+itemIndexValue).attr("readonly", true);
       $('.editItemsBtn_'+itemIndexValue).show();
       $('.updateItemsBtn_'+itemIndexValue).hide();
-      calculateTotal();
       emptyItemFields();
     }    
   }
@@ -423,11 +316,9 @@
     let itemIndexValue =  $(thisVar).attr("itemIndexValue");
     $('.item_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
-    $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
+    $('.item_unit_id_'+itemIndexValue).attr("disabled", false);
     $('.item_quantity_'+itemIndexValue).attr("readonly", false);
-    $('.item_rate_'+itemIndexValue).attr("readonly", false);
-    $('.item_gst_'+itemIndexValue).attr("readonly", false);
-
+    
     $('.editItemsBtn_'+itemIndexValue).hide();
     $('.updateItemsBtn_'+itemIndexValue).show();
     $('.updateItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
@@ -436,33 +327,66 @@
   function emptyItemFields(){
     $('.item_item_id_').val("").trigger('change');
     $('.item_sub_item_id_').val("").trigger('change');
-    $('.itemNoOfPkt').val("");
-    $('.itemQuantity').val("");
-    $('.itemRate').val("");
-    $('.itemGst').val("");
+    $('.itemQuantity').val("");    
   }
 
   function removeItems(thisVar){
     $(thisVar).parents('.itemRow').remove();
-    calculateTotal();
   }
 
-  function calculateTotal(){
-    let totalPrice = 0;
-    let totalGST = 0;
-    $(".itemRow").each(function(index, val){
-      let rate = parseFloat($(".rate", val).val());
-      let qty = parseFloat($(".qty", val).val());
-      let gst = parseFloat($(".gst", val).val());
-      totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
-      let gstPerItem = ((rate * qty) * gst) / 100;
-      totalGST = totalGST + gstPerItem;
-      
-      console.log(totalPrice, gstPerItem, totalGST)
-    });
-    $(".taxableValue").val(totalPrice);
-    $(".totalGST").val(totalGST);
-  }
+  $(document).on("change", ".selectItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+    
+    let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    if(id){
+      $.ajax({
+        url: "/admin/stocks/getByItemId",
+        data: {id},
+        //contentType: false,
+        //processData: false,
+        method: "POST",
+        cache: false,
+        success: function (response) {
+          if(response){
+            $(".item_quantity_"+indexValue).val(response.quantity);
+          }
+        }, error: function (resData) {
+            console.log(resData);
+        }
+      });
+    } else {
+      $(".item_quantity_"+indexValue).val("");
+    }    
+  });
+
+  $(document).on("change", ".selectSubItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+    if(id){
+      let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    
+      $.ajax({
+          url: "/admin/stocks/getBySubItemId",
+          data: {id},
+          //contentType: false,
+          //processData: false,
+          method: "POST",
+          cache: false,
+          success: function (response) {
+            if(response){
+              $(".item_quantity_"+indexValue).val(response.quantity);
+            }
+          }, error: function (resData) {
+              console.log(resData);
+          }
+      });
+    } else {
+      // $(".selectItem").trigger("change");
+    }
+  });
 
   $(document).ready(function() {
     // $.notify(data.message, { className:"success",position:"bottom right" });
