@@ -101,12 +101,6 @@ router.post('/add', function(req, res, next) {
     
     let errors = [];
     let newSaveData = [];
-    // if(req.body.status && req.body.status === 'on'){
-    //   req.body.status = 1;
-    // } else {
-    //   req.body.status = 0;
-    // }
-    // return;
     req.body.date_of_production = helper.changeDateFormate(req.body.date_of_production.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     async.parallel([
       function (callback) {
@@ -124,19 +118,6 @@ router.post('/add', function(req, res, next) {
           }
         })
       },
-      // function (callback) {
-      //   if(typeof req.body.item === "undefined"){
-      //     errorsItem = 
-      //       {
-      //         message: 'Atleast one item is required!',
-      //         type: 'Validation error',
-      //         path: 'items',
-      //         value: '',
-      //     };
-      //     errors = errors.concat(errorsItem);
-      //   }
-      //   callback(null, errors);
-      // },
       function (callback) {
         async.forEachOf(req.body.items, function (value1, key, callback1) {
           let reqS1 = {};
@@ -173,6 +154,74 @@ router.post('/add', function(req, res, next) {
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
+
+            function(callback) {
+              if(results.id){
+      
+                if(req.body.sub_item_id && req.body.sub_item_id != ""){
+                  let reqS1 = {};
+                  reqS1.where = {sub_item_id: req.body.sub_item_id}
+                  models.Stock.getFirstValues(reqS1, function (data1) {
+      
+                    if(data1){
+                      console.log("sub exist");
+                      let stockDataUpdate = {};
+                      stockDataUpdate.body = {
+                        id: data1.id,
+                        quantity: parseInt(data1.quantity) + parseInt(req.body.quantity),
+                      };
+                      models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                        callback();
+                      });
+                    } else {
+                      console.log("sub Not");
+                      let stockData = {}
+                      stockData.body = {
+                        item_id: req.body.item_id,
+                        type: "production",
+                        sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
+                        quantity: req.body.quantity,
+                      };
+                      models.Stock.saveAllValues(stockData, function (results){
+                        callback();
+                      });
+                    }
+                  });
+                } else {
+                  let reqS = {};
+                  console.log('value1value1', req.body);
+                  reqS.where = {item_id: req.body.item_id, sub_item_id: null}
+                  models.Stock.getFirstValues(reqS, function (data) {
+                    if(data){
+                      console.log('exist', data);
+                      
+                      let stockDataUpdate = {};
+                      stockDataUpdate.body = {
+                        id: data.id,
+                        quantity: parseInt(data.quantity) + parseInt(req.body.quantity),
+                      };
+                      models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                        callback();
+                      });
+                    } else {
+                      console.log("Not");
+                      let stockData = {};
+                      stockData.body = {
+                        item_id: req.body.item_id,
+                        type: "production",
+                        sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
+                        quantity: req.body.quantity,
+                      };
+                      models.Stock.saveAllValues(stockData, function (results){
+                        callback();
+                      });
+                    }
+                  });
+                }
+              } else {
+                callback({status: false})
+              }
+            },
             function(callback) {
 
               async.forEachOf(req.body.items, function (value1, key, callback1) {

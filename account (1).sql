@@ -159,6 +159,33 @@ CREATE TABLE `invoices` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
+DROP TABLE IF EXISTS `invoice_items`;
+CREATE TABLE `invoice_items` (
+  `id` int(11) NOT NULL AUTO_INCREMENT,
+  `invoice_id` int(11) DEFAULT NULL,
+  `item_id` int(11) DEFAULT NULL,
+  `sub_item_id` int(11) DEFAULT NULL,
+  `description` varchar(500) DEFAULT NULL,
+  `no_of_pkg` varchar(100) DEFAULT NULL,
+  `unit` int(11) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
+  `rate` int(11) DEFAULT NULL,
+  `per` varchar(100) DEFAULT NULL,
+  `amount` int(11) DEFAULT NULL,
+  `createdAt` date DEFAULT NULL,
+  `updatedAt` date DEFAULT NULL,
+  PRIMARY KEY (`id`),
+  KEY `item_id` (`item_id`),
+  KEY `sub_item_id` (`sub_item_id`),
+  KEY `unit` (`unit`),
+  KEY `invoice_id` (`invoice_id`),
+  CONSTRAINT `invoice_items_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
+  CONSTRAINT `invoice_items_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `sub_items` (`id`),
+  CONSTRAINT `invoice_items_ibfk_3` FOREIGN KEY (`unit`) REFERENCES `units` (`id`),
+  CONSTRAINT `invoice_items_ibfk_4` FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`)
+) ENGINE=InnoDB DEFAULT CHARSET=latin1;
+
+
 DROP TABLE IF EXISTS `items`;
 CREATE TABLE `items` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
@@ -329,4 +356,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2021-02-18 04:44:26
+-- 2021-02-18 07:46:08
