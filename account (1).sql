@@ -179,7 +179,6 @@ DROP TABLE IF EXISTS `productions`;
 CREATE TABLE `productions` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
-  `account_id` int(11) DEFAULT NULL,
   `sub_item_id` int(11) DEFAULT NULL,
   `brand_id` int(11) DEFAULT NULL,
   `quantity` int(11) DEFAULT NULL,
@@ -191,11 +190,9 @@ CREATE TABLE `productions` (
   KEY `item_id` (`item_id`),
   KEY `sub_item_id` (`sub_item_id`),
   KEY `brand_id` (`brand_id`),
-  KEY `account_id` (`account_id`),
   CONSTRAINT `productions_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
   CONSTRAINT `productions_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `sub_items` (`id`),
-  CONSTRAINT `productions_ibfk_3` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`),
-  CONSTRAINT `productions_ibfk_4` FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`)
+  CONSTRAINT `productions_ibfk_3` FOREIGN KEY (`brand_id`) REFERENCES `brands` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -267,19 +264,17 @@ DROP TABLE IF EXISTS `stocks`;
 CREATE TABLE `stocks` (
   `id` int(11) NOT NULL AUTO_INCREMENT,
   `item_id` int(11) DEFAULT NULL,
-  `purchase_id` int(11) DEFAULT NULL,
   `sub_item_id` int(11) DEFAULT NULL,
-  `quantity` varchar(50) DEFAULT NULL,
+  `quantity` int(11) DEFAULT NULL,
   `no_of_pkg` varchar(100) DEFAULT NULL,
+  `type` varchar(50) DEFAULT NULL,
   `createdAt` datetime DEFAULT NULL ON UPDATE CURRENT_TIMESTAMP,
   `updatedAt` datetime DEFAULT NULL,
   PRIMARY KEY (`id`),
   KEY `item_id` (`item_id`),
   KEY `sub_item_id` (`sub_item_id`),
-  KEY `purchase_id` (`purchase_id`),
   CONSTRAINT `stocks_ibfk_1` FOREIGN KEY (`item_id`) REFERENCES `items` (`id`),
-  CONSTRAINT `stocks_ibfk_2` FOREIGN KEY (`sub_item_id`) REFERENCES `sub_items` (`id`),
-  CONSTRAINT `stocks_ibfk_3` FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`)
+  CONSTRAINT `stocks_ibfk_5` FOREIGN KEY (`sub_item_id`) REFERENCES `sub_items` (`id`)
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
@@ -334,4 +329,4 @@ CREATE TABLE `users` (
 ) ENGINE=InnoDB DEFAULT CHARSET=latin1;
 
 
--- 2021-02-12 05:22:09
+-- 2021-02-18 04:44:26
