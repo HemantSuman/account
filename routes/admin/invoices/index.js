@@ -4,7 +4,8 @@ var helper = require('../../helper');
 var models = require('../../../models');
 var ImageUpload = require('../../../middlewares/ImageUpload');
 var async = require("async");
-const { Op } = require('sequelize')
+const { Op } = require('sequelize');
+const { relativeTimeRounding } = require('moment');
 var extraVar = [];
 
 var modelName = 'Invoice';
@@ -57,7 +58,7 @@ router.post('/add', function(req, res, next) {
     var errors = [];
     async.parallel([
       function (callback) {
-
+        console.log("111");
         modelBuild.validate()
         .then(function(){
           callback(null);
@@ -72,13 +73,28 @@ router.post('/add', function(req, res, next) {
         })        
       },
       function (callback) {
+        console.log("222");
+        if(typeof req.body.item === "undefined"){
+          errorsItem = 
+            {
+              message: 'Atleast one item is required!',
+              type: 'Validation error',
+              path: 'items',
+              value: '',
+          };
+          errors = errors.concat(errorsItem);
+        }
+        callback(null, errors);
+      },
+      function (callback) {
+        console.log("333");
         if(req.body.item && req.body.item.length > 0 ){
           async.forEach(req.body.item, function (value1, callback1) {
-            let itemInvoiceBuild = models['InvoiceItem'].build(value1);
 
+            let itemInvoiceBuild = models['InvoiceItem'].build(value1);
             itemInvoiceBuild.validate()
             .then(function(){
-              callback(null);
+              callback1(null);
             })
             .catch(function (err){
               if (err != null) {
@@ -94,9 +110,12 @@ router.post('/add', function(req, res, next) {
           }, function (err) {
             callback(null, errors);
           })
-        }                
+        } else {
+          callback();
+        }
       },
       function (callback) {
+        console.log("4444");
         async.forEachOf(req.body.item, function (value1, key, callback1) {
           if(typeof  value1 != "undefined"){
 
@@ -138,7 +157,6 @@ router.post('/add', function(req, res, next) {
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
       } else {      
         models[modelName].saveAllValues(req, function (results) {
-
 
           async.parallel([
             function(callback) {
@@ -234,7 +252,7 @@ router.post('/add', function(req, res, next) {
             }
           ],
           function(err, results) {
-            console.log('111111111')
+            // console.log('111111111'); return;
             if(err === null){
               req.session.sessionFlash = {
                 type: 'success',

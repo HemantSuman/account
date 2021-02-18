@@ -169,6 +169,7 @@ router.post('/add', function(req, res, next) {
                       stockDataUpdate.body = {
                         id: data1.id,
                         quantity: parseInt(data1.quantity) + parseInt(req.body.quantity),
+                        no_of_pkg: parseInt(data1.no_of_pkg) + parseInt(req.body.no_of_pkg),
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -181,6 +182,7 @@ router.post('/add', function(req, res, next) {
                         type: "production",
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
+                        no_of_pkg: req.body.no_of_pkg,
                       };
                       models.Stock.saveAllValues(stockData, function (results){
                         callback();
@@ -199,6 +201,7 @@ router.post('/add', function(req, res, next) {
                       stockDataUpdate.body = {
                         id: data.id,
                         quantity: parseInt(data.quantity) + parseInt(req.body.quantity),
+                        no_of_pkg: parseInt(data.no_of_pkg) + parseInt(req.body.no_of_pkg),
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -211,6 +214,7 @@ router.post('/add', function(req, res, next) {
                         type: "production",
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
+                        no_of_pkg: req.body.no_of_pkg,
                       };
                       models.Stock.saveAllValues(stockData, function (results){
                         callback();
