@@ -74,12 +74,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         email: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            type: DataTypes.STRING,           
         },
         mobile1: {
             type: DataTypes.STRING,
@@ -91,35 +86,15 @@ module.exports = function (sequelize, DataTypes) {
         },
         mobile2: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         bank_name: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         ac_no: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         ifsc: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         status: {
             type: DataTypes.STRING,

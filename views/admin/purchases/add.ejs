@@ -225,10 +225,18 @@
                         </div>
                       </div>
                       <div class="row">
+                        <div class="col-sm-2">
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
+                              <label for="tcsCheck" class="custom-control-label" >Is TCS</label>
+                            </div>
+                          </div>
+                        </div>
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label for="">TCS</label>
-                            <input name="tcs" type="text" class="form-control" placeholder="">
+                            <input name="tcs" disabled type="text" class="form-control tcs_value" placeholder="">
                             <div class="tcs-error-message error-message"></div>
                           </div>
                         </div>
@@ -281,6 +289,14 @@
     locale: {
         format: 'DD-MM-YYYY'
       }
+  });
+
+  $(document).on("click", ".tcs_check", function(){
+    if($(this).is(":checked")){
+      $(".tcs_value").attr("disabled", false);
+    } else {
+      $(".tcs_value").attr("disabled", true);
+    }
   });
 
   function addMoreItems(){

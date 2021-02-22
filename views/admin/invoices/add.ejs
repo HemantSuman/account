@@ -649,6 +649,37 @@
     }    
   }
     
+
+  $(document).on("change", ".selectItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+
+    let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    if(id){
+      $.ajax({
+        url: "/admin/stocks/getByItemId",
+        data: {id},
+        //contentType: false,
+        //processData: false,
+        method: "POST",
+        cache: false,
+        success: function (response) {
+          if(response){
+            $(".item_quantity_"+indexValue).val(response.quantity);
+          } else {
+            $(".item_quantity_"+indexValue).val('');
+          }
+
+        }, error: function (resData) {
+            console.log(resData);
+        }
+      });
+    } else {
+      $(".item_quantity_"+indexValue).val("");
+    }    
+  });
+
   $(document).ready(function() {
     // $.notify(data.message, { className:"success",position:"bottom right" });
     

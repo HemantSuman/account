@@ -5,6 +5,7 @@ var expressLayouts = require('express-ejs-layouts');
 var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
+var passport = require('passport');
 
 var indexRouter = require('./routes/front');
 // var usersRouter = require('./routes/users');
@@ -30,6 +31,7 @@ var flash = require('express-flash');
 const session = require('express-session');
 var sessionStore = new session.MemoryStore;
 var app = express();
+require('./middlewares/passport')(passport);
 
 // view engine setup
 app.set('views', path.join(__dirname, 'views'));
@@ -50,10 +52,13 @@ app.use(session({
   cookie: { maxAge: 60000 },
   store: sessionStore,
   saveUninitialized: true,
-  resave: 'true',
-  secret: 'secret'
+  resave: false,
+  secret: '$%^&*(107%G^HF%&367sfdlf675$%*)(!MNVC'
 }));
+app.use(passport.initialize());
+app.use(passport.session());
 app.use(flash());
+
 
 app.use(function(req, res, next){
   // if there's a flash message in the session request, make it available in the response, then delete it

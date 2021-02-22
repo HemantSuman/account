@@ -6,9 +6,7 @@ var ImageUpload = require('../../../middlewares/ImageUpload');
 var async = require("async");
 const bcrypt = require('bcrypt');
 const saltRounds = 10;
-var passport = require('passport')
-, LocalStrategy = require('passport-local').Strategy;
-
+var passport = require('passport');
 var extraVar = [];
 
 var modelName = 'User';
@@ -24,105 +22,48 @@ router.use(function(req, res, next) {
   next();
 });
 
+
 /* GET home page. */
 // router.get('/', function(req, res, next) {
 //   res.render('admin/index', { helper, layout:'admin/layout/layout' });
 // });
 
 router.get('/', function(req, res, next) {
-  console.log('@@@@@@');
-  req.where = {};
-  models[modelName].getAllValues(req, function (results) {
-    res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
-  });   
-});
-
-router.get('/login', function(req, res, next) {
   res.render('admin/'+viewDirectory+'/login', { extraVar,helper, layout: false });
 });
 
-router.post('/login', function(req, res, next) {
-  passport.authenticate('local', 
-  { 
-    successRedirect: '/',
-    failureRedirect: '/login',
-    failureFlash: true 
-  }) 
-});
+// router.get('/login', function(req, res, next) {
+//   res.render('admin/'+viewDirectory+'/login', { extraVar,helper, layout: false });
+// });
 
-router.get('/edit/:id', function(req, res, next) {
+router.post('/', function(req, res, next) {
+  console.log("####", req.body)
 
-  var id = req.params.id;
-  async.parallel({
-    my_model: function (callback) {
-        req.where = {'id': id}
-        models[modelName].getFirstValues(req, function (data) {
-            callback(null, data);
-        });
-    },    
-  }, function (err, results) {
-    extraVar['results'] = results;
-    res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
-  });
-});
-
-router.post('/edit', function(req, res, next) {
-  ImageUpload.uploadFile(req, res, function (err) {
-
-    var modelBuild = models[modelName].build(req.body);
-    var errors = [];
-    async.parallel([
-      function (callback) {
-
-        modelBuild.validate()
-        .then(function(){
-          callback(null);
-        })
-        .catch(function (err){
-          if (err != null) {
-              errors = errors.concat(err.errors);
-              callback(null, errors);
-          } else {
-              callback(null, errors);
-          }
-        });        
-      }
-    ], function (err) {
-      if (errors.length > 0) {
-        res.status(400).send({status: false, msg: ' saved d failed', data: errors});
-      } else {
-
-        models[modelName].updateAllValues(req, function (results) {
-          if(results.headerStatus) {
-            req.session.sessionFlash = {
-              type: 'success',
-              message: 'Record updated successfully!'
-            }
-            res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-          } else {
-            req.session.sessionFlash = {
-              type: 'success',
-              message: 'errorrr ............'
-            }
-            res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-          }
-        });
-      }
-    })
-
-  });  
-});
-
-router.post('/delete/:id', function (req, res, next) {
-  var id = req.params.id;
-  req.where = {'id': id};
-  models[modelName].deleteAllValues(req, function (data) {
-    req.session.sessionFlash = {
-      type: 'success',
-      message: 'Deleted successfully!'
+  passport.authenticate('local', function (err, user, info) {
+    console.log('user', user, err)
+    if (err) {
+        return next(err);
     }
-    res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-  });
+    if (!user) {
+        //return res.redirect('/login');
+        res.status(201).send({status: false, msg: "Invalid email or password", data: []});
+    } else {
+        if (user.is_complete_registration == 1 && user.is_active == 0) {
+            res.status(201).send({status: false, msg: 'Your account is inactive. Contact your administrator to activate it.', data: []});
+        } else {
+            req.logIn(user, function (err) {
+                if (err) {
+                    //return next(err); 
+                    //console.log(err);
+                }
+                res.status(201).send({status: true, msg: 'login done', 'url': 'dashboard', data: []});
+            });
+
+        }
+    }
+
+  })(req, res, next);
+
 });
 
 module.exports = router;

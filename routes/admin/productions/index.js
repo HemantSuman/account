@@ -101,6 +101,9 @@ router.post('/add', function(req, res, next) {
     
     let errors = [];
     let newSaveData = [];
+    if(!req.body.sub_item_id){
+      req.body.sub_item_id = null;
+    }
     req.body.date_of_production = helper.changeDateFormate(req.body.date_of_production.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     async.parallel([
       function (callback) {
