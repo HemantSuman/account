@@ -49,7 +49,14 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'stocks',
   });  
   myModel.getAllValues = function (req, res) {
-    this.findAll({where: req.where})
+    var itemToStock = myModel.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var itemSubToStock = myModel.belongsTo(sequelize.models.SubItem, {foreignKey: 'sub_item_id', as: "subItems"});
+    this.findAll({where: req.where, 
+        include: [
+            itemToStock,
+            itemSubToStock
+        ]
+    })
         .then(function(results){
             res(results);
         })

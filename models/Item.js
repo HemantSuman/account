@@ -47,6 +47,9 @@ module.exports = function (sequelize, DataTypes) {
         wastage: {
             type: DataTypes.STRING,            
         },
+        gstin: {
+            type: DataTypes.STRING,            
+        },
         status: {
             type: DataTypes.INTEGER,
         },

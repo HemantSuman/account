@@ -20,10 +20,13 @@ router.use(function(req, res, next) {
   next();
 });
 
-/* GET home page. */
-// router.get('/', function(req, res, next) {
-//   res.render('admin/index', { helper, layout:'admin/layout/layout' });
-// });
+router.get('/', function(req, res, next) {
+  req.where = {};
+  models[modelName].getAllValues(req, function (results) {
+    console.log(results)
+    res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
+  });   
+});
 
 router.post('/getByItemId', function(req, res, next) {
   req.where = {item_id: req.body.id, sub_item_id: null, type: "production"};
