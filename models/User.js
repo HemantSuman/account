@@ -59,6 +59,11 @@ module.exports = function (sequelize, DataTypes) {
             res(results);
         });
     }
+    myModel.getUserByEmail = function (req, res) {
+        this.findOne({where: {email: req}}).then(function (results) {
+            res(results);
+        });
+    }
     myModel.getAllValuesPaging = function (req, res) {
         this.findAndCountAll({
             where: req.where,

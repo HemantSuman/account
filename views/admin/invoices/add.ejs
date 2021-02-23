@@ -299,7 +299,7 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemAmount item_amount_" placeholder="">
+                                    <input readonly type="text" class="form-control itemAmount item_amount_" placeholder="">
                                     <div class="item_amount_-error-message error-message"></div>
                                 </div>
                             </div>
@@ -323,7 +323,7 @@
                   <div class="col-sm-3">
                     <div class="form-group">
                       <label for="">Sub Total</label>
-                      <input name="sub_total" type="text" class="form-control"  placeholder="">
+                      <input name="sub_total" type="number" class="form-control SubTotal"  placeholder="">
                       <div class="sub_total-error-message error-message"></div>
                     </div>
                   </div>
@@ -335,14 +335,14 @@
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">Discount</label>
-                    <input name="discount" type="text" class="form-control"  placeholder="">
+                    <input name="discount" type="number" class="form-control discountField"  placeholder="">
                     <div class="discount-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Amount</label>
-                    <input name="amount" type="text" class="form-control"  placeholder="">
+                    <input name="amount" type="number" class="form-control withDiscount"  placeholder="">
                     <div class="amount-error-message error-message"></div>
                   </div>
                 </div>
@@ -354,7 +354,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">transportation</label>
-                    <input name="transportation" type="text" class="form-control"  placeholder="">
+                    <input name="transportation" type="number" class="form-control transportationField"  placeholder="">
                     <div class="transportation-error-message error-message"></div>
                   </div>
                 </div>
@@ -366,14 +366,14 @@
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">cgst</label>
-                    <input name="cgst" type="text" class="form-control"  placeholder="">
+                    <input name="cgst" type="number" class="form-control"  placeholder="">
                     <div class="cgst-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">amount</label>
-                    <input name="cgst_amount" type="text" class="form-control"  placeholder="">
+                    <input name="cgst_amount" type="number" class="form-control"  placeholder="">
                     <div class="cgst_amount-error-message error-message"></div>
                   </div>
                 </div>
@@ -384,14 +384,14 @@
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">SGST</label>
-                    <input name="sgst" type="text" class="form-control"  placeholder="">
+                    <input name="sgst" type="number" class="form-control"  placeholder="">
                     <div class="sgst-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Amount</label>
-                    <input name="sgst_amount" type="text" class="form-control"  placeholder="">
+                    <input name="sgst_amount" type="number" class="form-control"  placeholder="">
                     <div class="sgst_amount-error-message error-message"></div>
                   </div>
                 </div>
@@ -403,14 +403,14 @@
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">IGST</label>
-                    <input name="igst" type="text" class="form-control"  placeholder="">
+                    <input name="igst" type="number" class="form-control"  placeholder="">
                     <div class="igst-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Amount</label>
-                    <input name="igst_amount" type="text" class="form-control"  placeholder="">
+                    <input name="igst_amount" type="number" class="form-control"  placeholder="">
                     <div class="igst_amount-error-message error-message"></div>
                   </div>
                 </div>
@@ -422,7 +422,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Net Amount</label>
-                    <input name="net_amount" type="text" class="form-control"  placeholder="">
+                    <input name="net_amount" type="number" class="form-control netAmount"  placeholder="">
                     <div class="net_amount-error-message error-message"></div>
                   </div>
                 </div>
@@ -531,7 +531,7 @@
       itemHtml += "<div class='item_per_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][amount]' type='number' value='"+itemAmount+"' class='form-control amount item_amount_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][amount]' type='number' value='"+itemAmount+"' class='form-control amount itemValue item_amount_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_amount_"+itemIndexValue+"-error-message error-message'></div></div></div>";
 
       itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";
@@ -585,10 +585,10 @@
       $('.item_per_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
     }
-    if($('.item_amount_'+itemIndexValue).val() === ""){
-      $('.item_amount_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
+    // if($('.item_amount_'+itemIndexValue).val() === ""){
+    //   $('.item_amount_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
+    // }
     return valid;
   }
 
@@ -649,6 +649,51 @@
     }    
   }
     
+  function itemName(thisObj, index){
+    $(".item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function subItemName(thisObj, index){
+    $(".sub_item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  $(document).on("keyup", ".discountField", function(){
+    calculateTotal();
+  });
+
+  $(document).on("keyup", ".transportationField", function(){
+    calculateTotal();
+  });
+
+  function calculateTotal(){
+    let totalPrice = 0;
+    let totalGST = 0;
+    $(".itemRow").each(function(index, val){
+      let rate = parseFloat($(".rate", val).val());
+      let qty = parseFloat($(".qty", val).val());
+      // let gst = parseFloat($(".gst", val).val());
+      let gst = 1;
+      totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
+      // let gstPerItem = ((rate * qty) * gst) / 100;
+      let gstPerItem = 0;
+      $(".gstAmount", val).val(gstPerItem);
+      totalGST = totalGST + gstPerItem;
+      $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
+      
+    });
+    $(".SubTotal").val(totalPrice);
+    let discountValue = parseFloat($(".discountField").val());
+    let withDiscount = totalPrice - discountValue;
+    $(".withDiscount").val(withDiscount);
+
+    let transportation = parseFloat($(".transportationField").val());
+    if(isNaN(transportation)){
+      transportation = 0;
+    }
+    console.log(transportation);
+    $(".netAmount").val(transportation + withDiscount);
+    // $(".totalGST").val(totalGST);
+  }
 
   $(document).on("change", ".selectItem", function () {
 
