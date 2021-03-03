@@ -27,6 +27,7 @@ var productionsRouter = require('./routes/admin/productions');
 var invoicesRouter = require('./routes/admin/invoices');
 var usersRouter = require('./routes/admin/users');
 var loginRouter = require('./routes/admin/login');
+var logoutRouter = require('./routes/admin/logout');
 var flash = require('express-flash');
 const session = require('express-session');
 var sessionStore = new session.MemoryStore;
@@ -74,6 +75,7 @@ app.use(function(req, res, next){
 app.use('/', indexRouter);
 app.use('/admin', adminRouter);
 app.use('/admin/login', loginRouter);
+app.use('/admin/logout', logoutRouter);
 app.use('/admin/categories', categoryRouter);
 app.use('/admin/groups', groupRouter);
 app.use('/admin/taxes', taxRouter);

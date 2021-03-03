@@ -32,3 +32,6 @@ CREATE TABLE `other_taxes` (
 ALTER TABLE `other_taxes`
 CHANGE `createdAt` `createdAt` datetime NULL ON UPDATE CURRENT_TIMESTAMP AFTER `invoice_id`,
 CHANGE `updatedAt` `updatedAt` datetime NULL AFTER `createdAt`;
+
+INSERT INTO `users` (`id`, `email`, `password`, `first_name`, `last_name`, `status`, `createdAt`, `updatedAt`) VALUES
+(2,	'test-11@yopmail.com',	'$2b$10$jfwGb5PRkibP.8qSWI1olubZAE5PYGsKuPMFrtCxR2ZkvcDcrj1Iy',	'test',	'test',	'active',	'2021-02-05 13:01:01',	'2021-02-05 13:01:01');
