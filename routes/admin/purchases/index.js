@@ -15,6 +15,9 @@ extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
 extraVar['titleName'] = titleName;
 
+var adminAuth = require('../../../middlewares/Auth');
+router.use(adminAuth.isLogin);
+
 router.use(function(req, res, next) {
   extraVar['siteVariable'] = req.siteVariable;
   next();
@@ -43,6 +46,18 @@ router.get('/add', function(req, res, next) {
     accounts: function (callback) {
         req.where = {}
         models.Account.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    taxes: function (callback) {
+        req.where = {}
+        models.Tax.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    units: function (callback) {
+        req.where = {}
+        models.Unit.getAllValues(req, function (data) {
             callback(null, data);
         });
     },    
@@ -110,6 +125,34 @@ router.post('/add', function(req, res, next) {
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
+            function(callback) {
+              if(results.id && req.body.tcs_check && req.body.tcs.length > 0){
+                console.log("###", req.body.tcs_check, req.body.tcs.length)
+                let bulkData1 = [];
+                async.forEachOf(req.body.tcs, function (value1, key, callback1) {
+                  if(typeof  value1 != "undefined"){
+                    let tmpObj = {};
+                    tmpObj.invoice_id = null;
+                    tmpObj.purchase_id = results.id;
+                    tmpObj.tax_id = value1;
+                    bulkData1.push(tmpObj);                  
+                  }
+                  callback1();
+                }, function (err) {
+                  console.log("&&", bulkData1)
+                  if (err) {
+                    console.error(err.message);
+                    callback();
+                  } else {
+                    models.OtherTax.saveAllBulkValues(bulkData1, function (results){
+                      callback();
+                    });
+                  }
+                });
+              } else {
+                callback()
+              }
+            },
             function(callback) {
               if(results.id){
                 let bulkData1 = [];
@@ -231,6 +274,7 @@ router.post('/add', function(req, res, next) {
             }
           ],
           function(err, results) {
+            console.log("errerrerrerrerr", err)
             if(err === null){
               req.session.sessionFlash = {
                 type: 'success',

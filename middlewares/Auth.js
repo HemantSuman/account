@@ -2,7 +2,6 @@ var models = require('../models');
 function MyModelClass() {
 
     this.isLogin = function (req, res, next) {
-        console.log("@@@", req.isAuthenticated());
         if (req.isAuthenticated()) {
             next();
         } else {

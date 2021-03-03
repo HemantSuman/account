@@ -49,7 +49,7 @@ app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.use(session({
-  cookie: { maxAge: 60000 },
+  cookie: {},
   store: sessionStore,
   saveUninitialized: true,
   resave: false,

@@ -7,78 +7,25 @@ var i18n_Validation = new (require('i18n-2'))({
 i18n_Validation.setLocale('en_valiation');
 
 module.exports = function (sequelize, DataTypes) {
-  var myModel = sequelize.define("InvoiceItem",
+  var myModel = sequelize.define("OtherTax",
     {
+        tax_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
+        purchase_id: {
+            type: DataTypes.INTEGER,
+        },
         invoice_id: {
             type: DataTypes.INTEGER,  
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }          
-        },
-        item_id: {
-            type: DataTypes.INTEGER,  
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }          
-        },
-        sub_item_id: {
-            type: DataTypes.INTEGER,  
-        },
-        description: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
-        no_of_pkg: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
-        unit: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
-        quantity: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
-        rate: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
-        acount: {
-            type: DataTypes.INTEGER,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        }
+        },        
     },
     {
-      tableName: 'invoice_items',
+      tableName: 'other_taxes',
   });  
   myModel.getAllValues = function (req, res) {
     this.findAll({where: req.where})

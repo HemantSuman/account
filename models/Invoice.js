@@ -29,15 +29,15 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         consignee_no: {
+            type: DataTypes.STRING,            
+        },
+        buyer: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },
-        buyer: {
-            type: DataTypes.STRING,
         },
         buyer_add: {
             type: DataTypes.STRING,
@@ -151,14 +151,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        trading_invoice: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
+        // trading_invoice: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
         payment_terms: {
             type: DataTypes.STRING,
             validate: {
@@ -177,11 +177,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         discount: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         amount: {
             type: DataTypes.STRING,
@@ -193,59 +193,59 @@ module.exports = function (sequelize, DataTypes) {
         },
         transportation: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
-        cgst: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
+        // cgst: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
         cgst_amount: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
-        igst: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
+        // igst: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
         igst_amount: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
-        sgst: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
+        // sgst: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
         sgst_amount: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         net_amount: {
             type: DataTypes.STRING,

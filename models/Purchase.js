@@ -137,16 +137,73 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        gst_amt: {
+        cgst_amount: {
+            type: DataTypes.STRING,
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
+        },
+        // igst: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
+        igst_amount: {
+            type: DataTypes.STRING,
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
+        },
+        // sgst: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
+        sgst_amount: {
+            type: DataTypes.STRING,
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
+        },
+        // gst_amt: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
+        tcs: {
+            type: DataTypes.STRING,
+            get() {
+                if(typeof this.getDataValue('tcs') !== "undefined"){
+                    return this.getDataValue('tcs').split(';')
+                }
+                return null;
+            },
+            set(val) {
+                this.setDataValue('tcs',val.join(';'));
+            },
+        },
+        total_value: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },
-        tcs: {
-            type: DataTypes.STRING,
         },
     },
     {

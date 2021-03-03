@@ -14,7 +14,6 @@ module.exports = function (passport) {
 
     // used to serialize the user for the session
     passport.serializeUser(function (user, done) {
-        console.log('serializeUser', user);
         done(null, user);
     });
 
@@ -85,21 +84,26 @@ module.exports = function (passport) {
         },
         function (req, email, password, done) { // callback with email and password from our form
 
-            console.log('passport call ....');
-
+            console.log(req.body.company_id)
             models.User.getUserByEmail(email, function (rows) {
+                req.where = {id: req.body.company_id};
+                models.Company.getFirstValues(req, function (rows1) {
+                    let results = {};
+                    results.User = rows;
+                    results.Company = rows1;
 
-                if (!rows) {
-                    // req.flash('msg', 'Invalid login details');
-                    return done(null, false, 'Invaild login details');
-                } else if (!bcrypt.compareSync(password, rows.password)) {
+                    if (!results) {
+                        return done(null, false, 'Invaild login details');
+                    } else if (!bcrypt.compareSync(password, results.User.password)) {
 
-                    return done(null, false, 'Invaild login details');
-                } else {
-                    return done(null, rows);
-                }
+                        return done(null, false, 'Invaild login details');
+                    } else {
+                        return done(null, results);
+                    }
 
+                });
             });
 
-        }));
+        })
+    );
 };

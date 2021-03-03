@@ -25,6 +25,7 @@
   </div>
   <!-- /.login-logo -->
   <div class="card">
+    <div class="overlay" style="display: none;"><i class="fas fa-2x fa-sync-alt fa-spin"></i></div>
     <div class="card-body login-card-body">
       <p class="login-box-msg">Sign in to start your session</p>
 
@@ -44,6 +45,23 @@
               <span class="fas fa-lock"></span>
             </div>
           </div>
+        </div>
+        <div class="input-group mb-3">
+          <label>Select Company</label>
+        </div>
+        <div class="input-group mb-2">
+          <select name="company_id" id="company_id" class="form-control select2">
+            <option value="">Select Company</option>
+            <% extraVar.companies.forEach(function(data){ %>
+              <option value="<%= data.id %>"><%= data.name %></option>
+            <% }); %>                  
+          </select>
+          <div class="input-group-append">
+            <div class="input-group-text">
+              <span class="fas fa-building"></span>
+            </div>
+          </div>
+          <div class="company_id-error-message error-message"></div>
         </div>
         <div class="row">
           <div class="col-8">
@@ -92,29 +110,43 @@
 <!-- AdminLTE App -->
 <script src="/admin/dist/js/adminlte.min.js"></script>
 <script src="/admin/plugins/notify.js"></script>
+
+<!-- jquery-validation -->
+<script src="/admin/plugins/jquery-validation/jquery.validate.min.js"></script>
+<script src="/admin/plugins/jquery-validation/additional-methods.min.js"></script>
 <script>
   $(document).on('submit','#loginForm', function(event){
     event.preventDefault();
     var thisObj = $(this);
     
-    $.ajax({
-      url : $(thisObj).attr('action'),
-      data: {
-        'email' : $('#email').val(),
-        'password' : $('#password').val(),
-        // 'remember_me' : $('#remember_me').val(),
-      },
-      method: 'post',
-      success: function(response){
-        console.log(response);
-        if(response.status){
-          window.location.href = '/admin' + '/' + response.url;
-          //bootstrapNotify.showMessage(response.msg,'success');
-        } else {
-          $.notify(response.msg, { className:"error", position:"bottom right" });
+    let email = $("#email").val();
+    let password = $("#password").val();
+    let company_id = $("#company_id").val();
+
+    if(email === '' || password === '' || company_id === ''){
+      $.notify("All fiels are required!", { className:"error", position:"bottom right" });
+    } else {
+      $(".overlay").show();
+      $.ajax({
+        url : $(thisObj).attr('action'),
+        data: {
+          'email' : $('#email').val(),
+          'password' : $('#password').val(),
+          'company_id' : $('#company_id').val(),
+          // 'remember_me' : $('#remember_me').val(),
+        },
+        method: 'post',
+        success: function(response){
+          $(".overlay").show();
+          if(response.status){
+            window.location.href = '/admin' + '/' + response.url;
+            //bootstrapNotify.showMessage(response.msg,'success');
+          } else {
+            $.notify(response.msg, { className:"error", position:"bottom right" });
+          }
         }
-      }
-    })
+      })
+    }
   });
 </script>
 </body>

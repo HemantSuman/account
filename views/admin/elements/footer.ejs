@@ -3,6 +3,7 @@ All rights reserved.
 <div class="float-right d-none d-sm-inline-block">
   <b>Version</b> 3.0.5
 </div>
+<span style="display: none;" id="sessionObj"><%= JSON.stringify(extraVar.siteVariable); %></span>
 <% if ( locals.sessionFlash ) { %>
   <div style="display: none;" class="flash-msg"><%- JSON.stringify(locals.sessionFlash) %></div>
 <% } %>

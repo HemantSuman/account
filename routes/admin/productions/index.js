@@ -16,6 +16,9 @@ extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
 extraVar['titleName'] = titleName;
 
+var adminAuth = require('../../../middlewares/Auth');
+router.use(adminAuth.isLogin);
+
 router.use(function(req, res, next) {
   extraVar['siteVariable'] = req.siteVariable;
   next();

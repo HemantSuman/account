@@ -29,7 +29,11 @@ router.use(function(req, res, next) {
 // });
 
 router.get('/', function(req, res, next) {
-  res.render('admin/'+viewDirectory+'/login', { extraVar,helper, layout: false });
+  req.where = {};
+  models.Company.getAllValues(req, function (results) {
+    extraVar['companies'] = results;
+    res.render('admin/'+viewDirectory+'/login', { extraVar, helper, layout: false });
+  });  
 });
 
 // router.get('/login', function(req, res, next) {
@@ -39,17 +43,14 @@ router.get('/', function(req, res, next) {
 router.post('/', function(req, res, next) {
 
   passport.authenticate('local', function (err, user, info) {
-    // console.log('user', user, err, info)
     if (err) {
         return next(err);
     }
     if (!user) {
-      //return res.redirect('/login');
       res.status(201).send({status: false, msg: "Invalid email or password", data: []});
     } else {
       req.logIn(user, function (err) {
           if (err) {
-              //return next(err); 
               console.log(err);
           }
           res.status(201).send({status: true, msg: 'login done', 'url': 'accounts', data: []});

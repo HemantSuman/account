@@ -28,14 +28,14 @@
           <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/add">
             <input type="hidden" class="itemIndexValue" value="0">
             <div class="card-body">
-              <div class="row">
+              <div class="row">                
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label for="">Buyer Account</label>
-                    <select name="account_id" class="form-control select2">
+                    <select name="account_id" class="form-control select2 buyerAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option value="<%= data.id %>"><%= data.account_name %></option>
+                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
                       <% }); %>                  
                     </select>
                     <div class="account_id-error-message error-message"></div>
@@ -125,6 +125,9 @@
                             <label for="">No. of Pkt.</label>
                           </div>
                           <div class="col-sm-1">
+                            <label for="">Unit</label>
+                          </div>
+                          <div class="col-sm-1">
                             <label for="">Quantity</label>
                           </div>
                           <div class="col-sm-1">
@@ -172,6 +175,16 @@
                                 </div>
                             </div>
                             <div class="col-sm-1">
+                              <div class="form-group">
+                                <select class="form-control item_unit_ select2 selectUnit">
+                                  <% extraVar.results.units.forEach(function(data){ %>
+                                    <option value="<%= data.id %>"><%= data.name %></option>
+                                  <% }); %>                  
+                                </select>
+                                <div class="item_unit_-error-message error-message"></div>
+                              </div>
+                            </div>
+                            <div class="col-sm-1">
                                 <div class="form-group">
                                     <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
                                     <div class="item_quantity_-error-message error-message"></div>
@@ -191,12 +204,12 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control itemGst item_gst_amount_" placeholder="">
+                                    <input type="text" disabled class="form-control item_gst_amount_" placeholder="">
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control itemGst item_value_" placeholder="">
+                                    <input type="text" disabled class="form-control item_value_" placeholder="">
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -231,12 +244,34 @@
                           </div>
                         </div>
                       </div>
-                      <div class="row">
-                        <div class="col-sm-6">
+                      <div class="sameStates" style="display: none;"> 
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">CGST Amount</label>
+                              <input name="cgst_amount" type="number" class="cgstAmount form-control"  placeholder="">
+                              <div class="cgst_amount-error-message error-message"></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">SGST Amount</label>
+                              <input name="sgst_amount" type="number" class="sgstAmount form-control"  placeholder="">
+                              <div class="sgst_amount-error-message error-message"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row diffStates" style="display: none;">
+                        <div class="col-sm-3">
                           <div class="form-group">
-                            <label for="">GST Amount</label>
-                            <input name="gst_amt" type="text" class="form-control totalGST" placeholder="">
-                            <div class="gst_amt-error-message error-message"></div>
+                            <label for="">IGST Amount</label>
+                            <input name="igst_amount" type="number" class="igstAmount form-control"  placeholder="">
+                            <div class="igst_amount-error-message error-message"></div>
                           </div>
                         </div>
                       </div>
@@ -245,15 +280,28 @@
                           <div class="form-group">
                             <div class="custom-control custom-checkbox">
                               <input name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
-                              <label for="tcsCheck" class="custom-control-label" >Is TCS</label>
+                              <label for="tcsCheck" class="custom-control-label" >Other Taxes</label>
                             </div>
                           </div>
                         </div>
                         <div class="col-sm-6">
                           <div class="form-group">
-                            <label for="">TCS</label>
-                            <input name="tcs" disabled type="text" class="form-control tcs_value" placeholder="">
+                            <label for="">Taxes</label>
+                            <select disabled multiple class="form-control select2 tcs_value" name="tcs">
+                              <% extraVar.results.taxes.forEach(function(data){ %>
+                                <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
+                              <% }); %>                  
+                            </select>
                             <div class="tcs-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">Total</label>
+                            <input name="total_value" type="text" class="form-control total_value" placeholder="">
+                            <div class="total_value-error-message error-message"></div>
                           </div>
                         </div>
                       </div>
@@ -281,6 +329,7 @@
           </form>
         </div>
         <!-- /.card -->
+        <span style="display: none;" id="unitsObj"><%= JSON.stringify(extraVar.results.units); %></span>
         <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
       </div>
       <!--/.col (left) -->
@@ -299,6 +348,7 @@
         format: 'DD-MM-YYYY'
       }
   });
+
   $('.date2').daterangepicker({
     singleDatePicker: true,
     startDate: moment().add(1, "month"),
@@ -310,9 +360,11 @@
   $(document).on("click", ".tcs_check", function(){
     if($(this).is(":checked")){
       $(".tcs_value").attr("disabled", false);
-    } else {
+    } else {      
+      $(".tcs_value").val("").trigger("change");
       $(".tcs_value").attr("disabled", true);
     }
+    calculateTotal();
   });
   
   $(document).on("change", ".selectItem", function(){
@@ -335,9 +387,11 @@
 
     let selectItem = $('.item_item_id_').val();
     let itemNoOfPkt = $('.itemNoOfPkt').val();
+    let itemUnit = $('.itemUnit').val();
     let itemQuantity = $('.itemQuantity').val();
     let itemRate = $('.itemRate').val();
     let itemGst = $('.itemGst').val();
+    let selectUnit = $('.selectUnit').val();
     let valid = validateItems();
 
     if(valid){
@@ -355,6 +409,20 @@
         }
         itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
       });
+
+      let unitsObj = JSON.parse($("#unitsObj").html());
+      let unitOptions = "";
+      let selectedValue3 = "";
+      unitsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectUnit){
+          selected = "selected";
+          selectedValue3 = data.id;          
+        }
+        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
+      });
+      unitOptions += "<input class='item_unit_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue3+"' name='item["+itemIndexValue+"][unit]' >";
+
 
       let subItemOptions = "";
       let selectedValue2 = "";
@@ -380,6 +448,10 @@
       itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
+
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
@@ -413,6 +485,14 @@
     }
   }
 
+  function changeUnit(thisObj, index){
+    $(".item_unit_hidden_"+index).val($(thisObj).val());
+  }
+
+  $(document).on("change", ".buyerAccount", function(){
+    calculateTotal();
+  });
+
   function emptyItemErrors(index = ""){
     $(".item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message, .item_rate_"+index+"-error-message, .item_gst_"+index+"-error-message").html("");
   }
@@ -435,6 +515,10 @@
       $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
     }
+    if($('.item_unit_'+itemIndexValue).val() === ""){
+      $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
     if($('.item_rate_'+itemIndexValue).val() === ""){
       $('.item_rate_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
@@ -455,6 +539,7 @@
       $('.item_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
+      $('.item_unit_'+itemIndexValue).attr("readonly", true);
       $('.item_quantity_'+itemIndexValue).attr("readonly", true);
       $('.item_rate_'+itemIndexValue).attr("readonly", true);
       $('.item_gst_'+itemIndexValue).attr("readonly", true);
@@ -479,6 +564,7 @@
     $('.item_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
+    $('.item_unit_'+itemIndexValue).attr("readonly", false);
     $('.item_quantity_'+itemIndexValue).attr("readonly", false);
     $('.item_rate_'+itemIndexValue).attr("readonly", false);
     $('.item_gst_'+itemIndexValue).attr("readonly", false);
@@ -492,6 +578,7 @@
     $('.item_item_id_').val("").trigger('change');
     $('.item_sub_item_id_').val("").trigger('change');
     $('.itemNoOfPkt').val("");
+    $('.itemUnit').val("");
     $('.itemQuantity').val("");
     $('.itemRate').val("");
     $('.itemGst').val("");
@@ -501,6 +588,10 @@
     $(thisVar).parents('.itemRow').remove();
     calculateTotal();
   }
+
+  $(document).on("change", ".tcs_value", function(){
+    calculateTotal();
+  });
 
   function calculateTotal(){
     let totalPrice = 0;
@@ -515,10 +606,51 @@
       totalGST = totalGST + gstPerItem;
       $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
       
-      console.log(totalPrice, gstPerItem, totalGST)
     });
     $(".taxableValue").val(totalPrice);
     $(".totalGST").val(totalGST);
+
+    let total_value = parseFloat(totalPrice + totalGST);
+
+    let buyerGstAmt = $(".buyerAccount option:selected").attr('gstin');
+    if(typeof buyerGstAmt !== "undefined"){
+      console.log("@@", buyerGstAmt)
+      let buyerGst = buyerGstAmt.substring(0, 2);
+      let sessionObj = JSON.parse($("#sessionObj").html());
+      let userGst = sessionObj.session.user.Company.gstin.substring(0, 2);
+      console.log("$$", userGst)
+      if(buyerGst == userGst){
+
+        $(".sameStates").show();
+        $(".diffStates").hide();
+        $(".cgstAmount").val(totalGST / 2);
+        $(".sgstAmount").val(totalGST / 2);
+        $(".igstAmount").val("");
+      } else {
+        $(".igstAmount").val(totalGST);
+        $(".cgstAmount").val("");
+        $(".sgstAmount").val("");
+        $(".diffStates").show();
+        $(".sameStates").hide();
+      }
+    }
+    
+    let withTcs = 0;
+    if($(".tcs_check").is(":checked")){
+      let otherTax = 0;
+      $(".tcs_value option:selected").each(function(val, index){
+        console.log($(this).attr("percentage"));
+        otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
+      })
+      // let tcs_value = parseFloat($(".tcs_value option:selected").attr("percentage"));
+      
+      // if(isNaN(tcs_value)){
+      //   tcs_value = 0;
+      // } 
+      withTcs = (total_value * otherTax) / 100;
+      total_value = parseFloat(total_value + withTcs);
+    }
+    $(".total_value").val(total_value);
   }
 
   $(document).ready(function() {
