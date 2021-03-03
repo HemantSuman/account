@@ -125,6 +125,19 @@ router.post('/add', function(req, res, next) {
         })
       },
       function (callback) {
+        if(typeof req.body.items === "undefined"){
+          errorsItem = 
+            {
+              message: 'Atleast one item is required!',
+              type: 'Validation error',
+              path: 'items',
+              value: '',
+          };
+          errors = errors.concat(errorsItem);
+        }
+        callback(null, errors);
+      },
+      function (callback) {
         async.forEachOf(req.body.items, function (value1, key, callback1) {
           let reqS1 = {};
           reqS1.where = {
