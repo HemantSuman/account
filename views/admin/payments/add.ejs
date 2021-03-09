@@ -1,0 +1,290 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Add <%=extraVar['modelName']%></h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+<!-- /.content-header -->
+<section class="content">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        
+        <div class="card card-primary">
+          
+          <!-- <div class="card-header">
+            <h3 class="card-title">Add <%=extraVar['modelName']%></h3>
+          </div> -->
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/add">
+            <input type="hidden" class="itemIndexValue" value="0">
+            <div class="card-body">
+              <div class="row">                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Party Account</label>
+                    <select name="account_id" class="form-control select2 buyerAccount">
+                      <option value="">Select Account</option>
+                      <% extraVar.results.accounts.forEach(function(data){ %>
+                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                      <% }); %>                  
+                    </select>
+                    <div class="account_id-error-message error-message"></div>
+                  </div>
+                </div>              
+                <!-- <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice Date</label>
+                    <input name="purchase_invoice_date" type="text" class="form-control date1" placeholder="">
+                    <div class="purchase_invoice_date-error-message error-message"></div>
+                  </div>
+                </div>               -->
+              </div>
+              <div class="row">
+                <table id="example1" class="table table-bordered table-striped">
+                  <thead>
+                    <tr>
+                      <th><input type="checkbox" class="checkAll" /></th>
+                      <th>Date</th>
+                      <th>Amount</th>
+                    </tr>
+                    <tr>
+                      <td colspan="3"><div class="purchaseArr-error-message error-message"></div></td>
+                    </tr>
+                  </thead>
+                  <tbody class="purchaseListing">
+                      
+                  </tbody>
+                </table>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Pay Date</label>
+                    <input name="pay_date" type="text" class="form-control date1" placeholder="">
+                    <div class="pay_date-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">PayMode</label>
+                    <input name="pay_mode" type="text" class="form-control" placeholder="">
+                    <div class="pay_mode-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Remark</label>
+                    <input name="remark" type="text" class="form-control" placeholder="">
+                    <div class="remark-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              <div class="row">
+                <div class="col-sm-6">
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Pay Amount</label>
+                    <input name="pay_amount" type="text" class="form-control payAmount" placeholder="">
+                    <div class="pay_amount-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+              
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+            </div>
+          </form>
+        </div>
+        <!-- /.card -->
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<!-- Summernote -->
+<script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
+
+<script type="text/javascript">
+
+  $('.date1').daterangepicker({
+    singleDatePicker: true,
+    locale: {
+        format: 'DD-MM-YYYY'
+      }
+  });
+
+  $(document).on("change", ".buyerAccount", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+
+    $.ajax({
+      url: "/admin/payments/getPurchasesByAccount",
+      data: {id},
+      //contentType: false,
+      //processData: false,
+      method: "POST",
+      cache: false,
+      success: function (response) {
+        if(response && response.length > 0){
+          let totalDueAmount = 0;
+          let purchaseHtml = "";
+          response.map(function(val, index){
+            let totalVal = 0;
+
+            if(val.total_value){
+              totalDueAmount = parseFloat(totalDueAmount + parseFloat(val.total_value));
+              totalVal = parseFloat(val.total_value);
+            }
+            if(val.Payments.length > 0){
+              val.Payments.map(function(val1, index1){
+                totalVal = parseFloat(totalVal - parseFloat(val1.pay_amount));
+              });
+            }
+            purchaseHtml += "<tr class='purchaseListingTr'>";
+            purchaseHtml += "<td><input name='purchaseArr[]' value='"+val.id+"' type='checkbox' class='rowCheckbox' /></td>";
+            purchaseHtml += "<td>"+moment(val.purchase_invoice_date, "YYYY-MM-DD").format("DD-MM-YYYY")+"</td>";
+            purchaseHtml += "<td class='rowAmt'>"+totalVal+"</td>";
+            purchaseHtml += "</tr>";            
+          });
+          purchaseHtml += "<tr>";
+          purchaseHtml += "<th></th>";
+          purchaseHtml += "<th>Total Due</th>";
+          purchaseHtml += "<td><strong class='rowTotalAmt'>"+totalDueAmount.toFixed(2)+"</strong></td>";
+          purchaseHtml += "</tr>";
+          $(".purchaseListing").html(purchaseHtml);
+        } else {
+          $(".purchaseListing").html("Not Found any Payment");
+        }
+
+      }, error: function (resData) {
+          console.log(resData);
+      }
+    });
+  });
+
+  $(document).on("click", ".checkAll", function(){
+    calculateAmount("all");
+  });
+
+  $(document).on("click", ".rowCheckbox", function(){
+    
+    calculateAmount("single");
+  });
+
+  function calculateAmount(type){
+    if(type === "all"){
+      let rowAmt = 0;
+      $(".purchaseListingTr").each(function(index, val){
+
+        if($(".checkAll").is(":checked")){
+          rowAmt = parseFloat(rowAmt) + parseFloat($(".rowAmt", val).text());
+          $(".rowCheckbox", val).prop("checked", true).trigger("change");
+        } else {
+          $(".rowCheckbox", val).prop("checked", false).trigger("change");
+        }
+        $(".payAmount").val(rowAmt);
+      });
+    } else {
+      let rowAmt = 0;
+      $(".purchaseListingTr").each(function(index, val){
+        if($(".rowCheckbox", val).is(":checked")){
+          rowAmt = parseFloat(rowAmt) + parseFloat($(".rowAmt", val).text());
+        } else {
+          $(".checkAll").prop("checked", false).trigger("change");
+        }
+        $(".payAmount").val(rowAmt);
+      });
+    }
+  }
+
+  $(document).ready(function() {
+    // $.notify(data.message, { className:"success",position:"bottom right" });
+    var formId = 'formId';
+    $(document).on('click', '.submitBtn', function(){
+      $('.error-message').html('');
+      $('#'+formId).validate({
+        rules: {
+          title: {
+            // required: true,
+          }
+        },
+        messages: {
+          title: {
+            required: "This field is required!",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+
+          var form = $('#'+formId);
+          errorFieldObj = [];
+          $.ajax({
+            url: $('#'+formId).attr('action'),
+            type: 'POST',
+            dataType: "json",
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status)
+            {
+              if (data.status) {
+                window.location.href = data.url;
+              } else {
+                $.notify("Somthing went wrong, Please try again!", { className:"error", position:"bottom right" });
+              }
+            },
+            error: function (xhr, desc, err)
+            {
+              xhr.responseJSON.data.map(function(val){
+                console.log(val)
+                if(!errorFieldObj.includes(val.path)){
+                  
+                  $('.'+val.path+'-error-message').html(val.message)
+                  errorFieldObj.push(val.path)
+                }
+              })
+
+            }
+          })
+        }
+      });
+    });
+  });
+</script>

@@ -186,7 +186,7 @@ router.post('/add', function(req, res, next) {
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
                       let reqS1 = {};
-                      reqS1.where = {sub_item_id: value1.sub_item_id}
+                      reqS1.where = {sub_item_id: value1.sub_item_id, type: "purchases"}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
                         if(data1){
@@ -195,7 +195,7 @@ router.post('/add', function(req, res, next) {
                           stockDataUpdate.body = {
                             id: data1.id,
                             item_id: value1.item_id,
-                            type: "production",
+                            type: "purchase",
                             sub_item_id: value1.sub_item_id,
                             quantity: parseInt(value1.quantity) + parseInt(data1.quantity),
                             no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
@@ -208,7 +208,7 @@ router.post('/add', function(req, res, next) {
                           let stockData = {}
                           stockData.body = {
                             item_id: value1.item_id,
-                            type: "production",
+                            type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,
@@ -222,7 +222,7 @@ router.post('/add', function(req, res, next) {
                     } else {
                       let reqS = {};
                       console.log('value1value1', value1);
-                      reqS.where = {item_id: value1.item_id, sub_item_id: null}
+                      reqS.where = {item_id: value1.item_id, sub_item_id: null, type: "purchases"}
                       models.Stock.getFirstValues(reqS, function (data) {
                         if(data){
                           console.log('exist', data);
@@ -231,7 +231,7 @@ router.post('/add', function(req, res, next) {
                           stockDataUpdate.body = {
                             id: data.id,
                             item_id: value1.item_id,
-                            type: "production",
+                            type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: parseInt(value1.quantity) + parseInt(data.quantity),
                             no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
@@ -244,7 +244,7 @@ router.post('/add', function(req, res, next) {
                           let stockData = {};
                           stockData.body = {
                             item_id: value1.item_id,
-                            type: "production",
+                            type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,

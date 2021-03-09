@@ -188,7 +188,7 @@ module.exports = function (sequelize, DataTypes) {
         tcs: {
             type: DataTypes.STRING,
             get() {
-                if(typeof this.getDataValue('tcs') !== "undefined"){
+                if(this.getDataValue('tcs') && typeof this.getDataValue('tcs') !== "undefined"){
                     return this.getDataValue('tcs').split(';')
                 }
                 return null;
@@ -205,23 +205,39 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        payment_status: {
+            type: DataTypes.STRING,            
+        },
     },
     {
       tableName: 'purchases',
   });  
   myModel.getAllValues = function (req, res) {
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
-    this.findAll({where: req.where,
-        include: [
-            accountToPurchae
-        ]
-    })
+    this.findAll({
+            where: req.where,
+            include: [
+                accountToPurchae
+            ],
+            order: req.order    
+        },    
+    )
         .then(function(results){
             res(results);
         })
     }    
     myModel.getFirstValues = function (req, res) {
         this.findOne({where: req.where}).then(function (results) {
+            res(results);
+        });
+    }
+    myModel.getPurchasesByAccount = function (req, res) {
+        var paymentToPurchae = myModel.hasMany(sequelize.models.Payment, {foreignKey: 'purchase_id'});
+        this.findAll({where: req.where,
+            include: [
+                paymentToPurchae
+            ],
+        }).then(function (results) {
             res(results);
         });
     }

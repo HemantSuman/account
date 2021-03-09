@@ -179,7 +179,7 @@ router.post('/add', function(req, res, next) {
       
                 if(req.body.sub_item_id && req.body.sub_item_id != ""){
                   let reqS1 = {};
-                  reqS1.where = {sub_item_id: req.body.sub_item_id}
+                  reqS1.where = {sub_item_id: req.body.sub_item_id, type: "production"}
                   models.Stock.getFirstValues(reqS1, function (data1) {
       
                     if(data1){
@@ -211,7 +211,7 @@ router.post('/add', function(req, res, next) {
                 } else {
                   let reqS = {};
                   console.log('value1value1', req.body);
-                  reqS.where = {item_id: req.body.item_id, sub_item_id: null}
+                  reqS.where = {item_id: req.body.item_id, sub_item_id: null, type: "production"}
                   models.Stock.getFirstValues(reqS, function (data) {
                     if(data){
                       console.log('exist', data);

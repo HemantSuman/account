@@ -32,14 +32,14 @@ router.get('/', function(req, res, next) {
 });
 
 router.post('/getByItemId', function(req, res, next) {
-  req.where = {item_id: req.body.id, sub_item_id: null, type: "production"};
+  req.where = {item_id: req.body.id, sub_item_id: null, type: req.body.type};
   models[modelName].getFirstValues(req, function (results) {
     res.json(results);
   });   
 });
 
 router.post('/getBySubItemId', function(req, res, next) {
-  req.where = {sub_item_id: req.body.id, type: "production"};
+  req.where = {sub_item_id: req.body.id, type: req.body.type};
   models[modelName].getFirstValues(req, function (results) {
     res.json(results);
   });   

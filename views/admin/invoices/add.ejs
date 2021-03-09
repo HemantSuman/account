@@ -207,6 +207,9 @@
                       </div>
                       <div class="card-body">
                         <div class="row itemHead">
+                          <div class="col-sm-1">
+                            <label for="">Item Type</label>
+                          </div>
                           <div class="col-sm-2">
                             <label for="">Item</label>
                           </div>
@@ -245,6 +248,15 @@
                       </div>
                       <div class="card-footer itemAddRow">
                         <div class="row">
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                  <select onchange="itemType(this, 0)" class="form-control select2 item_type_" indexValue="0">
+                                    <option value="production">From Production</option>
+                                    <option value="purchase">From Purchase</option>
+                                  </select>
+                                  <div class="item_type_-error-message error-message"></div>
+                                </div>
+                            </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
                                   <select class="form-control select2 selectItem item_item_id_" indexValue="0">
@@ -258,7 +270,7 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
+                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0" indexValue="0">                                              
                                   </select>
                                   <div class="item_sub_item_id_-error-message error-message"></div>
                                 </div>
@@ -547,14 +559,21 @@
         }
         subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
       });
-      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
+      let selectSubItemHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
       selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
       
 
       let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
       selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
       
-      let itemHtml = "<div class='row itemRow'><div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      let itemHtml = "<div class='row itemRow'>";
+
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<select disabled indexValue='"+itemIndexValue+"' onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
+      itemHtml += "<option value='production'>From Production</option><option value='purchase'>From Purchase</option></select>";
+      itemHtml += "<div class='item_type_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+                                    
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-1'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
@@ -566,7 +585,7 @@
       itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_"+itemIndexValue+"'>"+unitOptions+"</select>";
       itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
 
       // itemHtml += "<div class='col-sm-1'><div class='form-group'>";
@@ -622,6 +641,24 @@
 
   function changeUnit(thisObj, index){
     $(".item_unit_hidden_"+index).val($(thisObj).val());
+  }
+
+  function itemType(thisObj, index){
+    let indexvalue = $(thisObj).attr("indexvalue");
+    console.log("@@", indexvalue)
+    if(indexvalue == 0) {
+      indexvalue = '';
+    }
+    $('.item_item_id_'+indexvalue).val("").trigger('change');
+    $('.item_sub_item_id_'+indexvalue).val("").trigger('change');
+    $('.item_description_'+indexvalue).val("");
+    $('.item_no_of_pkg_'+indexvalue).val("");
+    $('.item_unit_'+indexvalue).val("").trigger('change');
+    $('.item_quantity_'+indexvalue).val("");
+    $('.item_rate_'+indexvalue).val("");
+    $('.item_gst_'+indexvalue).val("");
+    $('.item_gst_amount_'+indexvalue).val("");
+    $('.item_amount_'+indexvalue).val("");
   }
 
   function emptyItemErrors(index = ""){
@@ -685,15 +722,16 @@
   function editItems(thisVar){
 
     let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    $('.item_type_'+itemIndexValue).attr("disabled", false);
     $('.item_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_description_'+itemIndexValue).attr("readonly", false);
     $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
-    $('.item_unit_'+itemIndexValue).attr("readonly", false);
+    $('.item_unit_'+itemIndexValue).attr("disabled", false);
     $('.item_quantity_'+itemIndexValue).attr("readonly", false);
     $('.item_rate_'+itemIndexValue).attr("readonly", false);
-    $('.item_gst_'+itemIndexValue).attr("readonly", false);
-    $('.item_amount_'+itemIndexValue).attr("readonly", false);
+    // $('.item_gst_'+itemIndexValue).attr("readonly", false);
+    // $('.item_amount_'+itemIndexValue).attr("readonly", false);
 
     $('.editItemsBtn_'+itemIndexValue).hide();
     $('.updateItemsBtn_'+itemIndexValue).show();
@@ -706,15 +744,16 @@
     emptyItemErrors(itemIndexValue);
     let valid = validateItems(itemIndexValue);
     if(valid){
+      $('.item_type_'+itemIndexValue).attr("disabled", true);
       $('.item_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_description_'+itemIndexValue).attr("readonly", true);
       $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
-      $('.item_unit_'+itemIndexValue).attr("readonly", true);
+      $('.item_unit_'+itemIndexValue).attr("disabled", true);
       $('.item_quantity_'+itemIndexValue).attr("readonly", true);
       $('.item_rate_'+itemIndexValue).attr("readonly", true);
-      $('.item_gst_'+itemIndexValue).attr("readonly", true);
-      $('.item_amount_'+itemIndexValue).attr("readonly", true);
+      // $('.item_gst_'+itemIndexValue).attr("readonly", true);
+      // $('.item_amount_'+itemIndexValue).attr("readonly", true);
       $('.editItemsBtn_'+itemIndexValue).show();
       $('.updateItemsBtn_'+itemIndexValue).hide();
       calculateTotal();
@@ -825,12 +864,13 @@
         $(".item_gst_"+indexValue).val(data.gstin);
       }
     });
-
+    let type = $(".item_type_"+indexValue).val();
+    $(".item_quantity_"+indexValue).val('');
     
     if(id){
       $.ajax({
         url: "/admin/stocks/getByItemId",
-        data: {id},
+        data: {id, type},
         //contentType: false,
         //processData: false,
         method: "POST",
@@ -838,8 +878,6 @@
         success: function (response) {
           if(response){
             $(".item_quantity_"+indexValue).val(response.quantity);
-          } else {
-            $(".item_quantity_"+indexValue).val('');
           }
 
         }, error: function (resData) {
@@ -849,6 +887,36 @@
     } else {
       $(".item_quantity_"+indexValue).val("");
     }    
+  });
+
+  $(document).on("change", ".selectSubItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+    let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    $(".item_quantity_"+indexValue).val('');
+
+    if(id){
+      
+      let type = $(".item_type_"+indexValue).val();
+      $.ajax({
+          url: "/admin/stocks/getBySubItemId",
+          data: {id,type},
+          //contentType: false,
+          //processData: false,
+          method: "POST",
+          cache: false,
+          success: function (response) {
+            if(response){
+              $(".item_quantity_"+indexValue).val(response.quantity);
+            }
+          }, error: function (resData) {
+              console.log(resData);
+          }
+      });
+    } else {
+      // $(".selectItem").trigger("change");
+    }
   });
 
   $(document).ready(function() {
