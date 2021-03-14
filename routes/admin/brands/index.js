@@ -7,9 +7,9 @@ var async = require("async");
 
 var extraVar = [];
 
-var modelName = 'State';
-var viewDirectory = 'states';
-var titleName = 'Add new State';
+var modelName = 'Brand';
+var viewDirectory = 'brands';
+var titleName = 'Add new brand';
 
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;

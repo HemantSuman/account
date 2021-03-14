@@ -69,7 +69,14 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
-        this.findOne({where: req.where}).then(function (results) {
+        var itemToSubItem = myModel.hasMany(sequelize.models.SubItem, {foreignKey: 'item_id'});
+        var itemToFinishedItem = myModel.hasMany(sequelize.models.FinishedItem, {foreignKey: 'item_id'});
+        this.findOne({where: req.where,
+            include: [
+                itemToSubItem,
+                itemToFinishedItem
+            ]
+        }).then(function (results) {
             res(results);
         });
     }

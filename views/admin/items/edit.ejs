@@ -32,104 +32,280 @@
           </div> -->
           <!-- /.card-header -->
           <!-- form start -->
+
           <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/edit">
             <input type='hidden' name='id' value='<%= extraVar.results.my_model.id %>'>
+            <input type="hidden" class="finisheditemIndexValue" value="<%= extraVar.results.my_model.FinishedItems.length -1 %>">
+            <input type="hidden" class="subItemIndexValue" value="<%= extraVar.results.my_model.SubItems.length -1 %>">
             <div class="card-body">
-              <div class="form-group">
-                <label>Select Category</label>
-                <select name="category_id" class="form-control select2">
-                  <% extraVar.results.categories.forEach(function(data){ %>
-                    <option <%= (data.id === extraVar.results.my_model.category_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
-                  <% }); %>                  
-                </select>
-                <div class="category_id-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label>Select Parent Item</label>
-                <select name="parent_id" class="form-control select2">
-                  <% extraVar.results.items.forEach(function(data){ %>
-                    <option <%= (data.id === extraVar.results.my_model.parent_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
-                  <% }); %>                  
-                </select>
-                <div class="parent_id-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">Item Name</label>
-                <input name="item_name" type="text" value="<%= extraVar.results.my_model.item_name %>" class="form-control" id="" placeholder="">
-                <div class="item_name-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">item code</label>
-                <input name="item_code" type="text" value="<%= extraVar.results.my_model.item_code %>" class="form-control" id="" placeholder="">
-                <div class="item_code-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">HSN code</label>
-                <input name="hsn_code" type="text" value="<%= extraVar.results.my_model.hsn_code %>" class="form-control" id="" placeholder="">
-                <div class="hsn_code-error-message error-message"></div>
-              </div>
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
-                    <label for="">Quantity</label>
-                    <input name="quantity" type="text" value="<%= extraVar.results.my_model.quantity %>" class="form-control" id="" placeholder="">
-                    <div class="quantity-error-message error-message"></div>
+                    <label>Select Category</label>
+                    <!-- <select readonly name="category_id" class="form-control select2"> -->
+                      <% extraVar.results.categories.forEach(function(data){ %>
+                        <% if(data.id == extraVar.results.my_model.category_id) { %>
+                        <input disabled type="text" value="<%= data.name %>" class="form-control">
+                        <input name="category_id" value="<%= data.id %>" type="hidden" class="form-control">
+                        <% } %>
+                        <!-- <option <%= data.id == extraVar.results.my_model.category_id ? 'selected' : '' %> slug="<%= data.slug %>" value="<%= data.id %>"><%= data.name %></option> -->
+                      <% }); %>                  
+                    <!-- </select> -->
+                    <div class="category_id-error-message error-message"></div>
                   </div>
-                </div>
+                </div>  
                 <div class="col-sm-6">
                   <div class="form-group">
+                    <label for="">Item Name</label>
+                    <input name="item_name" value="<%= extraVar.results.my_model.item_name %>" type="text" class="form-control" id="" placeholder="">
+                    <div class="item_name-error-message error-message"></div>
+                  </div>
+                </div>              
+              </div>
+              <div class="row">
+                
+                <div class="col-sm-3">
+                  <div class="form-group">
+                    <label for="">HSN code</label>
+                    <input name="hsn_code" value="<%= extraVar.results.my_model.hsn_code %>" type="text" class="form-control" id="" placeholder="">
+                    <div class="hsn_code-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-3">
+                  <div class="form-group">
                     <label for="">Unit</label>
-                    <input name="unit" type="text" value="<%= extraVar.results.my_model.unit %>" class="form-control" id="" placeholder="">
+                    <select name="unit" class="form-control select2">
+                      <% extraVar.results.units.forEach(function(data){ %>
+                        <option <%= data.id == extraVar.results.my_model.unit ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
+                      <% }); %>                  
+                    </select>
                     <div class="unit-error-message error-message"></div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="">Rate</label>
-                    <input name="rate" type="text" value="<%= extraVar.results.my_model.rate %>" class="form-control" id="" placeholder="">
-                    <div class="rate-error-message error-message"></div>
+                    <label for="">GSTIN</label>
+                    <input name="gstin" value="<%= extraVar.results.my_model.gstin %>" type="text" class="form-control" placeholder="">
+                    <div class="gstin-error-message error-message"></div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-3 wastageDiv">
                   <div class="form-group">
-                    <label for="">Size-Pkt</label>
-                    <input name="size_pkt" type="text" value="<%= extraVar.results.my_model.size_pkt %>" class="form-control" id="" placeholder="">
-                    <div class="size_pkt-error-message error-message"></div>
+                    <label for="">Wastage(In %)</label>
+                    <input name="wastage" value="<%= extraVar.results.my_model.wastage %>" type="text" class="form-control" placeholder="">
+                    <div class="wastage-error-message error-message"></div>
                   </div>
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="">Amount</label>
-                    <input name="amount" type="text" value="<%= extraVar.results.my_model.amount %>" class="form-control" id="" placeholder="">
-                    <div class="amount-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="">Size-Case</label>
-                    <input name="size_case" type="text" value="<%= extraVar.results.my_model.size_case %>" class="form-control" id="" placeholder="">
-                    <div class="size_case-error-message error-message"></div>
-                  </div>
+
+              <div class="subItemCantainer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Sub Item Detail</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row subItemHead">
+                          <div class="col-sm-4">
+                            <label for="">Item</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Size Pkt.</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Size Case</label>
+                          </div>
+                          <div class="col-sm-3">
+                          </div>
+                        </div>
+                        <div class="gridTable subItemDiv">
+                          <% extraVar.results.my_model.SubItems.forEach(function(item, index){ %>
+                            <input type="hidden" name="subItem[<%=index%>][id]" value="<%=item.id%>" />
+                            <div class="row subItemRow">
+                              <div class="col-sm-4">
+                                  <div class="form-group">
+                                      <input readonly="" name="subItem[<%= index %>][name]" type="text" value="<%= item.name%>" class="form-control subItem_name_<%= index %>" placeholder="">
+                                      <div class="subItem_name_<%= index %>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <input readonly="" name="subItem[<%= index %>][size_pkt]" type="text" value="<%= item.size_pkt%>" class="form-control subItem_size_pkt_<%= index %>" placeholder="">
+                                      <div class="subItem_size_pkt_<%= index %>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <input readonly="" name="subItem[<%= index %>][size_case]" type="text" value="<%= item.size_case%>" class="form-control subItem_size_case_<%= index %>" placeholder="">
+                                      <div class="subItem_size_case_<%= index %>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3 " style="display: flex;align-items: center;">
+                                  <!-- <button onclick="removeSubItems(this)" type="button" class="btn btn-danger float-right">
+                                      <i class="fas fa-times"></i>
+                                  </button> -->
+                                  &nbsp;<button onclick="editSubItems(this)" type="button" itemindexvalue="<%= index %>" class="btn btn-danger float-right editSubItemsBtn_<%= index %>">Edit</button>
+                                  &nbsp;<button style="display:none;" itemindexvalue="" onclick="updateSubItems(this)" type="button" class="btn btn-info updateSubItemsBtn_<%= index %>">
+                                      <i class="fas fa-plus"></i> Update Item</button>
+                              </div>
+                            </div>
+                          <% }); %>
+                        </div>
+                        
+                      </div>
+                      <div class="card-footer itemAddRow">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <input type="text" class="form-control itemSubValue" placeholder="">
+                              <div class="subItem_name_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <input type="text" class="form-control itemSizePktValue" placeholder="">
+                              <div class="subItem_size_pkt_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <input type="text" class="form-control itemSizeCaseValue" placeholder="">
+                              <div class="subItem_size_case_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <div class="subItemBtnDiv">
+                                <button onclick="addMoreSubItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>                        
+                      </div>
+                    </div>                               
+                  </div>                    
                 </div>
               </div>
-              <div class="row">
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="">GST Rate</label>
-                    <input name="gst_rate" type="text" value="<%= extraVar.results.my_model.gst_rate %>" class="form-control" id="" placeholder="">
-                    <div class="gst_rate-error-message error-message"></div>
-                  </div>
+
+              <div class="finishedItemCantainer">
+                <div class="row">
+                  <div class="col-sm-10">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Fineshed Item Detail</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row finishedItemHead">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <label for="">Item</label>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <label for="">Unit</label>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <label for="">Quantity</label>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                          </div>
+                        </div>
+                        <div class="gridTable finishedItemDiv">
+                          <% extraVar.results.my_model.FinishedItems.forEach(function(itemFinished, index){ %>
+                            <input type="hidden" name="finishedItem[<%=index%>][id]" value="<%=itemFinished.id%>" />
+                            <div class="row itemRow">
+                              <div class="col-sm-4">
+                                  <div class="form-group">
+                                    <select disabled onchange="finishedItemName(this, <%=index%>)" class="form-control select2 finishedItem_name_<%=index%>">
+                                      <% extraVar.results.items.forEach(function(item, index1) { %>
+                                        <option <%= (item.id === itemFinished.finished_item_id ? 'selected' : '') %> value="<%= item.id%>"><%= item.item_name%></option>
+                                      <% }); %>
+                                    </select>
+                                    <input class="finishedItem_name_hidden_<%=index%>" type="hidden" value="<%=itemFinished.finished_item_id%>" name="finishedItem[<%=index%>][finished_item_id]">
+                                    <div class="finishedItem_finished_item_id_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <select disabled onchange="finishedItemUnit(this, <%=index%>)" class="form-control select2 finishedItem_unit_name_<%=index%>">
+                                        <% extraVar.results.units.forEach(function(unit, index2) { %>
+                                          <option <%= (unit.id === itemFinished.unit ? 'selected' : '') %> value="<%= unit.id %>"><%= unit.name%></option>
+                                        <% }); %>
+                                      </select>
+                                      <input class="finishedItem_unit_name_hidden_<%=index%>" type="hidden" value="<%=itemFinished.unit%>" name="finishedItem[<%=index%>][unit]">
+                                      <div class="finishedItem_unit_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <input name="finishedItem[<%=index%>][quantity]" type="text" class="form-control finishedItem_quantity_name_<%=index%>" value="<%=itemFinished.quantity%>" placeholder="" readonly="readonly">
+                                      <div class="finishedItem_quantity_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-3 " style="display: flex;align-items: center;">
+                                  <!-- <button onclick="removeItems(this)" type="button" class="btn btn-danger float-right">
+                                      <i class="fas fa-times"></i>
+                                  </button> -->
+                                  &nbsp;<button onclick="editFinishedItems(this)" type="button" itemindexvalue="<%=index%>" class="btn btn-danger float-right editFinishedItemsBtn_<%=index%>" style="">Edit</button>
+                                  &nbsp;<button style="display: none;" itemindexvalue="<%=index%>" onclick="updateFinishedItems(this)" type="button" class="btn btn-info updateFinishedItemsBtn_<%=index%>"><i class="fas fa-plus"></i> Update Item</button>
+                              </div>
+                            </div>
+                          <% }); %>
+                        </div>
+                      </div>
+                      <div class="card-footer itemAddRow">
+                        <div class="row">
+                          <div class="col-sm-4">
+                            <div class="form-group">
+                              <select class="form-control select2 selectItem">
+                                <option value="">Select</option>
+                                <% extraVar.results.items.forEach(function(data){ %>
+                                  <option value="<%= data.id %>"><%= data.item_name %></option>
+                                <% }); %>                  
+                              </select>
+                              <div class="finishedItem_finished_item_id_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <select class="form-control select2 selectUnit">
+                                <% extraVar.results.units.forEach(function(data){ %>
+                                  <option value="<%= data.id %>"><%= data.name %></option>
+                                <% }); %>                  
+                              </select>
+                              <div class="finishedItem_unit_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <input type="text" class="form-control itemFinishedQuantity" id="" placeholder="">
+                              <div class="finishedItem_quantity_-error-message error-message"></div>
+                            </div>
+                          </div>
+                          <div class="col-sm-2">
+                            <div class="form-group">
+                              <div class="finishedItemBtnDiv">
+                                <button onclick="addMoreFinishedItems()" type="button" class="btn btn-info float-right"><i class="fas fa-plus"></i> Add item</button>                                
+                              </div>
+                            </div>
+                          </div>
+                        </div>
+                        
+                      </div>
+                    </div>                               
+                  </div>                    
                 </div>
               </div>
               <div class="row">
                 <div class="col-sm-6">
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                      <input name="status" type="checkbox" <%= (extraVar.results.my_model.status === 1) ? 'checked' : '' %> class="custom-control-input" id="statusCheck">
+                      <input name="status" type="checkbox" checked class="custom-control-input" id="statusCheck">
                       <label for="statusCheck" class="custom-control-label" >Status</label>
                       <div class="ecc_no-error-message error-message"></div>
                     </div>
@@ -143,6 +319,8 @@
               <button type="submit" class="btn btn-primary submitBtn">Submit</button>
             </div>
           </form>
+          <span style="display: none;" id="unitsObj"><%= JSON.stringify(extraVar.results.units); %></span>
+          <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
         </div>
         <!-- /.card -->
 
@@ -155,11 +333,247 @@
 <script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
 <script type="text/javascript">
 
-  $(function () {
-    $('.ckEditor').summernote({
-      height: 300
-    })
-  })
+  function validatesubItem(index = "") {
+    let valid = true;
+    let itemSubValue = $('.itemSubValue').val();
+    let itemSizePktValue = $('.itemSizePktValue').val();
+    let itemSizeCaseValue = $('.itemSizeCaseValue').val();
+
+    if(itemSubValue === ""){
+      $(".subItem_name_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    if(itemSizePktValue === ""){
+      $(".subItem_size_pkt_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    if(itemSizeCaseValue === ""){
+      $(".subItem_size_case_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    return valid;
+  }
+
+  function emptySubItemErrors(index = ""){
+    $(".subItem_name_"+index+"-error-message, .subItem_size_pkt_"+index+"-error-message, .subItem_size_case_"+index+"-error-message").html("");
+  }
+
+  function emptySubItemFields(){
+    $('.itemSubValue').val("");
+    $('.itemSizePktValue').val("");
+    $('.itemSizeCaseValue').val("");
+  }
+
+  function addMoreSubItems(){
+    emptySubItemErrors();
+
+    let itemSubValue = $('.itemSubValue').val();
+    let itemSizePktValue = $('.itemSizePktValue').val();
+    let itemSizeCaseValue = $('.itemSizeCaseValue').val();
+    let valid = validatesubItem();
+
+    if(valid){
+      let itemIndexValue = parseInt($('.subItemIndexValue').val()) + 1;
+      $('.subItemIndexValue').val(itemIndexValue);      
+      
+      let itemHtml = "<div class='row subItemRow'><div class='col-sm-4'><div class='form-group'><input readonly name='subItem["+itemIndexValue+"][name]' type='text' value='"+itemSubValue+"' class='form-control subItem_name_"+itemIndexValue+"' placeholder=''><div class='subItem_name_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='subItem["+itemIndexValue+"][size_pkt]' type='text' value='"+itemSizePktValue+"' class='form-control subItem_size_pkt_"+itemIndexValue+"' placeholder=''><div class='subItem_size_pkt_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='subItem["+itemIndexValue+"][size_case]' type='text' value='"+itemSizeCaseValue+"' class='form-control subItem_size_case_"+itemIndexValue+"' placeholder=''><div class='subItem_size_case_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-3 ' style='display: flex;align-items: center;'><button onclick='removeSubItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
+      itemHtml += "<button onclick='editSubItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editSubItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
+      itemHtml += "<button style='display:none;' itemIndexValue='' onclick='updateSubItems(this)' type='button' class='btn btn-info updateSubItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
+      $('.subItemDiv').prepend(itemHtml);
+      $(".select2").each(function() {
+        $(this).select2();
+      });
+      emptySubItemFields();
+    }    
+  }
+
+  function editSubItems(thisVar){
+
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    $('.subItem_name_'+itemIndexValue).attr("readonly", false);
+    $('.subItem_size_pkt_'+itemIndexValue).attr("readonly", false);
+    $('.subItem_size_case_'+itemIndexValue).attr("readonly", false);
+
+    $('.editSubItemsBtn_'+itemIndexValue).hide();
+    $('.updateSubItemsBtn_'+itemIndexValue).show();
+    $('.updateSubItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
+  }
+
+  function updateSubItems(thisVar){
+    
+    let valid = true;
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    emptySubItemErrors(itemIndexValue);
+
+    if($('.subItem_name_'+itemIndexValue).val() === ""){
+      $('.subItem_name_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.subItem_size_pkt_'+itemIndexValue).val() === ""){
+      $('.subItem_size_pkt_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.subItem_size_case_'+itemIndexValue).val() === ""){
+      $('.subItem_size_case_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+
+    if(valid){
+      $('.subItem_name_'+itemIndexValue).attr("readonly", true);
+      $('.subItem_size_pkt_'+itemIndexValue).attr("readonly", true);
+      $('.subItem_size_case_'+itemIndexValue).attr("readonly", true);
+      $('.editSubItemsBtn_'+itemIndexValue).show();
+      $('.updateSubItemsBtn_'+itemIndexValue).hide();
+
+      emptySubItemFields();
+    }    
+  }
+
+  function removeSubItems(thisVar){
+    $(thisVar).parents('.subItemRow').remove();
+  }
+
+  function addMoreFinishedItems(){
+    emptyFinishedItemErrors();
+
+    let selectItem = $('.selectItem').val();
+    let selectUnit = $('.selectUnit').val();
+    let itemFinishedQuantity = $('.itemFinishedQuantity').val();
+    let valid = validateFinishedItem();
+
+    if(valid){
+      let itemIndexValue = parseInt($('.finisheditemIndexValue').val()) + 1;
+      $('.finisheditemIndexValue').val(itemIndexValue);
+      
+      // console.log(selectOptions);
+      let itemsObj = JSON.parse($("#itemsObj").html());
+      let itemOptions = "";
+      let selectedValue1 = "";
+      itemsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectItem){
+          selected = "selected";
+          selectedValue1 = data.id;
+        }
+        itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
+      });
+      itemOptions += "<input class='finishedItem_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='finishedItem["+itemIndexValue+"][finished_item_id]' >";
+
+      let unitsObj = JSON.parse($("#unitsObj").html());
+      let unitOptions = "";
+      let selectedValue = "";
+      unitsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectUnit){
+          selected = "selected";
+          selectedValue = data.id;          
+        }
+        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
+      });
+      unitOptions += "<input class='finishedItem_unit_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue+"' name='finishedItem["+itemIndexValue+"][unit]' >";
+
+      let selectHtml = "<select disabled onchange='finishedItemName(this, "+itemIndexValue+")' class='form-control select2 finishedItem_name_"+itemIndexValue+"'>"+itemOptions+"</select>";
+      let itemHtml = "<div class='row itemRow'><div class='col-sm-4'><div class='form-group'>"+selectHtml+"<div class='finishedItem_finished_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><select disabled onchange='finishedItemUnit(this, "+itemIndexValue+")' class='form-control select2 finishedItem_unit_name_"+itemIndexValue+"'>"+unitOptions+"</select><div class='finishedItem_unit_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='finishedItem["+itemIndexValue+"][quantity]' type='text' class='form-control finishedItem_quantity_name_"+itemIndexValue+"' value='"+itemFinishedQuantity+"' placeholder=''><div class='finishedItem_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-3 ' style='display: flex;align-items: center;'><button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
+      itemHtml += "<button onclick='editFinishedItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editFinishedItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
+      itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateFinishedItems(this)' type='button' class='btn btn-info updateFinishedItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
+      $('.finishedItemDiv').prepend(itemHtml);
+      $(".select2").each(function() {
+        $(this).select2();
+      });
+      emptyFinishedItemFields();
+    }    
+  }
+
+  function finishedItemUnit(thisObj, index){
+    $(".finishedItem_unit_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function finishedItemName(thisObj, index){
+    $(".finishedItem_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function emptyFinishedItemErrors(index = ""){
+    $(".finishedItem_finished_item_id_"+index+"-error-message, .finishedItem_unit_"+index+"-error-message, .finishedItem_quantity_"+index+"-error-message").html("");
+  }
+
+  function validateFinishedItem(index = "") {
+    let valid = true;
+    let selectItem = $('.selectItem').val();
+    let selectUnit = $('.selectUnit').val();
+    let itemFinishedQuantity = $('.itemFinishedQuantity').val();
+
+    if(selectItem === ""){
+      $(".finishedItem_finished_item_id_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    if(selectUnit === ""){
+      $(".finishedItem_unit_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    if(itemFinishedQuantity === ""){
+      $(".finishedItem_quantity_"+index+"-error-message").html("This field is required!");
+      valid = false;
+    }
+    return valid;
+  }
+
+  function emptyFinishedItemFields(){
+    $('.selectItem').val("").trigger('change');
+    $('.selectUnit').val("");
+    $('.itemFinishedQuantity').val("");
+  }
+
+  function editFinishedItems(thisVar){
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    $('.finishedItem_name_'+itemIndexValue).attr("disabled", false);
+    $('.finishedItem_unit_name_'+itemIndexValue).attr("disabled", false);
+    $('.finishedItem_quantity_name_'+itemIndexValue).attr("readonly", false);
+
+    $('.editFinishedItemsBtn_'+itemIndexValue).hide();
+    $('.updateFinishedItemsBtn_'+itemIndexValue).show();
+    $('.updateFinishedItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
+  }
+
+  function updateFinishedItems(thisVar){
+    
+    let valid = true;
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    emptyFinishedItemErrors(itemIndexValue);
+
+    if($('.subItem_name_'+itemIndexValue).val() === ""){
+      $('.subItem_name_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.subItem_size_pkt_'+itemIndexValue).val() === ""){
+      $('.subItem_size_pkt_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.subItem_size_case_'+itemIndexValue).val() === ""){
+      $('.subItem_size_case_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+
+    if(valid){
+      $('.finishedItem_name_'+itemIndexValue).attr("disabled", true);
+      $('.finishedItem_unit_name_'+itemIndexValue).attr("disabled", true);
+      $('.finishedItem_quantity_name_'+itemIndexValue).attr("readonly", true);
+
+      $('.editFinishedItemsBtn_'+itemIndexValue).show();
+      $('.updateFinishedItemsBtn_'+itemIndexValue).hide();
+
+      emptyFinishedItemFields();
+    }    
+  }
+
+  function removeItems(thisVar){
+    $(thisVar).parents('.itemRow').remove();
+  }
     
   $(document).ready(function() {
     // $.notify(data.message, { className:"success",position:"bottom right" });

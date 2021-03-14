@@ -117,7 +117,20 @@ router.post('/add', function(req, res, next) {
         }, function (err) {
             callback(null, errors);
         });  
-      }      
+      },
+      function (callback) {
+        if(typeof req.body.item === "undefined"){
+          errorsItem = 
+            {
+              message: 'Atleast one item is required!',
+              type: 'Validation error',
+              path: 'items',
+              value: '',
+          };
+          errors = errors.concat(errorsItem);
+        }
+        callback(null, errors);
+      },
     ], function (err) {
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved d failed', data: errors});

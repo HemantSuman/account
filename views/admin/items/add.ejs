@@ -344,7 +344,7 @@
       itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='subItem["+itemIndexValue+"][size_case]' type='text' value='"+itemSizeCaseValue+"' class='form-control subItem_size_case_"+itemIndexValue+"' placeholder=''><div class='subItem_size_case_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-3 ' style='display: flex;align-items: center;'><button onclick='removeSubItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
       itemHtml += "<button onclick='editSubItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editSubItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
-      itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateSubItems(this)' type='button' class='btn btn-info updateSubItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
+      itemHtml += "<button style='display:none;' itemIndexValue='' onclick='updateSubItems(this)' type='button' class='btn btn-info updateSubItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
       $('.subItemDiv').prepend(itemHtml);
       $(".select2").each(function() {
         $(this).select2();
