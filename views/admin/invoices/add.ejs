@@ -243,7 +243,8 @@
                           <div class="col-sm-2">
                           </div>
                         </div>
-                        <div class="gridTable itemDiv">                          
+                        <div class="gridTable itemDiv">       
+                          <div class="items-error-message error-message"></div>                   
                         </div>
                       </div>
                       <div class="card-footer itemAddRow">
@@ -423,13 +424,7 @@
                         </div>
 
                         <div class="row diffStates" style="display: none;">
-                          <!-- <div class="col-sm-2">
-                            <div class="form-group">
-                              <label for="">IGST</label>
-                              <input name="igst" type="number" class="form-control"  placeholder="">
-                              <div class="igst-error-message error-message"></div>
-                            </div>
-                          </div> -->
+                          <input name="total_GST" type="hidden" class="totalGST">
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label for="">IGST Amount</label>
@@ -456,6 +451,7 @@
                                   <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
                                 <% }); %>                  
                               </select>
+                              <label class="otherTaxInfo"></label>
                               <div class="tcs-error-message error-message"></div>
                             </div>
                           </div>
@@ -605,7 +601,7 @@
       itemHtml += "<div class='item_gst_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input disabled type='number' class='form-control gstAmount item_gst_amount_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][gst_amount]' type='number' class='form-control gstAmount item_gst_amount_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "</div></div>";
 
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
@@ -622,6 +618,7 @@
       });
       emptyItemFields();
       calculateTotal();
+      $(".items-error-message").html('');
     }
   }
 
@@ -653,7 +650,7 @@
     $('.item_sub_item_id_'+indexvalue).val("").trigger('change');
     $('.item_description_'+indexvalue).val("");
     $('.item_no_of_pkg_'+indexvalue).val("");
-    $('.item_unit_'+indexvalue).val("").trigger('change');
+    // $('.item_unit_'+indexvalue).val("").trigger('change');
     $('.item_quantity_'+indexvalue).val("");
     $('.item_rate_'+indexvalue).val("");
     $('.item_gst_'+indexvalue).val("");
@@ -795,6 +792,7 @@
       $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
       
     });
+    $(".totalGST").val(totalGST);
 
     $(".SubTotal").val(totalPrice);
     let discountValue = parseFloat($(".discountField").val());
@@ -836,14 +834,19 @@
     }
 
     let withTcs = 0;
+    let otherTaxInfo = "";
     if($(".tcs_check").is(":checked")){
       let otherTax = 0;
       $(".tcs_value option:selected").each(function(val, index){
-        console.log($(this).attr("percentage"));
+
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((totalPrice * parseFloat($(this).attr("percentage"))) / 100) + ", ";
       })
       withTcs = parseFloat((totalPrice * otherTax) / 100);
+      $(".otherTaxInfo").html(otherTaxInfo);
       // total_value = parseFloat(total_value + withTcs);
+    } else {
+      $(".otherTaxInfo").html("");
     }
     console.log(transportation , withDiscount , withTcs , totalGST)
 

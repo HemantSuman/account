@@ -40,3 +40,24 @@ ALTER TABLE `purchases`
 CHANGE `payment_status` `payment_status` varchar(50) COLLATE 'latin1_swedish_ci' NULL DEFAULT 'initial' AFTER `total_value`;
 
 update purchases set payment_status = 'initial';
+
+ALTER TABLE `invoice_items`
+ADD `gst` int(11) NULL AFTER `rate`;
+
+ALTER TABLE `invoice_items`
+ADD `gst_amount` int(11) NULL AFTER `gst`;
+
+ALTER TABLE `invoices`
+ADD `total_GST` varchar(500) COLLATE 'latin1_swedish_ci' NULL AFTER `sgst_amount`;
+
+ALTER TABLE `companies`
+DROP FOREIGN KEY `companies_ibfk_2`
+
+ALTER TABLE `companies`
+CHANGE `city_id` `city` varchar(50) NULL AFTER `state_id`;
+
+ALTER TABLE `accounts`
+DROP FOREIGN KEY `accounts_ibfk_2`
+
+ALTER TABLE `accounts`
+CHANGE `city_id` `city` varchar(50) NULL AFTER `state_id`;

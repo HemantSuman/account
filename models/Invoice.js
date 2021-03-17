@@ -29,7 +29,12 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         consignee_no: {
-            type: DataTypes.STRING,            
+            type: DataTypes.STRING,     
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }       
         },
         buyer: {
             type: DataTypes.STRING,
@@ -41,131 +46,53 @@ module.exports = function (sequelize, DataTypes) {
         },
         buyer_add: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         challan_no: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            type: DataTypes.STRING,            
         },
         challan_date: {
             type: DataTypes.DATEONLY,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         time_of_remeber: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         order_no: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         order_date: {
             type: DataTypes.DATEONLY,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         transaction_mode: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         dispach_through: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         delivery_at: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         vehicle_no: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         rr_gr_no: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         rr_date: {
             type: DataTypes.DATEONLY,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         freight: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         pay_by: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
-        // trading_invoice: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
         payment_terms: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
         },
         sub_total: {
             type: DataTypes.STRING,
@@ -231,14 +158,14 @@ module.exports = function (sequelize, DataTypes) {
             //     },   
             // }
         },
-        // sgst: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
+        total_GST: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         sgst_amount: {
             type: DataTypes.STRING,
             // validate: {

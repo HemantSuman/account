@@ -75,12 +75,8 @@
                 </div>
                 <div class="col-sm-4">
                   <div class="form-group">
-                    <label>Select City</label>
-                    <select name="city_id" id="cityId" class="form-control select2">
-                      <% extraVar.results.cities.forEach(function(data){ %>
-                        <option <%= (data.id === extraVar.results.my_model.city_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
-                      <% }); %>
-                    </select>
+                    <label>City</label>
+                    <input name="city" type="text" value="<%= extraVar.results.my_model.city %>" class="form-control" placeholder="">                    
                     <div class="group_id-error-message error-message"></div>
                   </div>
                 </div>

@@ -122,12 +122,12 @@ router.get('/edit/:id', function(req, res, next) {
       });
     }
   }, function (err, results) {
-      req.where = {state_id: results.my_model.state_id}
-      models.City.getAllValues(req, function (data) {
-        results.cities = data;
+      // req.where = {state_id: results.my_model.state_id}
+      // models.City.getAllValues(req, function (data) {
+        // results.cities = data;
         extraVar['results'] = results;
         res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
-      });
+      // });
   });
 });
 

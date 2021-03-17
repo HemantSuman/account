@@ -36,7 +36,7 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        city_id: {
+        city: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
@@ -86,11 +86,11 @@ module.exports = function (sequelize, DataTypes) {
   myModel.getAllValues = function (req, res) {
 
     var companyToState = myModel.belongsTo(sequelize.models.State, {foreignKey: 'state_id'});
-    var companyToCity = myModel.belongsTo(sequelize.models.City, {foreignKey: 'city_id'});
+    // var companyToCity = myModel.belongsTo(sequelize.models.City, {foreignKey: 'city_id'});
     this.findAll({where: req.where,
         include: [
             companyToState,
-            companyToCity
+            // companyToCity
         ],
     })
     .then(function(results){

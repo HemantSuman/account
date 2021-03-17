@@ -35,19 +35,19 @@ module.exports = function (sequelize, DataTypes) {
         },
         size_pkt: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },        
         size_case: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },        
     },
     {

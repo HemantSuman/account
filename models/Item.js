@@ -30,11 +30,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         hsn_code: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         unit: {
             type: DataTypes.STRING,
@@ -59,7 +59,9 @@ module.exports = function (sequelize, DataTypes) {
   });  
   myModel.getAllValues = function (req, res) {
     var itemToCategory = myModel.belongsTo(sequelize.models.Category, {foreignKey: 'category_id'});
-    this.findAll({where: req.where, 
+    this.findAll({
+        where: req.where, 
+        order: ['item_name'],
         include: [
             itemToCategory
         ]

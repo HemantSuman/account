@@ -31,10 +31,12 @@
                 <th>No.</th>
                 <th>invoice_no</th>
                 <th>date</th>
-                <th>consignee_no</th>
+                <th>consignee name</th>
                 <th>buyer</th>
-                <th>buyer_add</th>
-                <th>challan_no</th>
+                <!-- <th>buyer_add</th> -->
+                <!-- <th>challan_no</th> -->
+                <th>Amount</th>
+                <th>Tax</th>
                 <th>Actions</th>
               </tr>
               </thead>
@@ -47,8 +49,8 @@
                       <td><%= rows.date %></td>
                       <td><%= rows.consignee_no %></td>
                       <td><%= rows.buyer %></td>
-                      <td><%= rows.buyer_add %></td>
-                      <td><%= rows.challan_no %></td>
+                      <td><%= rows.net_amount %></td>
+                      <td><%= rows.total_GST %></td>
                       <td>
                         <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a>
                         <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a>

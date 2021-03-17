@@ -39,7 +39,7 @@ router.get('/', function(req, res, next) {
 router.get('/add', function(req, res, next) {
   async.parallel({
     items: function (callback) {
-        req.where = {}
+        req.where = {category_id: 2}
         models.Item.getAllValues(req, function (data) {
             callback(null, data);
         });

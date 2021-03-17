@@ -49,7 +49,7 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        city_id: {
+        city: {
             type: DataTypes.STRING,
             validate: {
                 notEmpty: {
@@ -67,11 +67,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         gstin: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         email: {
             type: DataTypes.STRING,           
