@@ -9,14 +9,6 @@ i18n_Validation.setLocale('en_valiation');
 module.exports = function (sequelize, DataTypes) {
   var myModel = sequelize.define("City",
     {
-        state_id: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
         name: {
             type: DataTypes.STRING,
             validate: {

@@ -31,6 +31,7 @@ router.use(function(req, res, next) {
 router.get('/', function(req, res, next) {
   req.where = {};
   models[modelName].getAllValues(req, function (results) {
+    console.log("@@@", results);
     res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
   });   
 });
@@ -70,7 +71,7 @@ router.get('/add', function(req, res, next) {
 router.post('/add', function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
-    
+    // console.log("!!!!", req.body); return;
     let errors = [];
     if(req.body.status && req.body.status === 'on'){
       req.body.status = 1;
@@ -318,13 +319,32 @@ router.get('/edit/:id', function(req, res, next) {
             callback(null, data);
         });
     },
-    categories: function (callback) {
+    items: function (callback) {
       req.where = {}
-      models.Category.getAllValues(req, function (data) {
+      models.Item.getAllValues(req, function (data) {
           callback(null, data);
       });
-    },
+    },    
+    accounts: function (callback) {
+        req.where = {}
+        models.Account.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    taxes: function (callback) {
+        req.where = {}
+        models.Tax.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    units: function (callback) {
+        req.where = {}
+        models.Unit.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    }, 
   }, function (err, results) {
+      // console.log(results.my_model);return;
       extraVar['results'] = results;
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
@@ -332,7 +352,7 @@ router.get('/edit/:id', function(req, res, next) {
 
 router.post('/edit', function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
-
+    console.log('req.body', req.body);
     var modelBuild = models[modelName].build(req.body);
     var errors = [];
     if(req.body.status && req.body.status === 'on'){

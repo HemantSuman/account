@@ -34,94 +34,365 @@
           <!-- form start -->
           <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/edit">
             <input type='hidden' name='id' value='<%= extraVar.results.my_model.id %>'>
+            <input type="hidden" class="itemIndexValue" value="<%= extraVar.results.my_model.PurchaseItems.length -1 %>">
             <div class="card-body">
-              <div class="form-group">
-                <label>Select Category</label>
-                <select name="category_id" class="form-control select2">
-                  <% extraVar.results.categories.forEach(function(data){ %>
-                    <option <%= (data.id === extraVar.results.my_model.category_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
-                  <% }); %>                  
-                </select>
-                <div class="category_id-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label>Select Parent Item</label>
-                <select name="parent_id" class="form-control select2">
-                  <% extraVar.results.items.forEach(function(data){ %>
-                    <option <%= (data.id === extraVar.results.my_model.parent_id) ? 'selected' : '' %> value="<%= data.id %>"><%= data.name %></option>
-                  <% }); %>                  
-                </select>
-                <div class="parent_id-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">Item Name</label>
-                <input name="item_name" type="text" value="<%= extraVar.results.my_model.item_name %>" class="form-control" id="" placeholder="">
-                <div class="item_name-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">item code</label>
-                <input name="item_code" type="text" value="<%= extraVar.results.my_model.item_code %>" class="form-control" id="" placeholder="">
-                <div class="item_code-error-message error-message"></div>
-              </div>
-              <div class="form-group">
-                <label for="">HSN code</label>
-                <input name="hsn_code" type="text" value="<%= extraVar.results.my_model.hsn_code %>" class="form-control" id="" placeholder="">
-                <div class="hsn_code-error-message error-message"></div>
+              <div class="row">                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Buyer Account</label>
+                    <select name="account_id" class="form-control select2 buyerAccount">
+                      <option value="">Select Account</option>
+                      <% extraVar.results.accounts.forEach(function(data){ %>
+                        <option <%= data.id == extraVar.results.my_model.account_id ? 'selected' : '' %> gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                      <% }); %>                  
+                    </select>
+                    <div class="account_id-error-message error-message"></div>
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice No.</label>
+                    <input name="purchase_invoice_no" type="text" value="<%= extraVar.results.my_model.purchase_invoice_no %>" class="form-control" id="" placeholder="">
+                    <div class="purchase_invoice_no-error-message error-message"></div>
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice Date</label>
+                    <input name="purchase_invoice_date" type="text" value="<%= extraVar.results.my_model.purchase_invoice_date %>" class="form-control date1" placeholder="">
+                    <div class="purchase_invoice_date-error-message error-message"></div>
+                  </div>
+                </div>              
               </div>
               <div class="row">
-                <div class="col-sm-6">
+                
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Quantity</label>
-                    <input name="quantity" type="text" value="<%= extraVar.results.my_model.quantity %>" class="form-control" id="" placeholder="">
-                    <div class="quantity-error-message error-message"></div>
+                    <label for="">Frieght Type</label>
+                    <input name="frieght_type" type="text" value="<%= extraVar.results.my_model.frieght_type %>" class="form-control" placeholder="">
+                    <div class="frieght_type-error-message error-message"></div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Unit</label>
-                    <input name="unit" type="text" value="<%= extraVar.results.my_model.unit %>" class="form-control" id="" placeholder="">
-                    <div class="unit-error-message error-message"></div>
+                    <label for="">Mode of Transport</label>
+                    <input name="mode_of_transport" type="text" value="<%= extraVar.results.my_model.mode_of_transport %>" class="form-control" placeholder="">
+                    <div class="mode_of_transport-error-message error-message"></div>
                   </div>
                 </div>
-              </div>
-              <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Rate</label>
-                    <input name="rate" type="text" value="<%= extraVar.results.my_model.rate %>" class="form-control" id="" placeholder="">
-                    <div class="rate-error-message error-message"></div>
-                  </div>
-                </div>
-                <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="">Size-Pkt</label>
-                    <input name="size_pkt" type="text" value="<%= extraVar.results.my_model.size_pkt %>" class="form-control" id="" placeholder="">
-                    <div class="size_pkt-error-message error-message"></div>
+                    <label for="">Vehicle No.</label>
+                    <input name="vehicle_no" type="text" value="<%= extraVar.results.my_model.vehicle_no %>" class="form-control" placeholder="">
+                    <div class="vehicle_no-error-message error-message"></div>
                   </div>
                 </div>
               </div>
+
               <div class="row">
-                <div class="col-sm-6">
+                
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Amount</label>
-                    <input name="amount" type="text" value="<%= extraVar.results.my_model.amount %>" class="form-control" id="" placeholder="">
-                    <div class="amount-error-message error-message"></div>
+                    <label for="">Dispatched Through</label>
+                    <input name="dispatched_through" type="text" value="<%= extraVar.results.my_model.dispatched_through %>" class="form-control" placeholder="">
+                    <div class="dispatched_through-error-message error-message"></div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
-                    <label for="">Size-Case</label>
-                    <input name="size_case" type="text" value="<%= extraVar.results.my_model.size_case %>" class="form-control" id="" placeholder="">
-                    <div class="size_case-error-message error-message"></div>
+                    <label for="">Term of Payment</label>
+                    <input name="term_of_payment" type="text" value="<%= extraVar.results.my_model.term_of_payment %>" class="form-control" placeholder="">
+                    <div class="term_of_payment-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">To Be Pay Upto Date</label>
+                    <input name="to_be_pay_upto_date" type="text" value="<%= extraVar.results.my_model.to_be_pay_upto_date %>" class="form-control date2" placeholder="">
+                    <div class="to_be_pay_upto_date-error-message error-message"></div>
                   </div>
                 </div>
               </div>
+              
+              <div class="itemCantainer">
+                <div class="row">
+                  <div class="col-sm-12">
+                    <div class="card card-primary">
+                      <div class="card-header">
+                        <h3 class="card-title">Item Detail</h3>
+                      </div>
+                      <div class="card-body">
+                        <div class="row itemHead">
+                          <div class="col-sm-2">
+                            <label for="">Item</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Sub Item</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">No.</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Unit</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Quantity</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Rate</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">GST</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Item GST</label>
+                          </div>
+                          <div class="col-sm-1">
+                            <label for="">Item value</label>
+                          </div>
+                          <div class="col-sm-2">
+                          </div>
+                        </div>
+                        <div class="gridTable itemDiv">     
+                          <% extraVar.results.my_model.PurchaseItems.forEach(function(item, index){ %>   
+                            <div class="row itemRow">
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <select disabled indexvalue="<%= index%>" onchange="itemName(this, <%=index%>)" class="form-control select2 selectItem item_item_id_<%=index%>" >
+                                        <% extraVar.results.items.forEach(function(data){ %>
+                                          <option <%= data.id == item.item_id ? 'selected' : '' %> value="<%= data.id %>"><%= data.item_name %></option>
+                                        <% }); %>
+                                      </select>
+                                      <input class="item_name_hidden_<%=index%>" value="<%=item.item_id%>" type="hidden" name="item[<%=index%>][item_id]">
+                                      <div class="item_item_id_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-2">
+                                  <div class="form-group">
+                                      <select disabled onchange="subItemName(this, <%=index%>)" class="form-control select2 selectSubItem_<%=index%> item_sub_item_id_<%=index%>" >
+                                          <option value="">Select Sub Item</option>
+                                      </select>
+                                      <input class="sub_item_name_hidden_<%=index%>" type="hidden" value="<%= item.sub_item_id%>" name="item[<%=index%>][sub_item_id]">
+                                      <div class="item_sub_item_id_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input readonly name="item[<%=index%>][no_of_pkg]" type="number" value="<%= item.no_of_pkg%>" class="form-control pkt item_no_of_pkg_<%=index%>" placeholder="">
+                                      <div class="item_no_of_pkg_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <select disabled onchange="changeUnit(this, <%=index%>)" class="form-control select2 item_unit_id_<%=index%>">
+                                          <option selected="" value="1">Kg</option>
+                                          <option value="2">Gm</option>
+                                      </select>
+                                      <input class="item_unit_hidden_<%=index%>" type="hidden" value="<%= item.unit%>" name="item[<%=index%>][unit]">
+                                      <div class="item_unit_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input readonly name="item[<%=index%>][quantity]" type="number" value="<%= item.quantity%>" class="form-control qty item_quantity_<%=index%>" placeholder="">
+                                      <div class="item_quantity_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input readonly name="item[<%=index%>][rate]" type="number" value="<%= item.rate%>" class="form-control rate item_rate_<%=index%>" placeholder="">
+                                      <div class="item_rate_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input readonly name="item[<%=index%>][gst]" type="number" value="<%= item.gst%>" class="form-control gst item_gst_<%=index%>" placeholder="">
+                                      <div class="item_gst_<%=index%>-error-message error-message"></div>
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input disabled type="number" class="form-control gstAmount item_gst_amount_<%=index%>" placeholder="">
+                                  </div>
+                              </div>
+                              <div class="col-sm-1">
+                                  <div class="form-group">
+                                      <input disabled="" type="number" class="form-control itemValue item_value_<%=index%>" placeholder="">
+                                  </div>
+                              </div>
+                              <div class="col-sm-2 " style="display: flex;align-items: center;">
+                                  <button onclick="removeItems(this)" type="button" class="btn btn-danger float-right">
+                                      <i class="fas fa-times"></i>
+                                  </button>
+                                  &nbsp;<button onclick="editItems(this)" type="button" itemindexvalue="<%=index%>" class="btn btn-danger float-right editItemsBtn_<%=index%>">Edit</button>
+                                  &nbsp;<button style="display:none;" itemindexvalue="" onclick="updateItems(this)" type="button" class="btn btn-info updateItemsBtn_<%=index%>">
+                                      <i class="fas fa-plus"></i> Update Item
+                                      </button>
+                              </div>
+                            </div>     
+                          <% }); %>             
+                        </div>
+                      </div>
+                      <div class="card-footer itemAddRow">
+                        <div class="row">
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <select class="form-control select2 selectItem item_item_id_" indexValue="0">
+                                    <option value="">Select Items</option>
+                                    <% extraVar.results.items.forEach(function(data){ %>
+                                      <option value="<%= data.id %>"><%= data.item_name %></option>
+                                    <% }); %>                  
+                                  </select>
+                                  <div class="item_item_id_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
+                                  </select>
+                                  <div class="item_sub_item_id_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
+                                    <div class="item_no_of_pkg_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                              <div class="form-group">
+                                <select class="form-control item_unit_ select2 selectUnit">
+                                  <% extraVar.results.units.forEach(function(data){ %>
+                                    <option value="<%= data.id %>"><%= data.name %></option>
+                                  <% }); %>                  
+                                </select>
+                                <div class="item_unit_-error-message error-message"></div>
+                              </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                    <div class="item_quantity_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemRate item_rate_" placeholder="">
+                                    <div class="item_rate_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" class="form-control itemGst item_gst_" placeholder="">
+                                    <div class="item_gst_-error-message error-message"></div>
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" disabled class="form-control item_gst_amount_" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-1">
+                                <div class="form-group">
+                                    <input type="text" disabled class="form-control item_value_" placeholder="">
+                                </div>
+                            </div>
+                            <div class="col-sm-2">
+                                <div class="form-group">
+                                  <div class="itemBtnDiv">
+                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>                                
+                                  </div>
+                                </div>
+                            </div>                
+                        </div>     
+                        <div class="items-error-message error-message"></div>                   
+                      </div>
+                    </div>                               
+                  </div>                    
+                </div>
+              </div>
+
               <div class="row">
                 <div class="col-sm-6">
-                  <div class="form-group">
-                    <label for="">GST Rate</label>
-                    <input name="gst_rate" type="text" value="<%= extraVar.results.my_model.gst_rate %>" class="form-control" id="" placeholder="">
-                    <div class="gst_rate-error-message error-message"></div>
+                </div>
+                <div class="col-sm-6">
+                  <div class="card card-primary">
+                    <div class="card-header">
+                      <h3 class="card-title"></h3>
+                    </div>
+                    <div class="card-body">
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">Taxable value</label>
+                            <input readonly name="taxable_value" type="text" class="form-control taxableValue" placeholder="">
+                            <div class="taxable_value-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="sameStates" style="display: none;"> 
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">CGST Amount</label>
+                              <input name="cgst_amount" type="number" class="cgstAmount form-control"  placeholder="">
+                              <div class="cgst_amount-error-message error-message"></div>
+                            </div>
+                          </div>
+                        </div>
+
+                        <div class="row">
+                          <div class="col-sm-3">
+                            <div class="form-group">
+                              <label for="">SGST Amount</label>
+                              <input name="sgst_amount" type="number" class="sgstAmount form-control"  placeholder="">
+                              <div class="sgst_amount-error-message error-message"></div>
+                            </div>
+                          </div>
+                        </div>
+                      </div>
+
+                      <div class="row diffStates" style="display: none;">
+                        <div class="col-sm-3">
+                          <div class="form-group">
+                            <label for="">IGST Amount</label>
+                            <input name="igst_amount" type="number" class="igstAmount form-control"  placeholder="">
+                            <div class="igst_amount-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-2">
+                          <div class="form-group">
+                            <div class="custom-control custom-checkbox">
+                              <input name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
+                              <label for="tcsCheck" class="custom-control-label" >Other Taxes</label>
+                            </div>
+                          </div>
+                        </div>
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">Taxes</label>
+                            <select disabled multiple class="form-control select2 tcs_value" name="tcs">
+                              <% extraVar.results.taxes.forEach(function(data){ %>
+                                <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
+                              <% }); %>                  
+                            </select>
+                            <label class="otherTaxInfo"></label>
+                            <div class="tcs-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                      <div class="row">
+                        <div class="col-sm-6">
+                          <div class="form-group">
+                            <label for="">Total</label>
+                            <input name="total_value" type="text" class="form-control total_value" placeholder="">
+                            <div class="total_value-error-message error-message"></div>
+                          </div>
+                        </div>
+                      </div>
+                    </div>
                   </div>
                 </div>
               </div>
@@ -129,9 +400,9 @@
                 <div class="col-sm-6">
                   <div class="form-group">
                     <div class="custom-control custom-checkbox">
-                      <input name="status" type="checkbox" <%= (extraVar.results.my_model.status === 1) ? 'checked' : '' %> class="custom-control-input" id="statusCheck">
+                      <input name="status" type="checkbox" checked class="custom-control-input" id="statusCheck">
                       <label for="statusCheck" class="custom-control-label" >Status</label>
-                      <div class="ecc_no-error-message error-message"></div>
+                      <div class="status-error-message error-message"></div>
                     </div>
                   </div>
                 </div>
@@ -145,7 +416,8 @@
           </form>
         </div>
         <!-- /.card -->
-
+        <span style="display: none;" id="unitsObj"><%= JSON.stringify(extraVar.results.units); %></span>
+        <span style="display: none;" id="itemsObj"><%= JSON.stringify(extraVar.results.items); %></span>
       </div>
       <!--/.col (left) -->
     </div>
@@ -156,11 +428,295 @@
 <script type="text/javascript">
 
   $(function () {
-    $('.ckEditor').summernote({
-      height: 300
-    })
-  })
+    calculateTotal();
+  });
+
+  $(document).on("change", ".selectItem", function(){
+    let thisObj = this;
+    let indexvalue = $(thisObj).attr("indexvalue");
+    if(indexvalue == 0) {
+      indexvalue = '';
+    }
+    let itemsObj = JSON.parse($("#itemsObj").html());
+    itemsObj.map(function(data) {
+      
+      if(data.id === parseInt($(thisObj).val())){
+        $(".item_gst_"+indexvalue).val(data.gstin);
+      }
+    });
+  });
+
+  function addMoreItems(){
+    emptyItemErrors();
+
+    let selectItem = $('.item_item_id_').val();
+    let itemNoOfPkt = $('.itemNoOfPkt').val();
+    let itemUnit = $('.itemUnit').val();
+    let itemQuantity = $('.itemQuantity').val();
+    let itemRate = $('.itemRate').val();
+    let itemGst = $('.itemGst').val();
+    let selectUnit = $('.selectUnit').val();
+    let valid = validateItems();
+
+    if(valid){
+      let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
+      $('.itemIndexValue').val(itemIndexValue); 
+      
+      let itemsObj = JSON.parse($("#itemsObj").html());
+      let itemOptions = "";
+      let selectedValue1 = "";
+      itemsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectItem){
+          selected = "selected";
+          selectedValue1 = data.id;
+        }
+        itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
+      });
+
+      let unitsObj = JSON.parse($("#unitsObj").html());
+      let unitOptions = "";
+      let selectedValue3 = "";
+      unitsObj.map(function(data) {
+        let selected = "";
+        if(data.id == selectUnit){
+          selected = "selected";
+          selectedValue3 = data.id;          
+        }
+        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
+      });
+      unitOptions += "<input class='item_unit_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue3+"' name='item["+itemIndexValue+"][unit]' >";
+
+
+      let subItemOptions = "";
+      let selectedValue2 = "";
+      $(".selectSubItem  option").each(function(){
+        let selectedSubItem = "";
+        if(this.value == $(".selectSubItem").val()){
+          selectedSubItem = "selected";
+          selectedValue2 = this.value;
+        }
+        subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
+      });
+      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
+      selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
+      
+
+      let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
+      selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
+      
+      let itemHtml = "<div class='row itemRow'><div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
+
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][rate]' type='number' value='"+itemRate+"' class='form-control rate item_rate_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_rate_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input readonly name='item["+itemIndexValue+"][gst]' type='number' value='"+itemGst+"' class='form-control gst item_gst_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='item_gst_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input disabled type='number' class='form-control gstAmount item_gst_amount_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "</div></div>";
+      
+      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      itemHtml += "<input disabled type='number' class='form-control itemValue item_value_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "</div></div>";
+
+      itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";
+      itemHtml += "<button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
+      itemHtml += "<button onclick='editItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";
+      itemHtml += "<button style='display:none;'' itemIndexValue='' onclick='updateItems(this)' type='button' class='btn btn-info updateItemsBtn_"+itemIndexValue+"'><i class='fas fa-plus'></i> Update Item</button></div></div>";
+      $('.itemDiv').prepend(itemHtml);
+      $(".select2").each(function() {
+        $(this).select2();
+      });
+      emptyItemFields();
+      calculateTotal();
+    }
+  }
     
+  function emptyItemErrors(index = ""){
+    $(".item_item_id_"+index+"-error-message, .item_no_of_pkg_"+index+"-error-message, .item_quantity_"+index+"-error-message, .item_rate_"+index+"-error-message, .item_gst_"+index+"-error-message").html("");
+  }
+
+  function emptyItemFields(){
+    $('.item_item_id_').val("").trigger('change');
+    $('.item_sub_item_id_').val("").trigger('change');
+    $('.itemNoOfPkt').val("");
+    $('.itemUnit').val("");
+    $('.itemQuantity').val("");
+    $('.itemRate').val("");
+    $('.itemGst').val("");
+  }
+
+  function validateItems(itemIndexValue = ""){
+    let valid = true;
+    if($('.item_item_id_'+itemIndexValue).val() === ""){
+      $('.item_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    // if($('.item_sub_item_id_'+itemIndexValue).val() === ""){
+    //   $('.item_sub_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
+    // }
+    if($('.item_no_of_pkg_'+itemIndexValue).val() === ""){
+      $('.item_no_of_pkg_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_quantity_'+itemIndexValue).val() === ""){
+      $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_unit_'+itemIndexValue).val() === ""){
+      $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_rate_'+itemIndexValue).val() === ""){
+      $('.item_rate_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    if($('.item_gst_'+itemIndexValue).val() === ""){
+      $('.item_gst_'+itemIndexValue+'-error-message').html("This field is required!");
+      valid = false;
+    }
+    return valid;
+  }
+
+  function editItems(thisVar){
+
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    $('.item_item_id_'+itemIndexValue).attr("disabled", false);
+    $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
+    $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
+    $('.item_unit_'+itemIndexValue).attr("readonly", false);
+    $('.item_quantity_'+itemIndexValue).attr("readonly", false);
+    $('.item_rate_'+itemIndexValue).attr("readonly", false);
+    $('.item_gst_'+itemIndexValue).attr("readonly", false);
+
+    $('.editItemsBtn_'+itemIndexValue).hide();
+    $('.updateItemsBtn_'+itemIndexValue).show();
+    $('.updateItemsBtn_'+itemIndexValue).attr("itemIndexValue", itemIndexValue);
+  }
+
+  function updateItems(thisVar){
+    
+    let itemIndexValue =  $(thisVar).attr("itemIndexValue");
+    emptyItemErrors(itemIndexValue);
+    let valid = validateItems(itemIndexValue);
+    if(valid){
+      $('.item_item_id_'+itemIndexValue).attr("disabled", true);
+      $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
+      $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
+      $('.item_unit_'+itemIndexValue).attr("readonly", true);
+      $('.item_quantity_'+itemIndexValue).attr("readonly", true);
+      $('.item_rate_'+itemIndexValue).attr("readonly", true);
+      $('.item_gst_'+itemIndexValue).attr("readonly", true);
+      $('.editItemsBtn_'+itemIndexValue).show();
+      $('.updateItemsBtn_'+itemIndexValue).hide();
+      calculateTotal();
+      emptyItemFields();
+    }    
+  }
+
+  function removeItems(thisVar){
+    $(thisVar).parents('.itemRow').remove();
+    calculateTotal();
+  }
+
+  $(document).on("click", ".tcs_check", function(){
+    if($(this).is(":checked")){
+      $(".tcs_value").attr("disabled", false);
+    } else {      
+      $(".tcs_value").val("").trigger("change");
+      $(".tcs_value").attr("disabled", true);
+    }
+    calculateTotal();
+  });
+
+  $(document).on("change", ".tcs_value", function(){
+    calculateTotal();
+  });
+
+  function itemName(thisObj, index){
+    $(".item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function subItemName(thisObj, index){
+    $(".sub_item_name_hidden_"+index).val($(thisObj).val());
+  }
+
+  function calculateTotal(){
+    let totalPrice = 0;
+    let totalGST = 0;
+    $(".itemRow").each(function(index, val){
+      let rate = parseFloat($(".rate", val).val());
+      let qty = parseFloat($(".qty", val).val());
+      let gst = parseFloat($(".gst", val).val());
+      totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
+      let gstPerItem = ((rate * qty) * gst) / 100;
+      $(".gstAmount", val).val(gstPerItem);
+      totalGST = totalGST + gstPerItem;
+      $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
+      
+    });
+    $(".taxableValue").val(totalPrice);
+    $(".totalGST").val(totalGST);
+
+    let total_value = parseFloat(totalPrice + totalGST);
+
+    let buyerGstAmt = $(".buyerAccount option:selected").attr('gstin');
+    if(typeof buyerGstAmt !== "undefined"){
+      let buyerGst = buyerGstAmt.substring(0, 2);
+      let sessionObj = JSON.parse($("#sessionObj").html());
+      let userGst = sessionObj.session.user.Company.gstin.substring(0, 2);
+      console.log("$$", userGst)
+      if(buyerGst == userGst){
+
+        $(".sameStates").show();
+        $(".diffStates").hide();
+        $(".cgstAmount").val(totalGST / 2);
+        $(".sgstAmount").val(totalGST / 2);
+        $(".igstAmount").val("");
+      } else {
+        $(".igstAmount").val(totalGST);
+        $(".cgstAmount").val("");
+        $(".sgstAmount").val("");
+        $(".diffStates").show();
+        $(".sameStates").hide();
+      }
+    }
+    
+    let withTcs = 0;
+    let otherTaxInfo = "";
+    if($(".tcs_check").is(":checked")){
+      let otherTax = 0;
+      $(".tcs_value option:selected").each(function(val, index){
+        otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((totalPrice * parseFloat($(this).attr("percentage"))) / 100) + ", ";
+      })
+      withTcs = (totalPrice * otherTax) / 100;
+      $(".otherTaxInfo").html(otherTaxInfo);
+      total_value = parseFloat(total_value + withTcs);
+    } else {
+      $(".otherTaxInfo").html("");
+    }
+    $(".total_value").val(total_value);
+  }
+
   $(document).ready(function() {
     // $.notify(data.message, { className:"success",position:"bottom right" });
     var formId = 'formId';

@@ -58,7 +58,7 @@
                     <select name="consignee_no" class="form-control select2 consigneeAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %> - <%= data.address %></option>
                       <% }); %>                  
                     </select>
                     <div class="consignee_no-error-message error-message"></div>
@@ -80,7 +80,7 @@
               <div class="row">
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="">Buyer Add</label>
+                    <label for="">Consignee Add</label>
                     <input name="buyer_add" type="text" class="form-control"  placeholder="">
                     <div class="buyer_add-error-message error-message"></div>
                   </div>

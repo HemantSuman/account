@@ -70,33 +70,33 @@
         });
     });
 
-    $(document).on("change", "#stateId", function () {
-        // e.preventDefault();
+    // $(document).on("change", "#stateId", function () {
+    //     // e.preventDefault();
 
-        let thisObj = $(this);
-        let id = thisObj.val();
-        console.log('statusUpdated');
-        $.ajax({
-            url: "/admin/cities/citiesById",
-            data: {id: id},
-            //contentType: false,
-            //processData: false,
-            method: "POST",
-            cache: false,
-            success: function (response) {
-                let optionsHtml = "<option value=''>Select City</option>";
-                response.map(function(data){
-                    optionsHtml += "<option value='"+data.id+"'>"+data.name+"</option>"
-                });
-                $("#cityId").html(optionsHtml);
-            }, error: function (resData) {
-                console.log(resData);
-                // $.each(resData.responseJSON.data, function (key, val) {
-                //     // bootstrapNotify.showMessageOnField(val.message, val.path);
-                // });
-            }
-        });
-    });
+    //     let thisObj = $(this);
+    //     let id = thisObj.val();
+    //     console.log('statusUpdated');
+    //     $.ajax({
+    //         url: "/admin/cities/citiesById",
+    //         data: {id: id},
+    //         //contentType: false,
+    //         //processData: false,
+    //         method: "POST",
+    //         cache: false,
+    //         success: function (response) {
+    //             let optionsHtml = "<option value=''>Select City</option>";
+    //             response.map(function(data){
+    //                 optionsHtml += "<option value='"+data.id+"'>"+data.name+"</option>"
+    //             });
+    //             $("#cityId").html(optionsHtml);
+    //         }, error: function (resData) {
+    //             console.log(resData);
+    //             // $.each(resData.responseJSON.data, function (key, val) {
+    //             //     // bootstrapNotify.showMessageOnField(val.message, val.path);
+    //             // });
+    //         }
+    //     });
+    // });
     
     $(document).on("change", ".selectItem", function () {
 

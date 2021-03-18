@@ -84,7 +84,7 @@
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="">GSTIN</label>
+                    <label for="">GST Tax Value</label>
                     <input name="gstin" value="<%= extraVar.results.my_model.gstin %>" type="text" class="form-control" placeholder="">
                     <div class="gstin-error-message error-message"></div>
                   </div>
@@ -121,8 +121,8 @@
                         </div>
                         <div class="gridTable subItemDiv">
                           <% extraVar.results.my_model.SubItems.forEach(function(item, index){ %>
-                            <input type="hidden" name="subItem[<%=index%>][id]" value="<%=item.id%>" />
                             <div class="row subItemRow">
+                              <input type="hidden" name="subItem[<%=index%>][id]" value="<%=item.id%>" />
                               <div class="col-sm-4">
                                   <div class="form-group">
                                       <input readonly="" name="subItem[<%= index %>][name]" type="text" value="<%= item.name%>" class="form-control subItem_name_<%= index %>" placeholder="">
@@ -333,6 +333,11 @@
 <script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
 <script type="text/javascript">
 
+  $(function () {
+    $(".finishedItemCantainer, .subItemCantainer, .wastageDiv").hide();
+    $(".finishedItemBtnDiv, .subItemBtnDiv").hide();
+  })
+
   function validatesubItem(index = "") {
     let valid = true;
     let itemSubValue = $('.itemSubValue').val();
@@ -525,7 +530,7 @@
 
   function emptyFinishedItemFields(){
     $('.selectItem').val("").trigger('change');
-    $('.selectUnit').val("");
+    // $('.selectUnit').val("");
     $('.itemFinishedQuantity').val("");
   }
 

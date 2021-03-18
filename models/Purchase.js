@@ -188,13 +188,17 @@ module.exports = function (sequelize, DataTypes) {
         tcs: {
             type: DataTypes.STRING,
             get() {
+                console.log("4")
                 if(this.getDataValue('tcs') && typeof this.getDataValue('tcs') !== "undefined"){
                     return this.getDataValue('tcs').split(';')
                 }
                 return null;
             },
             set(val) {
-                this.setDataValue('tcs',val.join(';'));
+                if(Array.isArray(val)){
+                    return this.setDataValue('tcs',val.join(';'));
+                } 
+                return null;
             },
         },
         total_value: {
@@ -214,10 +218,14 @@ module.exports = function (sequelize, DataTypes) {
   });  
   myModel.getAllValues = function (req, res) {
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
+    // var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
+    // var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({
             where: req.where,
             include: [
-                accountToPurchae
+                accountToPurchae,
+                // purchaseItemToPurchae,
+                // {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
             ],
             order: req.order    
         },    
@@ -227,7 +235,12 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
-        this.findOne({where: req.where}).then(function (results) {
+        var purchaseToPurchaseItems = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
+        this.findOne({where: req.where, 
+            include: [
+                purchaseToPurchaseItems,
+            ]
+        }).then(function (results) {
             res(results);
         });
     }

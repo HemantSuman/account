@@ -293,6 +293,7 @@
                                 <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
                               <% }); %>                  
                             </select>
+                            <label class="otherTaxInfo"></label>
                             <div class="tcs-error-message error-message"></div>
                           </div>
                         </div>
@@ -615,7 +616,6 @@
 
     let buyerGstAmt = $(".buyerAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
-      console.log("@@", buyerGstAmt)
       let buyerGst = buyerGstAmt.substring(0, 2);
       let sessionObj = JSON.parse($("#sessionObj").html());
       let userGst = sessionObj.session.user.Company.gstin.substring(0, 2);
@@ -637,19 +637,18 @@
     }
     
     let withTcs = 0;
+    let otherTaxInfo = "";
     if($(".tcs_check").is(":checked")){
       let otherTax = 0;
       $(".tcs_value option:selected").each(function(val, index){
-        console.log($(this).attr("percentage"));
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((totalPrice * parseFloat($(this).attr("percentage"))) / 100) + ", ";
       })
-      // let tcs_value = parseFloat($(".tcs_value option:selected").attr("percentage"));
-      
-      // if(isNaN(tcs_value)){
-      //   tcs_value = 0;
-      // } 
-      withTcs = (total_value * otherTax) / 100;
+      withTcs = (totalPrice * otherTax) / 100;
       total_value = parseFloat(total_value + withTcs);
+      $(".otherTaxInfo").html(otherTaxInfo);
+    } else {
+      $(".otherTaxInfo").html("");
     }
     $(".total_value").val(total_value);
   }

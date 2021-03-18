@@ -96,6 +96,12 @@ module.exports = function (sequelize, DataTypes) {
         ifsc: {
             type: DataTypes.STRING,
         },
+        pan_no: {
+            type: DataTypes.STRING,
+        },
+        registration_no: {
+            type: DataTypes.STRING,
+        },
         status: {
             type: DataTypes.STRING,
         },
