@@ -5,10 +5,24 @@
   color: #dc3545;
 }
 .gridTable {
-  max-height: 155px;
+  max-height: 262px;
   overflow-y: auto;
   overflow-x: hidden;
 }
 .itemAddRow {
   background-color: #dde3e8;
+}
+
+.row.itemRow {
+  border: 1px #ccc solid;
+  margin: 2px;
+  padding: 2px;
+  /* background-color: rgba(0, 0, 0, 0.05); */
+}
+.row.itemRow:nth-child(even) {
+  background-color: #f2f2f2;
+}
+
+.row.form-group {
+  margin-bottom: 1rem;
 }

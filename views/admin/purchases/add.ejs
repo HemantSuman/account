@@ -124,9 +124,9 @@
                           <div class="col-sm-1">
                             <label for="">No.</label>
                           </div>
-                          <div class="col-sm-1">
+                          <!-- <div class="col-sm-1">
                             <label for="">Unit</label>
-                          </div>
+                          </div> -->
                           <div class="col-sm-1">
                             <label for="">Quantity</label>
                           </div>
@@ -158,6 +158,7 @@
                                       <option value="<%= data.id %>"><%= data.item_name %></option>
                                     <% }); %>                  
                                   </select>
+                                  <small class="item_unit_ selectUnit"><b>Unit: </b><span></span></small>
                                   <div class="item_item_id_-error-message error-message"></div>
                                 </div>
                             </div>
@@ -174,7 +175,7 @@
                                     <div class="item_no_of_pkg_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <!-- <div class="col-sm-1">
                               <div class="form-group">
                                 <select class="form-control item_unit_ select2 selectUnit">
                                   <% extraVar.results.units.forEach(function(data){ %>
@@ -183,7 +184,7 @@
                                 </select>
                                 <div class="item_unit_-error-message error-message"></div>
                               </div>
-                            </div>
+                            </div> -->
                             <div class="col-sm-1">
                                 <div class="form-group">
                                     <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
@@ -215,7 +216,7 @@
                             <div class="col-sm-2">
                                 <div class="form-group">
                                   <div class="itemBtnDiv">
-                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i> Add Item</button>                                
+                                    <button onclick="addMoreItems()" type="button" class="btn btn-info"><i class="fas fa-plus"></i></button>                                
                                   </div>
                                 </div>
                             </div>                
@@ -344,6 +345,12 @@
 
 <script type="text/javascript">
 
+  let unitsObj = JSON.parse($("#unitsObj").html());
+  let unitKeyValue = {};
+  unitsObj.map(function(data) {
+    unitKeyValue[data.id] = data.name;
+  });
+
   $('.date1').daterangepicker({
     singleDatePicker: true,
     locale: {
@@ -380,6 +387,8 @@
       
       if(data.id === parseInt($(thisObj).val())){
         $(".item_gst_"+indexvalue).val(data.gstin);
+        $(".item_unit_"+indexvalue+" span").text(unitKeyValue[data.unit])
+        // $(".item_unit_"+indexvalue).val(data.unit).trigger("change")
       }
     });
   });
@@ -393,7 +402,8 @@
     let itemQuantity = $('.itemQuantity').val();
     let itemRate = $('.itemRate').val();
     let itemGst = $('.itemGst').val();
-    let selectUnit = $('.selectUnit').val();
+    // let selectUnit = $('.selectUnit').val();
+    let selectUnit = $('.item_unit_ span').html();
     let valid = validateItems();
 
     if(valid){
@@ -412,18 +422,18 @@
         itemOptions += "<option " + selected + " value='"+ data.id +"'>"+data.item_name+"</option>";
       });
 
-      let unitsObj = JSON.parse($("#unitsObj").html());
-      let unitOptions = "";
-      let selectedValue3 = "";
-      unitsObj.map(function(data) {
-        let selected = "";
-        if(data.id == selectUnit){
-          selected = "selected";
-          selectedValue3 = data.id;          
-        }
-        unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
-      });
-      unitOptions += "<input class='item_unit_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue3+"' name='item["+itemIndexValue+"][unit]' >";
+      // let unitsObj = JSON.parse($("#unitsObj").html());
+      // let unitOptions = "";
+      // let selectedValue3 = "";
+      // unitsObj.map(function(data) {
+      //   let selected = "";
+      //   if(data.id == selectUnit){
+      //     selected = "selected";
+      //     selectedValue3 = data.id;          
+      //   }
+      //   unitOptions += "<option " + selected + " value='"+ data.id +"'>"+data.name+"</option>";
+      // });
+      // unitOptions += "<input class='item_unit_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue3+"' name='item["+itemIndexValue+"][unit]' >";
 
 
       let subItemOptions = "";
@@ -443,16 +453,21 @@
       let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
       selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
       
-      let itemHtml = "<div class='row itemRow'><div class='col-sm-2'><div class='form-group'>"+selectHtml+"<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      let itemHtml = "<div class='row itemRow'>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += selectHtml;
+      itemHtml += "<small class='item_unit_"+itemIndexValue+" selectUnit'><b>Unit: </b><span>"+selectUnit+"</span></small>";
+      itemHtml += "<div class='item_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      
       itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
-      itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
+      // itemHtml += "<div class='col-sm-1'><div class='form-group'>";
+      // itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      // itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
 
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
@@ -487,9 +502,9 @@
     }
   }
 
-  function changeUnit(thisObj, index){
-    $(".item_unit_hidden_"+index).val($(thisObj).val());
-  }
+  // function changeUnit(thisObj, index){
+  //   $(".item_unit_hidden_"+index).val($(thisObj).val());
+  // }
 
   $(document).on("change", ".buyerAccount", function(){
     calculateTotal();
@@ -517,10 +532,10 @@
       $('.item_quantity_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
     }
-    if($('.item_unit_'+itemIndexValue).val() === ""){
-      $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
+    // if($('.item_unit_'+itemIndexValue).val() === ""){
+    //   $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
+    // }
     if($('.item_rate_'+itemIndexValue).val() === ""){
       $('.item_rate_'+itemIndexValue+'-error-message').html("This field is required!");
       valid = false;
@@ -541,7 +556,7 @@
       $('.item_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
-      $('.item_unit_'+itemIndexValue).attr("readonly", true);
+      // $('.item_unit_'+itemIndexValue).attr("readonly", true);
       $('.item_quantity_'+itemIndexValue).attr("readonly", true);
       $('.item_rate_'+itemIndexValue).attr("readonly", true);
       $('.item_gst_'+itemIndexValue).attr("readonly", true);
@@ -566,7 +581,7 @@
     $('.item_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
-    $('.item_unit_'+itemIndexValue).attr("readonly", false);
+    // $('.item_unit_'+itemIndexValue).attr("disabled", false);
     $('.item_quantity_'+itemIndexValue).attr("readonly", false);
     $('.item_rate_'+itemIndexValue).attr("readonly", false);
     $('.item_gst_'+itemIndexValue).attr("readonly", false);

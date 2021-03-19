@@ -184,7 +184,7 @@
                               </div>
                               <div class="col-sm-1">
                                   <div class="form-group">
-                                      <select disabled onchange="changeUnit(this, <%=index%>)" class="form-control select2 item_unit_id_<%=index%>">
+                                      <select disabled onchange="changeUnit(this, <%=index%>)" class="form-control select2 item_unit_<%=index%>">
                                           <option selected="" value="1">Kg</option>
                                           <option value="2">Gm</option>
                                       </select>
@@ -237,7 +237,7 @@
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                  <select class="form-control select2 selectItem item_item_id_" indexValue="0">
+                                  <select class="form-control select2 selectItem item_item_id_" indexValue="<%=extraVar.results.my_model.PurchaseItems.length%>">
                                     <option value="">Select Items</option>
                                     <% extraVar.results.items.forEach(function(data){ %>
                                       <option value="<%= data.id %>"><%= data.item_name %></option>
@@ -248,20 +248,20 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
-                                  <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
+                                  <select class="form-control select2 item_sub_item_id_<%=extraVar.results.my_model.PurchaseItems.length%> selectSubItem selectSubItem_<%=extraVar.results.my_model.PurchaseItems.length%>">                                              
                                   </select>
                                   <div class="item_sub_item_id_-error-message error-message"></div>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
+                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                     <div class="item_no_of_pkg_-error-message error-message"></div>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                               <div class="form-group">
-                                <select class="form-control item_unit_ select2 selectUnit">
+                                <select class="form-control item_unit_<%=extraVar.results.my_model.PurchaseItems.length%> select2 selectUnit">
                                   <% extraVar.results.units.forEach(function(data){ %>
                                     <option value="<%= data.id %>"><%= data.name %></option>
                                   <% }); %>                  
@@ -271,30 +271,30 @@
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                    <input type="text" class="form-control itemQuantity item_quantity_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                     <div class="item_quantity_-error-message error-message"></div>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemRate item_rate_" placeholder="">
+                                    <input type="text" class="form-control itemRate item_rate_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                     <div class="item_rate_-error-message error-message"></div>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemGst item_gst_" placeholder="">
+                                    <input type="text" class="form-control itemGst item_gst_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                     <div class="item_gst_-error-message error-message"></div>
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control item_gst_amount_" placeholder="">
+                                    <input type="text" disabled class="form-control item_gst_amount_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                 </div>
                             </div>
                             <div class="col-sm-1">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control item_value_" placeholder="">
+                                    <input type="text" disabled class="form-control item_value_<%=extraVar.results.my_model.PurchaseItems.length%>" placeholder="">
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -434,14 +434,15 @@
   $(document).on("change", ".selectItem", function(){
     let thisObj = this;
     let indexvalue = $(thisObj).attr("indexvalue");
-    if(indexvalue == 0) {
-      indexvalue = '';
-    }
+    // if(indexvalue == 0) {
+    //   indexvalue = '';
+    // }
     let itemsObj = JSON.parse($("#itemsObj").html());
     itemsObj.map(function(data) {
       
       if(data.id === parseInt($(thisObj).val())){
         $(".item_gst_"+indexvalue).val(data.gstin);
+        $(".item_unit_"+indexvalue).val(data.unit).trigger("change")
       }
     });
   });
@@ -513,7 +514,7 @@
       itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_id_"+itemIndexValue+"'>"+unitOptions+"</select>";
+      itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_"+itemIndexValue+"'>"+unitOptions+"</select>";
       itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
 
       itemHtml += "<div class='col-sm-1'><div class='form-group'>";
@@ -547,6 +548,10 @@
       emptyItemFields();
       calculateTotal();
     }
+  }
+
+  function changeUnit(thisObj, index){
+    $(".item_unit_hidden_"+index).val($(thisObj).val());
   }
     
   function emptyItemErrors(index = ""){

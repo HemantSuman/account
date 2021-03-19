@@ -52,7 +52,7 @@ router.get('/add', function(req, res, next) {
         });
     },
     items: function (callback) {
-        req.where = {}
+        req.where = {category_id:1}
         models.Item.getAllValues(req, function (data) {
             callback(null, data);
         });
@@ -236,10 +236,10 @@ router.get('/edit/:id', function(req, res, next) {
       });
     },
     items: function (callback) {
-        req.where = {}
-        models.Item.getAllValues(req, function (data) {
-            callback(null, data);
-        });
+      req.where = {category_id:1}
+      models.Item.getAllValues(req, function (data) {
+          callback(null, data);
+      });
     },
     units: function (callback) {
         req.where = {}
@@ -429,14 +429,36 @@ router.post('/edit', function(req, res, next) {
 
 router.post('/delete/:id', function (req, res, next) {
   var id = req.params.id;
-  req.where = {'id': id};
-  models[modelName].deleteAllValues(req, function (data) {
-    req.session.sessionFlash = {
-      type: 'success',
-      message: 'Deleted successfully!'
-    }
-    res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+
+  async.parallel([
+    function (callback) {
+      req.where = {'item_id': id};
+      models["SubItem"].deleteAllValues(req, function (data) {
+        callback(null);
+      });       
+      // callback(null);
+    },
+    function (callback) {
+      req.where = {'item_id': id};
+      models["FinishedItem"].deleteAllValues(req, function (data) {
+        callback(null);
+      });       
+      // callback(null);
+    },
+  ], function (err) {
+
+    req.where = {'id': id};
+    models[modelName].deleteAllValues(req, function (data) {
+      req.session.sessionFlash = {
+        type: 'success',
+        message: 'Deleted successfully!'
+      }
+      res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+    });
   });
+
+
+  
 });
 
 module.exports = router;

@@ -54,11 +54,11 @@
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
-                    <label for="">Consignee No.</label>
+                    <label for="">Consignee Name</label>
                     <select name="consignee_no" class="form-control select2 consigneeAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %> - <%= data.address %></option>
+                        <option address="<%= data.address %>" gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
                       <% }); %>                  
                     </select>
                     <div class="consignee_no-error-message error-message"></div>
@@ -81,7 +81,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Consignee Add</label>
-                    <input name="buyer_add" type="text" class="form-control"  placeholder="">
+                    <input name="buyer_add" type="text" class="form-control buyer_add"  placeholder="">
                     <div class="buyer_add-error-message error-message"></div>
                   </div>
                 </div>
@@ -768,6 +768,7 @@
 
   $(document).on("change", ".consigneeAccount", function(){
     calculateTotal();
+    $(".buyer_add").val($(".consigneeAccount option:selected").attr("address"));
   });
 
   $(document).on("keyup", ".discountField", function(){
@@ -858,6 +859,16 @@
 
     let thisObj = $(this);
     let id = thisObj.val();
+    
+    // let unitsObj = JSON.parse($("#unitsObj").html());
+    // let itemsObj = JSON.parse($("#itemsObj").html());
+    // unitsObj.map(function(data) {
+    //   console.log("#", data, id)
+    //   if(data.id == id){
+    //     console.log("#", JSON.parse($("#itemsObj").html()))
+    //     $(".selectUnit").val(2).trigger("change")
+    //   }
+    // });
 
     let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
     let itemsObj = JSON.parse($("#itemsObj").html());
@@ -865,6 +876,7 @@
       
       if(data.id === parseInt($(thisObj).val())){
         $(".item_gst_"+indexValue).val(data.gstin);
+        $(".item_unit_"+indexValue).val(data.unit).trigger("change")
       }
     });
     let type = $(".item_type_"+indexValue).val();

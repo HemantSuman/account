@@ -35,43 +35,43 @@ module.exports = function (sequelize, DataTypes) {
         },
         frieght_type: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         mode_of_transport: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         vehicle_no: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         dispatched_through: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         term_of_payment: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         to_be_pay_upto_date: {
             type: DataTypes.DATE,
@@ -236,9 +236,11 @@ module.exports = function (sequelize, DataTypes) {
     }    
     myModel.getFirstValues = function (req, res) {
         var purchaseToPurchaseItems = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
+        var purchaseToOtherTax = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'purchase_id'});
         this.findOne({where: req.where, 
             include: [
                 purchaseToPurchaseItems,
+                purchaseToOtherTax
             ]
         }).then(function (results) {
             res(results);

@@ -178,7 +178,7 @@
                         <div class="row">
                           <div class="col-sm-4">
                             <div class="form-group">
-                              <select class="form-control select2 selectItem">
+                              <select class="form-control select2 selectItem finishedItem_finished_item_id_" indexValue="0">
                                 <option value="">Select</option>
                                 <% extraVar.results.items.forEach(function(data){ %>
                                   <option value="<%= data.id %>"><%= data.item_name %></option>
@@ -189,17 +189,17 @@
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
-                              <select class="form-control select2 selectUnit">
+                              <select class="form-control select2 selectUnit finishedItem_unit_name_">
                                 <% extraVar.results.units.forEach(function(data){ %>
                                   <option value="<%= data.id %>"><%= data.name %></option>
                                 <% }); %>                  
                               </select>
-                              <div class="finishedItem_unit_-error-message error-message"></div>
+                              <div class="finishedItem_unit_name_-error-message error-message"></div>
                             </div>
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
-                              <input type="text" class="form-control itemFinishedQuantity" id="" placeholder="">
+                              <input type="text" class="form-control itemFinishedQuantity" placeholder="">
                               <div class="finishedItem_quantity_-error-message error-message"></div>
                             </div>
                           </div>
@@ -265,6 +265,20 @@
     }
   });  
 
+  $(document).on("change", ".selectItem", function () {
+
+    let thisObj = $(this);
+    let id = thisObj.val();
+
+    let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    let itemsObj = JSON.parse($("#itemsObj").html());
+    itemsObj.map(function(data) {
+      if(data.id == parseInt($(thisObj).val())){
+        $(".finishedItem_unit_name_"+indexValue).val(data.unit).trigger("change")
+      }
+    });
+  });
+
   function validatesubItem(index = "") {
     let valid = true;
     let itemSubValue = $('.itemSubValue').val();
@@ -288,7 +302,7 @@
   
   function validateFinishedItem(index = "") {
     let valid = true;
-    let selectItem = $('.selectItem').val();
+    let selectItem = $('.finishedItem_finished_item_id_').val();
     let selectUnit = $('.selectUnit').val();
     let itemFinishedQuantity = $('.itemFinishedQuantity').val();
 
@@ -297,7 +311,7 @@
       valid = false;
     }
     if(selectUnit === ""){
-      $(".finishedItem_unit_"+index+"-error-message").html("This field is required!");
+      $(".finishedItem_unit_name_"+index+"-error-message").html("This field is required!");
       valid = false;
     }
     if(itemFinishedQuantity === ""){
@@ -312,7 +326,7 @@
   }
 
   function emptyFinishedItemErrors(index = ""){
-    $(".finishedItem_finished_item_id_"+index+"-error-message, .finishedItem_unit_"+index+"-error-message, .finishedItem_quantity_"+index+"-error-message").html("");
+    $(".finishedItem_finished_item_id_"+index+"-error-message, .finishedItem_unit_name_"+index+"-error-message, .finishedItem_quantity_"+index+"-error-message").html("");
   }
 
   function emptySubItemFields(){
@@ -322,7 +336,7 @@
   }
 
   function emptyFinishedItemFields(){
-    $('.selectItem').val("").trigger('change');
+    $('.finishedItem_finished_item_id_').val("").trigger('change');
     // $('.selectUnit').val("");
     $('.itemFinishedQuantity').val("");
   }
@@ -356,7 +370,7 @@
   function addMoreFinishedItems(){
     emptyFinishedItemErrors();
 
-    let selectItem = $('.selectItem').val();
+    let selectItem = $('.finishedItem_finished_item_id_').val();
     let selectUnit = $('.selectUnit').val();
     let itemFinishedQuantity = $('.itemFinishedQuantity').val();
     let valid = validateFinishedItem();
@@ -392,9 +406,9 @@
       });
       unitOptions += "<input class='finishedItem_unit_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue+"' name='finishedItem["+itemIndexValue+"][unit]' >";
 
-      let selectHtml = "<select disabled onchange='finishedItemName(this, "+itemIndexValue+")' class='form-control select2 finishedItem_name_"+itemIndexValue+"'>"+itemOptions+"</select>";
+      let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='finishedItemName(this, "+itemIndexValue+")' class='form-control select2 selectItem finishedItem_name_"+itemIndexValue+"'>"+itemOptions+"</select>";
       let itemHtml = "<div class='row itemRow'><div class='col-sm-4'><div class='form-group'>"+selectHtml+"<div class='finishedItem_finished_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
-      itemHtml += "<div class='col-sm-2'><div class='form-group'><select disabled onchange='finishedItemUnit(this, "+itemIndexValue+")' class='form-control select2 finishedItem_unit_name_"+itemIndexValue+"'>"+unitOptions+"</select><div class='finishedItem_unit_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'><select disabled onchange='finishedItemUnit(this, "+itemIndexValue+")' class='form-control select2 finishedItem_unit_name_"+itemIndexValue+"'>"+unitOptions+"</select><div class='finishedItem_unit_name_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-2'><div class='form-group'><input readonly name='finishedItem["+itemIndexValue+"][quantity]' type='text' class='form-control finishedItem_quantity_name_"+itemIndexValue+"' value='"+itemFinishedQuantity+"' placeholder=''><div class='finishedItem_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       itemHtml += "<div class='col-sm-3 ' style='display: flex;align-items: center;'><button onclick='removeItems(this)' type='button' class='btn btn-danger float-right'><i class='fas fa-times'></i></button>&nbsp;";
       itemHtml += "<button onclick='editFinishedItems(this)' type='button' itemIndexValue='"+itemIndexValue+"' class='btn btn-danger float-right editFinishedItemsBtn_"+itemIndexValue+"'>Edit</button>&nbsp;";

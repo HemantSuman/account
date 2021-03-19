@@ -344,7 +344,7 @@ router.get('/edit/:id', function(req, res, next) {
         });
     }, 
   }, function (err, results) {
-      // console.log(results.my_model);return;
+      //console.log(results.my_model.OtherTaxes);
       extraVar['results'] = results;
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
