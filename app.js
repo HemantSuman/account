@@ -55,7 +55,7 @@ app.use(session({
   cookie: {},
   store: sessionStore,
   saveUninitialized: true,
-  resave: false,
+  resave: true,
   secret: '$%^&*(107%G^HF%&367sfdlf675$%*)(!MNVC'
 }));
 app.use(passport.initialize());

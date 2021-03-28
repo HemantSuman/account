@@ -218,13 +218,13 @@ module.exports = function (sequelize, DataTypes) {
   });  
   myModel.getAllValues = function (req, res) {
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
-    // var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
+    var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
     // var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({
             where: req.where,
             include: [
                 accountToPurchae,
-                // purchaseItemToPurchae,
+                purchaseItemToPurchae,
                 // {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
             ],
             order: req.order    

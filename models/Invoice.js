@@ -29,7 +29,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         consignee_no: {
-            type: DataTypes.STRING,     
+            type: DataTypes.INTEGER,     
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
@@ -37,7 +37,7 @@ module.exports = function (sequelize, DataTypes) {
             }       
         },
         buyer: {
-            type: DataTypes.STRING,
+            type: DataTypes.INTEGER,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
@@ -193,7 +193,24 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
-        this.findOne({where: req.where}).then(function (results) {
+        var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
+        var otherTaxToInvoice = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'invoice_id'});
+        // if( !myModel.hasAlias('Consignee') ){
+        //     var consigneeToInvoice = myModel.belongsTo(sequelize.models.Account, {as: "Consignee", foreignKey: 'consignee_no'});
+        // }
+        // if( !myModel.hasAlias('Buyer') ){
+        //     var buyerToInvoice = myModel.belongsTo(sequelize.models.Account, {as: 'Buyer', foreignKey: 'buyer'});
+        // }
+        var InvoiceItemToItem = sequelize.models.InvoiceItem.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+        this.findOne({
+            where: req.where,
+            include : [
+                // consigneeToInvoice,
+                // buyerToInvoice,
+                otherTaxToInvoice,
+                {association: invoiceItemToInvoice, include: [{association: InvoiceItemToItem, include: []}]},
+            ]
+        }).then(function (results) {
             res(results);
         });
     }

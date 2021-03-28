@@ -5,9 +5,11 @@
   color: #dc3545;
 }
 .gridTable {
-  max-height: 262px;
+  max-height: 530px;
   overflow-y: auto;
   overflow-x: hidden;
+  border: 2px solid #231c1c;
+  border-radius: 5px;
 }
 .itemAddRow {
   background-color: #dde3e8;
@@ -15,14 +17,20 @@
 
 .row.itemRow {
   border: 1px #ccc solid;
-  margin: 2px;
+  margin: 10px 0px;
   padding: 2px;
-  /* background-color: rgba(0, 0, 0, 0.05); */
+  background-color: #c0d5ec;
+  border-radius: 5px;
 }
-.row.itemRow:nth-child(even) {
-  background-color: #f2f2f2;
-}
+/* .row.itemRow:nth-child(even) {
+  background-color: #a3c8ef;
+} */
 
 .row.form-group {
   margin-bottom: 1rem;
+}
+
+.itemAddRow .form-group,
+.itemRow .form-group {
+  margin-bottom: 0;
 }

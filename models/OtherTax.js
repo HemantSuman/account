@@ -23,6 +23,9 @@ module.exports = function (sequelize, DataTypes) {
         invoice_id: {
             type: DataTypes.INTEGER,  
         },        
+        percentage: {
+            type: DataTypes.STRING,  
+        },        
     },
     {
       tableName: 'other_taxes',

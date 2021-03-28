@@ -1,0 +1,396 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Editable Invoice</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <style>
+      * {
+        margin: 0;
+        padding: 0;
+      }
+      body {
+        font: 10px Georgia, serif;
+      }
+      #page-wrap {
+        width: 520px;
+        margin: 0 auto;
+      }
+
+      textarea {
+        border: 0;
+        font: 14px Georgia, Serif;
+        overflow: hidden;
+        resize: none;
+      }
+      table {
+        border-collapse: collapse;
+      }
+      table td,
+      table th {
+        border: 1px solid black;
+        padding: 5px;
+      }
+
+      #header {
+        height: 15px;
+        width: 100%;
+        margin: 20px 0;
+        background: #222;
+        text-align: center;
+        color: white;
+        font: bold 15px Helvetica, Sans-Serif;
+        text-decoration: uppercase;
+        letter-spacing: 20px;
+        padding: 8px 0px;
+      }
+
+      #address {
+        width: 250px;
+        height: 150px;
+        float: left;
+      }
+      #customer {
+        overflow: hidden;
+      }
+
+      #logo {
+        text-align: right;
+        float: right;
+        position: relative;
+        margin-top: 25px;
+        border: 1px solid #fff;
+        max-width: 540px;
+        max-height: 100px;
+        overflow: hidden;
+      }
+      #logo:hover,
+      #logo.edit {
+        border: 1px solid #000;
+        margin-top: 0px;
+        max-height: 125px;
+      }
+      #logoctr {
+        display: none;
+      }
+      #logo:hover #logoctr,
+      #logo.edit #logoctr {
+        display: block;
+        text-align: right;
+        line-height: 25px;
+        background: #eee;
+        padding: 0 5px;
+      }
+      #logohelp {
+        text-align: left;
+        display: none;
+        font-style: italic;
+        padding: 10px 5px;
+      }
+      #logohelp input {
+        margin-bottom: 5px;
+      }
+      .edit #logohelp {
+        display: block;
+      }
+      .edit #save-logo,
+      .edit #cancel-logo {
+        display: inline;
+      }
+      .edit #image,
+      #save-logo,
+      #cancel-logo,
+      .edit #change-logo,
+      .edit #delete-logo {
+        display: none;
+      }
+      #customer-title {
+        font-size: 10px;
+        font-weight: bold;
+        float: left;
+      }
+
+      #meta {
+        margin-top: 1px;
+        width: 300px;
+        float: right;
+      }
+      #meta td {
+        text-align: right;
+      }
+      #meta td.meta-head {
+        text-align: left;
+        background: #eee;
+      }
+      #meta td textarea {
+        width: 100%;
+        height: 20px;
+        text-align: right;
+      }
+
+      #items {
+        clear: both;
+        width: 100%;
+        margin: 30px 0 0 0;
+        border: 1px solid black;
+      }
+      #items th {
+        background: #eee;
+      }
+      #items textarea {
+        width: 80px;
+        height: 50px;
+      }
+      #items tr.item-row td {
+        /* border: 0; */
+        vertical-align: top;
+      }
+      #items td.description {
+        width: 300px;
+      }
+      #items td.item-name {
+        width: 175px;
+      }
+      #items td.description textarea,
+      #items td.item-name textarea {
+        width: 100%;
+      }
+      #items td.total-line {
+        border-right: 0;
+        text-align: right;
+      }
+      #items td.total-value {
+        border-left: 0;
+        padding: 5px;
+      }
+      #items td.balance {
+        background: #eee;
+      }
+      #items td.blank {
+        border: 0;
+      }
+
+      #terms {
+        text-align: center;
+        margin: 20px 0 0 0;
+      }
+      #terms h5 {
+        text-transform: uppercase;
+        font: 13px Helvetica, Sans-Serif;
+        letter-spacing: 10px;
+        border-bottom: 1px solid black;
+        padding: 0 0 8px 0;
+        margin: 0 0 8px 0;
+      }
+      #terms textarea {
+        width: 100%;
+        text-align: center;
+      }
+
+      textarea:hover,
+      textarea:focus,
+      #items td.total-value textarea:hover,
+      #items td.total-value textarea:focus,
+      .delete:hover {
+        background-color: #eeff88;
+      }
+
+      .delete-wpr {
+        position: relative;
+      }
+      .delete {
+        display: block;
+        color: #000;
+        text-decoration: none;
+        position: absolute;
+        background: #eeeeee;
+        font-weight: bold;
+        padding: 0px 3px;
+        border: 1px solid;
+        top: -6px;
+        left: -22px;
+        font-family: Verdana;
+        font-size: 12px;
+      }
+      #hiderow,
+      .delete {
+        display: none;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="page-wrap">
+      <textarea id="header">INVOICE</textarea>
+
+      <div id="identity">
+        <strong><%= extraVar.siteVariable.session.user.Company.name%></strong
+        ><br />
+        <%= extraVar.siteVariable.session.user.Company.address%><br />
+        <strong>GSTIN: </strong><%=
+        extraVar.siteVariable.session.user.Company.gstin%><br />
+        <strong>CIN: </strong><%=
+        extraVar.siteVariable.session.user.Company.cin%><br />
+        <strong>PAN No.: </strong><%=
+        extraVar.siteVariable.session.user.Company.pan_no%><br />
+        <div id="logo">
+          <table id="meta">
+            <tr>
+              <td class="meta-head">Invoice #</td>
+              <td><%=extraVar.results.my_model.invoice_no%></td>
+            </tr>
+            <tr>
+              <td class="meta-head">Date</td>
+              <td><%=extraVar.results.my_model.date%></td>
+            </tr>
+          </table>
+        </div>
+      </div>
+
+      <div style="clear: both"></div>
+
+      <div id="customer">
+        Widget Corp. c/o Steve Widget
+        <table id="meta">
+          <tr>
+            <td class="meta-head">Consignee</td>
+            <td>
+              <strong
+                ><%=
+                extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%></strong
+              ><br />
+              <%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
+              <strong>GSTIN: </strong><%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
+              <strong>PAN No.: </strong><%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
+            </td>
+          </tr>
+          <tr>
+            <td class="meta-head">Buyer(If other than consignee)</td>
+            <td>
+              <% if(extraVar.results.my_model.consignee_no !=
+              extraVar.results.my_model.buyer){ %>
+              <strong
+                ><%=
+                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%></strong
+              ><br />
+              <%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
+              <strong>GSTIN: </strong><%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
+              <strong>PAN No.: </strong><%=
+              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
+              <% } %>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <table id="items">
+        <tr>
+          <th>Item</th>
+          <th>Description</th>
+          <th>HSN</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Total</th>
+          <th>GST</th>
+        </tr>
+        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+
+        <tr class="item-row">
+          <td class="item-name"><%= rows.Item.item_name%></td>
+          <td class="item-name"><%= rows.description%></td>
+          <td class="item-name"><%= rows.Item.hsn_code%></td>
+          <td class="item-name"><%= rows.quantity%></td>
+          <td class="item-name"><%= rows.rate%></td>
+          <td class="item-name">
+            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+          </td>
+          <td class="item-name"><%= rows.gst%>%</td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr class="item-row">
+          <td colspan="13" class="text-center">No Record Found.</td>
+        </tr>
+        <% } %>
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Total</td>
+          <td class="total-value"><%=extraVar.results.my_model.sub_total%></td>
+        </tr>
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">
+            Discount/Transportation
+          </td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.discount != "" ?
+            extraVar.results.my_model.discount :
+            0)%>/<%=(extraVar.results.my_model.transportation != "" ?
+            extraVar.results.my_model.transportation : 0)%>
+          </td>
+        </tr>
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Amount Paid</td>
+          <td class="total-value"><%=extraVar.results.my_model.amount%></td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Transportation</td>
+          <td class="total-value">
+            <%=extraVar.results.my_model.transportation%>
+          </td>
+        </tr> -->
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">CGST/SGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.cgst_amount != "" ?
+            extraVar.results.my_model.cgst_amount :
+            0)%>/<%=(extraVar.results.my_model.sgst_amount != "" ?
+            extraVar.results.my_model.sgst_amount : 0)%>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">IGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.igst_amount != "" ?
+            extraVar.results.my_model.igst_amount : 0)%>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">
+            <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> <% var
+            othTaxPer = 0; %> <%
+            extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+            othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+            <%=extraVar.results.taxKeyValue[rows.tax_id]%>:
+            <%=rows.percentage%>% <% }) %> <% } %>
+          </td>
+          <td class="total-value">
+            <%=(parseFloat(extraVar.results.my_model.sub_total) *
+            parseFloat(othTaxPer) / 100) %>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Net Amount</td>
+          <td class="total-value"><%=extraVar.results.my_model.net_amount%></td>
+        </tr>
+      </table>
+
+      <div id="terms">
+        <h5>Terms</h5>
+      </div>
+    </div>
+  </body>
+</html>

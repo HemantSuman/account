@@ -9,6 +9,9 @@ i18n_Validation.setLocale('en_valiation');
 module.exports = function (sequelize, DataTypes) {
   var myModel = sequelize.define("InvoiceItem",
     {
+        type: {
+            type: DataTypes.STRING,  
+        },
         invoice_id: {
             type: DataTypes.INTEGER,  
             validate: {

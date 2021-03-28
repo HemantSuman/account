@@ -156,6 +156,7 @@
                         <div class="gridTable itemDiv">     
                           <% extraVar.results.my_model.PurchaseItems.forEach(function(item, index){ %>   
                             <div class="row itemRow">
+                              <input type="hidden" name="item[<%=index%>][id]" value="<%=item.id%>" />
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <select disabled indexvalue="<%= index%>" onchange="itemName(this, <%=index%>)" class="form-control select2 selectItem item_item_id_<%=index%>" >
@@ -365,7 +366,12 @@
                         <div class="col-sm-2">
                           <div class="form-group">
                             <div class="custom-control custom-checkbox">
-                              <input name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
+                              <% 
+                              let checkedTcs = "";
+                              if(extraVar.OtherTaxesIds.length > 0){ 
+                                checkedTcs = "checked";
+                              } %>
+                              <input <%= checkedTcs%> name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
                               <label for="tcsCheck" class="custom-control-label" >Other Taxes</label>
                             </div>
                           </div>
@@ -373,9 +379,14 @@
                         <div class="col-sm-6">
                           <div class="form-group">
                             <label for="">Taxes</label>
-                            <select disabled multiple class="form-control select2 tcs_value" name="tcs">
+                            <select <%= (checkedTcs == '' ? 'disabled' : '')%> multiple class="form-control select2 tcs_value" name="tcs">
                               <% extraVar.results.taxes.forEach(function(data){ %>
-                                <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
+                                <%
+                                let multiSelect = "";
+                                if(extraVar.OtherTaxesIds.includes(data.id)){
+                                  multiSelect = "selected";
+                                } %>
+                                <option <%=multiSelect%> percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
                               <% }); %>                  
                             </select>
                             <label class="otherTaxInfo"></label>
