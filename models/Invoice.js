@@ -187,7 +187,12 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'invoices',
   });  
   myModel.getAllValues = function (req, res) {
-    this.findAll({where: req.where})
+    var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
+    this.findAll({where: req.where, 
+        include: [
+            invoiceItemToInvoice
+        ]
+    })
         .then(function(results){
             res(results);
         })

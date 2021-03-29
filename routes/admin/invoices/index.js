@@ -151,6 +151,7 @@ router.post('/add', function(req, res, next) {
 
             let reqS1 = {};
             reqS1.where = {
+              type: value1.type,
               item_id: value1.item_id,
               sub_item_id: value1.sub_item_id,
               quantity: {
@@ -385,7 +386,8 @@ router.get('/edit/:id', function(req, res, next) {
     },
   }, function (err, results) {
       extraVar['results'] = results;
-      console.log(results.my_model.InvoiceItems);
+      extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
+      console.log(results.my_model);
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
 });
@@ -400,6 +402,7 @@ router.post('/edit', function(req, res, next) {
     var modelBuild = models[modelName].build(req.body);
     var errors = [];
     let taxObj = {};
+    let previousInvoiceItemValue = {};
     async.parallel([
       function (callback) {
         console.log("111");
@@ -458,44 +461,44 @@ router.post('/edit', function(req, res, next) {
           callback();
         }
       },
-      function (callback) {
-        console.log("4444");
-        async.forEachOf(req.body.item, function (value1, key, callback1) {
-          if(typeof  value1 != "undefined"){
+      // function (callback) {
+      //   console.log("4444");
+      //   async.forEachOf(req.body.item, function (value1, key, callback1) {
+      //     if(typeof  value1 != "undefined"){
 
-            if(value1.sub_item_id === ""){
-              value1.sub_item_id = null;
-            }
+      //       if(value1.sub_item_id === ""){
+      //         value1.sub_item_id = null;
+      //       }
 
-            let reqS1 = {};
-            reqS1.where = {
-              item_id: value1.item_id,
-              sub_item_id: value1.sub_item_id,
-              quantity: {
-                [Op.gte]: value1.quantity
-              }
-            }
-            models.Stock.getFirstValues(reqS1, function (data1) {
-              if(!data1){
-                console.log('##', data1, key);
-                errorsItem = {
-                    message: 'Insufficient Stock!',
-                    type: 'Validation error',
-                    path: "item_quantity_"+ key,
-                    value: '',
-                };
-                errors = errors.concat(errorsItem);                
-              }
-              callback1();
-            });
-          } else {
-            callback1();
-          }
+      //       let reqS1 = {};
+      //       reqS1.where = {
+      //         item_id: value1.item_id,
+      //         sub_item_id: value1.sub_item_id,
+      //         quantity: {
+      //           [Op.gte]: value1.quantity
+      //         }
+      //       }
+      //       models.Stock.getFirstValues(reqS1, function (data1) {
+      //         if(!data1){
+      //           console.log('##', data1, key);
+      //           errorsItem = {
+      //               message: 'Insufficient Stock!',
+      //               type: 'Validation error',
+      //               path: "item_quantity_"+ key,
+      //               value: '',
+      //           };
+      //           errors = errors.concat(errorsItem);                
+      //         }
+      //         callback1();
+      //       });
+      //     } else {
+      //       callback1();
+      //     }
 
-        }, function (err) {
-            callback(null, errors);
-        });  
-      },
+      //   }, function (err) {
+      //       callback(null, errors);
+      //   });  
+      // },
       function (callback) {
         models.Tax.getAllValues(req, function (data1) {
           data1.map(function(v){
@@ -504,53 +507,94 @@ router.post('/edit', function(req, res, next) {
           callback();
         });        
       },
+      function (callback) {
+        if (errors.length == 0) {
+          let reqS1 = {}
+          reqS1.where = {id: req.body.id};
+          models[modelName].getAllValues(reqS1, function (data2) {
+            // console.log("%%%", data2);return;
+            data2[0].InvoiceItems.map(function(val2){
+              if(val2.sub_item_id) {
+                previousInvoiceItemValue[val2.sub_item_id] = val2.quantity;
+              } else {
+                previousInvoiceItemValue[val2.item_id] = val2.quantity;
+              }
+            });
+            callback(null, errors);
+          });
+        } else {
+          callback(null, errors);
+        }        
+      },
     ], function (err) {
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
       } else {      
+        // console.log("###", req.body);return;
         models[modelName].updateAllValues(req, function (results) {
 
           async.parallel([
             function(callback) {
-              if(results.id && req.body.tcs_check && req.body.tcs.length > 0){
-                let bulkData1 = [];
-                async.forEachOf(req.body.tcs, function (value1, key, callback1) {
-                  if(typeof  value1 != "undefined"){
-                    let tmpObj = {};
-                    tmpObj.invoice_id = results.id;
-                    tmpObj.purchase_id = null;
-                    tmpObj.tax_id = value1;
-                    tmpObj.percentage = taxObj[value1];
-                    bulkData1.push(tmpObj);                  
-                  }
-                  callback1();
-                }, function (err) {
-                  if (err) {
-                    console.error(err.message);
-                    callback();
-                  } else {
-                    models.OtherTax.saveAllBulkValues(bulkData1, function (results){
+              if(results.headerStatus && req.body.tcs_check && req.body.tcs.length > 0){
+
+                req.where = {'purchase_id': req.body.id};
+                models.OtherTax.deleteAllValues(req, function (data) {
+
+                  let bulkData1 = [];
+                  async.forEachOf(req.body.tcs, function (value1, key, callback1) {
+                    if(typeof  value1 != "undefined"){
+
+                      let tmpObj = {};
+                      tmpObj.invoice_id = req.body.id;
+                      tmpObj.purchase_id = null;
+                      tmpObj.tax_id = value1;
+                      tmpObj.percentage = taxObj[value1];
+                      bulkData1.push(tmpObj);                  
+                    }
+                    callback1();
+                  }, function (err) {
+                    if (err) {
+                      console.error(err.message);
                       callback();
-                    });
-                  }
-                });
+                    } else {
+                      models.OtherTax.saveAllBulkValues(bulkData1, function (results){
+                        callback();
+                      });
+                    }
+                  });
+
+                });                
               } else {
                 callback()
               }
             },
             function(callback) {
-              if(results.id){
+              if(results.headerStatus){
                 let bulkData1 = [];
                 async.forEachOf(req.body.item, function (value1, key, callback1) {
                   if(typeof  value1 != "undefined"){
 
-                    if(value1.sub_item_id === ""){
-                      value1.sub_item_id = null;
+                    if(value1.id) {
+                      let tmpData = {}
+                      tmpData.body = value1;
+                      if(tmpData.body.sub_item_id === ""){
+                        tmpData.body.sub_item_id = null;
+                      }
+                      models.InvoiceItem.updateAllValues(tmpData, function (results) {
+                        callback1(null);
+                      });
+                    } else {
+                      if(value1.sub_item_id === ""){
+                        value1.sub_item_id = null;
+                      }
+                      value1.invoice_id = req,body.id;
+                      bulkData1.push(value1);
+                      callback1();
                     }
-                    value1.invoice_id = results.id;
-                    bulkData1.push(value1);                  
+                  } else {
+                    callback1();
                   }
-                  callback1();
+                  
                 }, function (err) {
                   if (err) {
                     console.error(err.message);
@@ -566,7 +610,7 @@ router.post('/edit', function(req, res, next) {
               }
             },
             function(callback) {
-              if(results.id){
+              if(results.headerStatus){
                 async.forEachOf(req.body.item, function (value1, key, callback1) {
                   if(typeof  value1 != "undefined"){
 
@@ -594,22 +638,62 @@ router.post('/edit', function(req, res, next) {
                     } else {
                       let reqS = {};
                       console.log('value1value1', value1);
-                      reqS.where = {item_id: value1.item_id, sub_item_id: null}
+                      reqS.where = {item_id: value1.item_id, sub_item_id: null, type: value1.type}
                       models.Stock.getFirstValues(reqS, function (data) {
                         if(data){
                           console.log('exist', data);
-                          
                           let stockDataUpdate = {};
-                          stockDataUpdate.body = {
-                            id: data.id,
-                            quantity: parseInt(data.quantity) - parseInt(value1.quantity),
-                            no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
-                          };
+                          if(previousInvoiceItemValue[data.item_id]){
+                            console.log("&&&1");
+                            let tmpPre = parseInt(previousInvoiceItemValue[data.item_id]);
+                            let tmpPost = parseInt(value1.quantity);
+                            let qty = 0;
+                            console.log("&&&1", tmpPre , tmpPost);
+                            if(tmpPre > tmpPost){
+                              qty = parseInt(data.quantity) - parseInt(tmpPre - tmpPost);
+                            } else if(tmpPre < tmpPost){
+                              qty = parseInt(data.quantity) + parseInt(tmpPost - tmpPre);
+                            } else {
+                              qty = parseInt(data.quantity);
+                            }
+
+                            stockDataUpdate.body = {
+                              id: data.id,
+                              item_id: value1.item_id,
+                              type: value1.type,
+                              sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                              quantity: qty,
+                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                            };
+                            console.log('exist', stockDataUpdate);
+                          } else {
+                            console.log("&&&2");
+                            
+                            stockDataUpdate.body = {
+                              id: data.id,
+                              item_id: value1.item_id,
+                              type: value1.type,
+                              sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                              quantity: parseInt(value1.quantity) + parseInt(data.quantity),
+                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                            };
+                          }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
                           });
                         } else {
-                          callback1();
+                          console.log("Not");
+                          let stockData = {};
+                          stockData.body = {
+                            item_id: value1.item_id,
+                            type: value1.type,
+                            sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                            quantity: value1.quantity,
+                            no_of_pkg: value1.no_of_pkg,
+                          };
+                          models.Stock.saveAllValues(stockData, function (results){
+                            callback1();
+                          });
                         }
                       });
                     }

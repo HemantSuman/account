@@ -518,6 +518,7 @@
   function addMoreItems(){
     emptyItemErrors();
 
+    let selectItemType = $('.item_type_').val();
     let selectItem = $('.item_item_id_').val();
     let itemDescription = $('.itemDescription').val();
     let itemNoOfPkt = $('.itemNoOfPkt').val();
@@ -580,8 +581,9 @@
       let itemHtml = "<div class='row itemRow'>";
 
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";
-      itemHtml += "<small><b>Item Type: </b></small><select disabled indexValue='"+itemIndexValue+"' name='item["+itemIndexValue+"][type]' onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
+      itemHtml += "<small><b>Item Type: </b></small><select disabled indexValue='"+itemIndexValue+"'  onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
       itemHtml += "<option value='production'>From Production</option><option value='purchase'>From Purchase</option></select>";
+      itemHtml += "<input class='item_type_hidden_"+itemIndexValue+"' type='hidden' value='"+selectItemType+"' name='item["+itemIndexValue+"][type]' >";
       itemHtml += "<div class='item_type_"+itemIndexValue+"-error-message error-message'></div></div></div>";
                                     
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";
@@ -664,6 +666,7 @@
     if(indexvalue == 0) {
       indexvalue = '';
     }
+    $('.item_type_hidden_'+indexvalue).val($(thisObj).val())
     $('.item_item_id_'+indexvalue).val("").trigger('change');
     $('.item_sub_item_id_'+indexvalue).val("").trigger('change');
     $('.item_description_'+indexvalue).val("");

@@ -49,14 +49,14 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Invoice No.</label>
-                    <input name="invoice_no" type="text" class="form-control"  placeholder="">
+                    <input name="invoice_no" value="<%= extraVar.results.my_model.invoice_no%>" type="text" class="form-control"  placeholder="">
                     <div class="invoice_no-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Date</label>
-                    <input name="date" type="text" class="form-control date1"  placeholder="">
+                    <input name="date" type="text" value="<%= extraVar.results.my_model.date%>" class="form-control date1"  placeholder="">
                     <div class="date-error-message error-message"></div>
                   </div>
                 </div>
@@ -66,7 +66,7 @@
                     <select name="consignee_no" class="form-control select2 consigneeAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option address="<%= data.address %>" gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                        <option <%= data.id==extraVar.results.my_model.consignee_no ? 'selected':'' %> address="<%= data.address %>" gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
                       <% }); %>                  
                     </select>
                     <div class="consignee_no-error-message error-message"></div>
@@ -78,7 +78,7 @@
                     <select name="buyer" class="form-control select2">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                        <option <%= data.id==extraVar.results.my_model.buyer ? 'selected':'' %> gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
                       <% }); %>                  
                     </select>
                     <div class="buyer-error-message error-message"></div>
@@ -89,28 +89,28 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Consignee Add</label>
-                    <input name="buyer_add" type="text" class="form-control buyer_add"  placeholder="">
+                    <input name="buyer_add" value="<%= extraVar.results.my_model.buyer_add%>" type="text" class="form-control buyer_add"  placeholder="">
                     <div class="buyer_add-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Challan No.</label>
-                    <input name="challan_no" type="text" class="form-control"  placeholder="">
+                    <input name="challan_no" value="<%= extraVar.results.my_model.challan_no%>" type="text" class="form-control"  placeholder="">
                     <div class="challan_no-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Challan Date</label>
-                    <input name="challan_date" type="text" class="form-control date1"  placeholder="">
+                    <input name="challan_date" value="<%= extraVar.results.my_model.challan_date%>" type="text" class="form-control date1"  placeholder="">
                     <div class="challan_date-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Time of Remeber</label>
-                    <input name="time_of_remeber" type="text" class="form-control"  placeholder="">
+                    <input name="time_of_remeber" value="<%= extraVar.results.my_model.time_of_remeber%>" type="text" class="form-control"  placeholder="">
                     <div class="time_of_remeber-error-message error-message"></div>
                   </div>
                 </div>
@@ -120,28 +120,28 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Order No</label>
-                    <input name="order_no" type="text" class="form-control"  placeholder="">
+                    <input name="order_no" value="<%= extraVar.results.my_model.order_no%>" type="text" class="form-control"  placeholder="">
                     <div class="order_no-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Order Date</label>
-                    <input name="order_date" type="text" class="form-control date1"  placeholder="">
+                    <input name="order_date" value="<%= extraVar.results.my_model.order_date%>" type="text" class="form-control date1"  placeholder="">
                     <div class="order_date-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Transaction Mode</label>
-                    <input name="transaction_mode" type="text" class="form-control"  placeholder="">
+                    <input name="transaction_mode" value="<%= extraVar.results.my_model.transaction_mode%>" type="text" class="form-control"  placeholder="">
                     <div class="transaction_mode-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Dispach Through</label>
-                    <input name="dispach_through" type="text" class="form-control"  placeholder="">
+                    <input name="dispach_through" value="<%= extraVar.results.my_model.dispach_through%>" type="text" class="form-control"  placeholder="">
                     <div class="dispach_through-error-message error-message"></div>
                   </div>
               </div>
@@ -152,28 +152,28 @@
                 <div class="col-sm-3">
                     <div class="form-group">
                       <label for="">Delivery At</label>
-                      <input name="delivery_at" type="text" class="form-control"  placeholder="">
+                      <input name="delivery_at" value="<%= extraVar.results.my_model.delivery_at%>" type="text" class="form-control"  placeholder="">
                       <div class="delivery_at-error-message error-message"></div>
                     </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Vehicle No.</label>
-                    <input name="vehicle_no" type="text" class="form-control"  placeholder="">
+                    <input name="vehicle_no" value="<%= extraVar.results.my_model.vehicle_no%>" type="text" class="form-control"  placeholder="">
                     <div class="vehicle_no-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">RR GR No.</label>
-                    <input name="rr_gr_no" type="text" class="form-control"  placeholder="">
+                    <input name="rr_gr_no" value="<%= extraVar.results.my_model.rr_gr_no%>" type="text" class="form-control"  placeholder="">
                     <div class="rr_gr_no-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">RR Date</label>
-                    <input name="rr_date" type="text" class="form-control date1"  placeholder="">
+                    <input name="rr_date" value="<%= extraVar.results.my_model.rr_date%>" type="text" class="form-control date1"  placeholder="">
                     <div class="rr_date-error-message error-message"></div>
                   </div>
                 </div>
@@ -184,14 +184,14 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Freight</label>
-                    <input name="freight" type="text" class="form-control"  placeholder="">
+                    <input name="freight" value="<%= extraVar.results.my_model.freight%>" type="text" class="form-control"  placeholder="">
                     <div class="freight-error-message error-message"></div>
                   </div>
                 </div>
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Pay By</label>
-                    <input name="pay_by" type="text" class="form-control"  placeholder="">
+                    <input name="pay_by" value="<%= extraVar.results.my_model.pay_by%>" type="text" class="form-control"  placeholder="">
                     <div class="pay_by-error-message error-message"></div>
                   </div>
                 </div>                                                
@@ -200,7 +200,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Payment Terms</label>
-                    <input name="payment_terms" type="text" class="form-control"  placeholder="">
+                    <input name="payment_terms" value="<%= extraVar.results.my_model.payment_terms%>" type="text" class="form-control"  placeholder="">
                     <div class="payment_terms-error-message error-message"></div>
                   </div>
                 </div>
@@ -217,20 +217,22 @@
                         <div class="gridTable itemDiv">
                           <% extraVar.results.my_model.InvoiceItems.forEach(function(item, index){ %>
                             <div class="row itemRow">
+                              <input type="hidden" name="item[<%=index%>][id]" value="<%=item.id%>" />
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Item Type: </b></small>
-                                      <select disabled="" indexvalue="<%= index%>" onchange="itemType(this, <%= index%>)" class="form-control select2 item_type_<%= index%>">
+                                      <select disabled indexvalue="<%= index%>" onchange="itemType(this, <%= index%>)" class="form-control select2 item_type_<%= index%>">
                                           <option <%= item.type == 'production' ? 'selected' : '' %> value="production">From Production</option>
                                           <option <%= item.type == 'purchase' ? 'selected' : '' %> value="purchase">From Purchase</option>
                                       </select>
+                                      <input class="item_type_hidden_<%= index%>" type="hidden" value="<%= item.type%>" name="item[<%= index%>][type]">
                                       <div class="item_type_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Item: </b></small>
-                                      <select disabled="" indexvalue="<%= index%>" onchange="itemName(this, <%= index%>)" class="form-control select2 selectItem item_item_id_<%= index%>" >
+                                      <select disabled indexvalue="<%= index%>" onchange="itemName(this, <%= index%>)" class="form-control select2 selectItem item_item_id_<%= index%>" >
                                         <% extraVar.results.items.forEach(function(data){ %>
                                           <option <%= item.item_id == data.id ? 'selected' : '' %> value="<%= data.id %>"><%= data.item_name %></option>
                                         <% }); %>
@@ -245,7 +247,7 @@
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Sub Item: </b></small>
-                                      <select disabled="" indexvalue="<%= index%>" onchange="subItemName(this, <%= index%>)" class="form-control select2 selectSubItem selectSubItem_<%= index%> item_sub_item_id_<%= index%>">
+                                      <select disabled indexvalue="<%= index%>" onchange="subItemName(this, <%= index%>)" class="form-control select2 selectSubItem selectSubItem_<%= index%> item_sub_item_id_<%= index%>">
                                           <option selected="" value="">Select Sub Item</option>
                                       </select>
                                       <input class="sub_item_name_hidden_<%= index%>" type="hidden" value="<%= item.sub_item_id%>" name="item[<%= index%>][sub_item_id]">
@@ -255,48 +257,48 @@
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Description: </b></small>
-                                      <input readonly="" name="item[<%= index%>][description]" type="text" value="<%= item.description%>" class="form-control desc item_description_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][description]" type="text" value="<%= item.description%>" class="form-control desc item_description_<%= index%>" placeholder="">
                                       <div class="item_description_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>No.: </b></small>
-                                      <input readonly="" name="item[<%= index%>][no_of_pkg]" type="number" value="<%= item.no_of_pkg%>" class="form-control pkt item_no_of_pkg_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][no_of_pkg]" type="number" value="<%= item.no_of_pkg%>" class="form-control pkt item_no_of_pkg_<%= index%>" placeholder="">
                                       <div class="item_no_of_pkg_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Quantity: </b></small>
-                                      <input readonly="" name="item[<%= index%>][quantity]" type="number" value="<%= item.quantity%>" class="form-control qty item_quantity_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][quantity]" type="number" value="<%= item.quantity%>" class="form-control qty item_quantity_<%= index%>" placeholder="">
                                       <div class="item_quantity_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Rate: </b></small>
-                                      <input readonly="" name="item[<%= index%>][rate]" type="number" value="<%= item.rate%>" class="form-control rate item_rate_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][rate]" type="number" value="<%= item.rate%>" class="form-control rate item_rate_<%= index%>" placeholder="">
                                       <div class="item_rate_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>GST (%): </b></small>
-                                      <input readonly="" name="item[<%= index%>][gst]" type="number" value="<%= item.gst%>" class="form-control gst item_gst_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][gst]" type="number" value="<%= item.gst%>" class="form-control gst item_gst_<%= index%>" placeholder="">
                                       <div class="item_gst_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Item GST: </b></small>
-                                      <input readonly="" name="item[<%= index%>][gst_amount]" type="number" value="<%= item.gst_amount%>" class="form-control gstAmount item_gst_amount_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][gst_amount]" type="number" value="<%= item.gst_amount%>" class="form-control gstAmount item_gst_amount_<%= index%>" placeholder="">
                                   </div>
                               </div>
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Item Amount: </b></small>
-                                      <input readonly="" name="item[<%= index%>][amount]" type="number" value="<%= item.amount%>" class="form-control amount itemValue item_amount_<%= index%>" placeholder="">
+                                      <input readonly name="item[<%= index%>][amount]" type="number" value="<%= item.amount%>" class="form-control amount itemValue item_amount_<%= index%>" placeholder="">
                                       <div class="item_amount_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
@@ -321,7 +323,7 @@
                           <div class="col-sm-2">
                               <div class="form-group">
                                 <small><b>Item Type: </b></small>
-                                <select onchange="itemType(this, 0)" class="form-control select2 item_type_" indexValue="0">
+                                <select onchange="itemType(this, 0)" class="form-control select2 item_type_<%=extraVar.results.my_model.InvoiceItems.length%>" indexValue="<%=extraVar.results.my_model.InvoiceItems.length%>">
                                   <option value="production">From Production</option>
                                   <option value="purchase">From Purchase</option>
                                 </select>
@@ -331,7 +333,7 @@
                           <div class="col-sm-2">
                               <div class="form-group">
                                 <small><b>Item: </b></small>
-                                <select class="form-control select2 selectItem item_item_id_" indexValue="0">
+                                <select class="form-control select2 selectItem item_item_id_<%=extraVar.results.my_model.InvoiceItems.length%>" indexValue="<%=extraVar.results.my_model.InvoiceItems.length%>">
                                   <option value="">Select Items</option>
                                   <% extraVar.results.items.forEach(function(data){ %>
                                     <option value="<%= data.id %>"><%= data.item_name %></option>
@@ -344,7 +346,7 @@
                           <div class="col-sm-2">
                               <div class="form-group">
                                 <small><b>Sub Item: </b></small>
-                                <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0" indexValue="0">                                              
+                                <select class="form-control select2 item_sub_item_id_<%=extraVar.results.my_model.InvoiceItems.length%> selectSubItem selectSubItem_<%=extraVar.results.my_model.InvoiceItems.length%>" indexValue="<%=extraVar.results.my_model.InvoiceItems.length%>">                                              
                                 </select>
                                 <div class="item_sub_item_id_-error-message error-message"></div>
                               </div>
@@ -352,14 +354,14 @@
                           <div class="col-sm-2">
                               <div class="form-group">
                                   <small><b>Description: </b></small>
-                                  <input type="text" class="form-control itemDescription item_description_" placeholder="">
+                                  <input type="text" class="form-control itemDescription item_description_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                   <div class="item_description_-error-message error-message"></div>
                               </div>
                           </div>                          
                           <div class="col-sm-2">
                               <div class="form-group">
                                   <small><b>No.: </b></small>
-                                  <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
+                                  <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                   <div class="item_no_of_pkg_-error-message error-message"></div>
                               </div>
                           </div>
@@ -376,21 +378,21 @@
                           <div class="col-sm-2">
                               <div class="form-group">
                                   <small><b>Quantity: </b></small>
-                                  <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                  <input type="text" class="form-control itemQuantity item_quantity_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                   <div class="item_quantity_-error-message error-message"></div>
                               </div>
                           </div>
                           <div class="col-sm-2">
                               <div class="form-group">
                                   <small><b>Rate: </b></small>
-                                  <input type="text" class="form-control itemRate item_rate_" placeholder="">
+                                  <input type="text" class="form-control itemRate item_rate_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                   <div class="item_rate_-error-message error-message"></div>
                               </div>
                           </div>
                           <div class="col-sm-2">
                             <div class="form-group">
                                 <small><b>GST (%): </b></small>
-                                <input type="text" class="form-control itemGst item_gst_" placeholder="">
+                                <input type="text" class="form-control itemGst item_gst_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                 <div class="item_gst_-error-message error-message"></div>
                             </div>
                           </div>
@@ -434,7 +436,7 @@
                           <div class="col-sm-6">
                             <div class="form-group">
                               <label for="">Sub Total</label>
-                              <input readonly name="sub_total" type="number" class="form-control SubTotal"  placeholder="">
+                              <input readonly value="<%= extraVar.results.my_model.sub_total%>" name="sub_total" type="number" class="form-control SubTotal"  placeholder="">
                               <div class="sub_total-error-message error-message"></div>
                             </div>
                           </div>
@@ -444,14 +446,14 @@
                           <div class="col-sm-2">
                             <div class="form-group">
                               <label for="">Discount</label>
-                              <input name="discount" type="number" class="form-control discountField"  placeholder="">
+                              <input name="discount" value="<%= extraVar.results.my_model.discount%>" type="number" class="form-control discountField"  placeholder="">
                               <div class="discount-error-message error-message"></div>
                             </div>
                           </div>
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label for="">Amount</label>
-                              <input readonly name="amount" type="number" class="form-control withDiscount"  placeholder="">
+                              <input readonly name="amount" value="<%= extraVar.results.my_model.amount%>" type="number" class="form-control withDiscount"  placeholder="">
                               <div class="amount-error-message error-message"></div>
                             </div>
                           </div>
@@ -461,7 +463,7 @@
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label for="">transportation</label>
-                              <input name="transportation" type="number" class="form-control transportationField"  placeholder="">
+                              <input name="transportation" value="<%= extraVar.results.my_model.transportation%>" type="number" class="form-control transportationField"  placeholder="">
                               <div class="transportation-error-message error-message"></div>
                             </div>
                           </div>
@@ -479,7 +481,7 @@
                             <div class="col-sm-3">
                               <div class="form-group">
                                 <label for="">CGST Amount</label>
-                                <input name="cgst_amount" type="number" class="cgstAmount form-control"  placeholder="">
+                                <input name="cgst_amount" value="<%= extraVar.results.my_model.cgst_amount%>" type="number" class="cgstAmount form-control"  placeholder="">
                                 <div class="cgst_amount-error-message error-message"></div>
                               </div>
                             </div>
@@ -496,7 +498,7 @@
                             <div class="col-sm-3">
                               <div class="form-group">
                                 <label for="">SGST Amount</label>
-                                <input name="sgst_amount" type="number" class="sgstAmount form-control"  placeholder="">
+                                <input name="sgst_amount" value="<%= extraVar.results.my_model.sgst_amount%>" type="number" class="sgstAmount form-control"  placeholder="">
                                 <div class="sgst_amount-error-message error-message"></div>
                               </div>
                             </div>
@@ -508,7 +510,7 @@
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label for="">IGST Amount</label>
-                              <input name="igst_amount" type="number" class="igstAmount form-control"  placeholder="">
+                              <input name="igst_amount" value="<%= extraVar.results.my_model.igst_amount%>" type="number" class="igstAmount form-control"  placeholder="">
                               <div class="igst_amount-error-message error-message"></div>
                             </div>
                           </div>
@@ -518,7 +520,12 @@
                           <div class="col-sm-2">
                             <div class="form-group">
                               <div class="custom-control custom-checkbox">
-                                <input name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
+                                <% 
+                                let checkedTcs = "";
+                                if(extraVar.OtherTaxesIds.length > 0){ 
+                                  checkedTcs = "checked";
+                                } %>
+                                <input <%= checkedTcs%> name="tcs_check" type="checkbox" class="custom-control-input tcs_check" id="tcsCheck" >
                                 <label for="tcsCheck" class="custom-control-label" >Other Taxes</label>
                               </div>
                             </div>
@@ -526,9 +533,14 @@
                           <div class="col-sm-6">
                             <div class="form-group">
                               <label for="">Taxes</label>
-                              <select disabled multiple class="form-control select2 tcs_value" name="tcs">
+                              <select <%= (checkedTcs == '' ? 'disabled' : '')%> multiple class="form-control select2 tcs_value" name="tcs">
                                 <% extraVar.results.taxes.forEach(function(data){ %>
-                                  <option percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
+                                  <%
+                                  let multiSelect = "";
+                                  if(extraVar.OtherTaxesIds.includes(data.id)){
+                                    multiSelect = "selected";
+                                  } %>
+                                  <option <%=multiSelect%> percentage="<%= data.percentage %>" value="<%= data.id %>"><%= data.name %></option>
                                 <% }); %>                  
                               </select>
                               <label class="otherTaxInfo"></label>
@@ -541,7 +553,7 @@
                           <div class="col-sm-3">
                             <div class="form-group">
                               <label for="">Net Amount</label>
-                              <input readonly name="net_amount" type="number" class="form-control netAmount"  placeholder="">
+                              <input readonly name="net_amount" value="<%= extraVar.results.my_model.net_amount%>" type="number" class="form-control netAmount"  placeholder="">
                               <div class="net_amount-error-message error-message"></div>
                             </div>
                           </div>
@@ -579,6 +591,10 @@ $('.date1').daterangepicker({
         format: 'DD-MM-YYYY'
       }
   })
+
+  $(function () {
+    calculateTotal();
+  });
 
   let unitsObj = JSON.parse($("#unitsObj").html());
   let unitKeyValue = {};
@@ -732,9 +748,10 @@ $('.date1').daterangepicker({
   function itemType(thisObj, index){
     let indexvalue = $(thisObj).attr("indexvalue");
     console.log("@@", indexvalue)
-    if(indexvalue == 0) {
-      indexvalue = '';
-    }
+    $('.item_type_hidden_'+indexvalue).val($(thisObj).val())
+    // if(indexvalue == 0) {
+    //   indexvalue = '';
+    // }
     $('.item_item_id_'+indexvalue).val("").trigger('change');
     $('.item_sub_item_id_'+indexvalue).val("").trigger('change');
     $('.item_description_'+indexvalue).val("");
@@ -959,7 +976,8 @@ $('.date1').daterangepicker({
     //   }
     // });
 
-    let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
+    let indexValue = thisObj.attr('indexValue');
+    // let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
     let itemsObj = JSON.parse($("#itemsObj").html());
     itemsObj.map(function(data) {
       
