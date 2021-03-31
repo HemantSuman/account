@@ -7,17 +7,9 @@ var i18n_Validation = new (require('i18n-2'))({
 i18n_Validation.setLocale('en_valiation');
 
 module.exports = function (sequelize, DataTypes) {
-  var myModel = sequelize.define("Payment",
+  var myModel = sequelize.define("PaymentPurchase",
     {
-        // purchase_id: {
-        //     type: DataTypes.INTEGER,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        account_id: {
+        purchase_id: {
             type: DataTypes.INTEGER,
             validate: {
                 notEmpty: {
@@ -25,22 +17,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        pay_date: {
-            type: DataTypes.DATE,
+        payment_id: {
+            type: DataTypes.INTEGER,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },
-        pay_mode: {
-            type: DataTypes.STRING,     
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }       
-        },
+        },        
         pay_amount: {
             type: DataTypes.STRING,
             validate: {
@@ -48,13 +32,10 @@ module.exports = function (sequelize, DataTypes) {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },
-        remark: {
-            type: DataTypes.STRING,
-        },
+        },        
     },
     {
-      tableName: 'payments',
+      tableName: 'payment_purchases',
   });  
   myModel.getAllValues = function (req, res) {
     var accountToPayment = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});

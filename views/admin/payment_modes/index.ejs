@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">List <%=extraVar['viewDirectory']%></h1>
+        <h1 class="m-0 text-dark">List <%=extraVar['modelName']%></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <a href="/admin/<%= extraVar.viewDirectory %>/add" class="btn btn-primary float-right">Add</a>
@@ -29,11 +29,7 @@
               <thead>
               <tr>
                 <th>No.</th>
-                <th>Account Name</th>
-                <th>Date</th>
-                <th>Pay Mode</th>
-                <th>Amount</th>
-                <th>Remark</th>
+                <th>Party Type</th>
                 <th>Actions</th>
               </tr>
               </thead>
@@ -42,19 +38,15 @@
                     <% results.forEach(function(rows, index){ %>
                     <tr>
                       <td><%= ++index %></td>
-                      <td><%= rows.Account.account_name %></td>
-                      <td><%= rows.pay_date %></td>
-                      <td><%= rows.pay_mode %></td>
-                      <td><%= rows.pay_amount %></td>
-                      <td><%= rows.remark %></td>
+                      <td><%= rows.name %></td>
                       <td>
-                        <!-- <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a> -->
-                        <!-- <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a> -->
+                        <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a>
+                        <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a>
                       </td>
                     </tr>                
                     <% }); %>
                   <% } else { %>
-                    <td colspan="13" class="text-center">No Record Found.</td>
+                    <td colspan="11" class="text-center">No Record Found.</td>
                   <% } %>
                 </tbody>
             </table>

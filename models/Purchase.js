@@ -208,9 +208,12 @@ module.exports = function (sequelize, DataTypes) {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },
+        },        
         payment_status: {
             type: DataTypes.STRING,            
+        },
+        payment_remaining: {
+            type: DataTypes.STRING,
         },
     },
     {
@@ -219,12 +222,14 @@ module.exports = function (sequelize, DataTypes) {
   myModel.getAllValues = function (req, res) {
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
+    var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
     // var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({
             where: req.where,
             include: [
                 accountToPurchae,
                 purchaseItemToPurchae,
+                paymentToPurchae
                 // {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
             ],
             order: req.order    
@@ -247,7 +252,7 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
     myModel.getPurchasesByAccount = function (req, res) {
-        var paymentToPurchae = myModel.hasMany(sequelize.models.Payment, {foreignKey: 'purchase_id'});
+        var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
         this.findAll({where: req.where,
             include: [
                 paymentToPurchae

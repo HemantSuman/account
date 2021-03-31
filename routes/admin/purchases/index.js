@@ -146,6 +146,7 @@ router.post('/add', function(req, res, next) {
         res.status(400).send({status: false, msg: ' saved d failed', data: errors});
       } else {
         // console.log("@@@", taxObj);return;
+        req.body.payment_remaining = req.body.total_value;
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([

@@ -1,12 +1,19 @@
-ALTER TABLE `other_taxes`
-ADD `percentage` varchar(50) NULL AFTER `invoice_id`;
+CREATE TABLE `payment_purchases` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `payment_id` int(11) NULL,
+  `purchase_id` int(11) NULL,
+  `createdAt` datetime NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updatedAt` datetime NULL,
+  FOREIGN KEY (`payment_id`) REFERENCES `payments` (`id`) ON DELETE RESTRICT,
+  FOREIGN KEY (`purchase_id`) REFERENCES `purchases` (`id`) ON DELETE RESTRICT
+);
 
-ALTER TABLE `invoices`
-CHANGE `consignee_no` `consignee_no` int(11) NULL AFTER `date`,
-CHANGE `buyer` `buyer` int(11) NULL AFTER `consignee_no`,
-ADD FOREIGN KEY (`consignee_no`) REFERENCES `accounts` (`id`) ON DELETE RESTRICT,
-ADD FOREIGN KEY (`buyer`) REFERENCES `accounts` (`id`) ON DELETE RESTRICT;
+ALTER TABLE `payment_purchases`
+ADD `pay_amount` varchar(250) NULL AFTER `purchase_id`;
 
 
-ALTER TABLE `invoice_items`
-ADD `type` varchar(20) COLLATE 'latin1_swedish_ci' NULL AFTER `id`;
+ALTER TABLE `purchases`
+ADD `payment_remaining` varchar(100) COLLATE 'latin1_swedish_ci' NULL AFTER `payment_status`;
+
+
+UPDATE `purchases` SET `payment_remaining` = total_value;

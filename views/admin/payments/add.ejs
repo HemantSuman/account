@@ -54,7 +54,8 @@
                   <thead>
                     <tr>
                       <th><input type="checkbox" class="checkAll" /></th>
-                      <th>Date</th>
+                      <th>Invoice Date</th>
+                      <th>To be Pay Upto Date</th>
                       <th>Amount</th>
                     </tr>
                     <tr>
@@ -83,7 +84,12 @@
                 <div class="col-sm-4">
                   <div class="form-group">
                     <label for="">PayMode</label>
-                    <input name="pay_mode" type="text" class="form-control" placeholder="">
+                    <select name="pay_mode" class="form-control select2">
+                      <option value="">Select Modes</option>
+                      <% extraVar.results.payment_modes.forEach(function(data){ %>
+                        <option value="<%= data.name %>"><%= data.name %></option>
+                      <% }); %>                  
+                    </select>
                     <div class="pay_mode-error-message error-message"></div>
                   </div>
                 </div>
@@ -158,21 +164,24 @@
             let totalVal = 0;
 
             if(val.total_value){
-              totalDueAmount = parseFloat(totalDueAmount + parseFloat(val.total_value));
+              // totalDueAmount = parseFloat(totalDueAmount + parseFloat(val.total_value));
               totalVal = parseFloat(val.total_value);
             }
-            if(val.Payments.length > 0){
-              val.Payments.map(function(val1, index1){
+            if(val.PaymentPurchases.length > 0){
+              val.PaymentPurchases.map(function(val1, index1){
                 totalVal = parseFloat(totalVal - parseFloat(val1.pay_amount));
               });
             }
+            totalDueAmount = parseFloat(totalDueAmount) + parseFloat(totalVal);
             purchaseHtml += "<tr class='purchaseListingTr'>";
             purchaseHtml += "<td><input name='purchaseArr[]' value='"+val.id+"' type='checkbox' class='rowCheckbox' /></td>";
             purchaseHtml += "<td>"+moment(val.purchase_invoice_date, "YYYY-MM-DD").format("DD-MM-YYYY")+"</td>";
+            purchaseHtml += "<td>"+moment(val.to_be_pay_upto_date, "YYYY-MM-DD").format("DD-MM-YYYY")+"</td>";
             purchaseHtml += "<td class='rowAmt'>"+totalVal+"</td>";
             purchaseHtml += "</tr>";            
           });
           purchaseHtml += "<tr>";
+          purchaseHtml += "<th></th>";
           purchaseHtml += "<th></th>";
           purchaseHtml += "<th>Total Due</th>";
           purchaseHtml += "<td><strong class='rowTotalAmt'>"+totalDueAmount.toFixed(2)+"</strong></td>";

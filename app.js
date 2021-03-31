@@ -28,6 +28,7 @@ var productionsRouter = require('./routes/admin/productions');
 var invoicesRouter = require('./routes/admin/invoices');
 var usersRouter = require('./routes/admin/users');
 var paymentsRouter = require('./routes/admin/payments');
+var paymentModesRouter = require('./routes/admin/payment_modes');
 var loginRouter = require('./routes/admin/login');
 var logoutRouter = require('./routes/admin/logout');
 var flash = require('express-flash');
@@ -95,6 +96,7 @@ app.use('/admin/productions', productionsRouter);
 app.use('/admin/invoices', invoicesRouter);
 app.use('/admin/users', usersRouter);
 app.use('/admin/payments', paymentsRouter);
+app.use('/admin/payment_modes', paymentModesRouter);
 // 
 // 
 
