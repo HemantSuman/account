@@ -303,9 +303,9 @@
                                   </div>
                               </div>
                               <div class="col-sm-2 " style="display: flex;align-items: center;">
-                                  <button onclick="removeItems(this)" type="button" class="btn btn-danger float-right">
+                                  <!-- <button onclick="removeItems(this)" type="button" class="btn btn-danger float-right">
                                       <i class="fas fa-times"></i>
-                                  </button>
+                                  </button> -->
                                   &nbsp;<button onclick="editItems(this)" type="button" itemindexvalue="<%= index%>" class="btn btn-danger float-right editItemsBtn_<%= index%>">
                                       <i class="fas fa-edit"></i>
                                   </button>
@@ -604,8 +604,10 @@ $('.date1').daterangepicker({
 
   function addMoreItems(){
     emptyItemErrors();
+    let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
 
-    let selectItem = $('.item_item_id_').val();
+    let itemType = $('.item_type_'+itemIndexValue ).val();
+    let selectItem = $('.item_item_id_'+itemIndexValue ).val();
     let itemDescription = $('.itemDescription').val();
     let itemNoOfPkt = $('.itemNoOfPkt').val();
     let itemUnit = $('.itemUnit').val();
@@ -618,7 +620,7 @@ $('.date1').daterangepicker({
     let valid = validateItems();
     
     if(valid){
-      let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
+      
       $('.itemIndexValue').val(itemIndexValue); 
       
       let itemsObj = JSON.parse($("#itemsObj").html());
@@ -668,7 +670,8 @@ $('.date1').daterangepicker({
 
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";
       itemHtml += "<small><b>Item Type: </b></small><select disabled indexValue='"+itemIndexValue+"' name='item["+itemIndexValue+"][type]' onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
-      itemHtml += "<option value='production'>From Production</option><option value='purchase'>From Purchase</option></select>";
+      itemHtml += "<option "+ (itemType == 'production' ? 'selected':'') +" value='production'>From Production</option><option "+(itemType == 'purchase' ? 'selected':'')+" value='purchase'>From Purchase</option></select>";
+      itemHtml += "<input class='item_type_hidden_"+itemIndexValue+"' type='hidden' value='"+itemType+"' name='item["+itemIndexValue+"][type]'>";
       itemHtml += "<div class='item_type_"+itemIndexValue+"-error-message error-message'></div></div></div>";
                                     
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";

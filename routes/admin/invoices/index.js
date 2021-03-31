@@ -436,7 +436,7 @@ router.post('/edit', function(req, res, next) {
       function (callback) {
         console.log("333");
         if(req.body.item && req.body.item.length > 0 ){
-          async.forEach(req.body.item, function (value1, callback1) {
+          async.forEachOf(req.body.item, function (value1, key, callback1) {
 
             let itemInvoiceBuild = models['InvoiceItem'].build(value1);
             itemInvoiceBuild.validate()
@@ -587,7 +587,7 @@ router.post('/edit', function(req, res, next) {
                       if(value1.sub_item_id === ""){
                         value1.sub_item_id = null;
                       }
-                      value1.invoice_id = req,body.id;
+                      value1.invoice_id = req.body.id;
                       bulkData1.push(value1);
                       callback1();
                     }

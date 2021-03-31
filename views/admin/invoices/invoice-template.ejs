@@ -37,7 +37,7 @@
       #header {
         height: 15px;
         width: 100%;
-        margin: 20px 0;
+        margin-top: 20px;
         background: #222;
         text-align: center;
         color: white;
@@ -224,35 +224,31 @@
   <body>
     <div id="page-wrap">
       <textarea id="header">INVOICE</textarea>
+      <H3 style="text-align: center;"><%= extraVar.siteVariable.session.user.Company.name%></H3> 
+      <strong>GSTIN: </strong><%= extraVar.siteVariable.session.user.Company.gstin%>, 
+      <strong>CIN: </strong><%= extraVar.siteVariable.session.user.Company.cin%>, 
+      <strong>PAN No.: </strong><%= extraVar.siteVariable.session.user.Company.pan_no%>
+      <%= extraVar.siteVariable.session.user.Company.address%>
+      <br>
+      <br>
+      <br>
+      <div style="clear: both"></div>
+      <table id="meta">
+        <tr>
+          <td class="meta-head">Invoice #</td>
+          <td><%=extraVar.results.my_model.invoice_no%></td>
+        </tr>
+        <tr>
+          <td class="meta-head">Date</td>
+          <td><%=extraVar.results.my_model.date%></td>
+        </tr>
+      </table>
 
-      <div id="identity">
-        <strong><%= extraVar.siteVariable.session.user.Company.name%></strong
-        ><br />
-        <%= extraVar.siteVariable.session.user.Company.address%><br />
-        <strong>GSTIN: </strong><%=
-        extraVar.siteVariable.session.user.Company.gstin%><br />
-        <strong>CIN: </strong><%=
-        extraVar.siteVariable.session.user.Company.cin%><br />
-        <strong>PAN No.: </strong><%=
-        extraVar.siteVariable.session.user.Company.pan_no%><br />
-        <div id="logo">
-          <table id="meta">
-            <tr>
-              <td class="meta-head">Invoice #</td>
-              <td><%=extraVar.results.my_model.invoice_no%></td>
-            </tr>
-            <tr>
-              <td class="meta-head">Date</td>
-              <td><%=extraVar.results.my_model.date%></td>
-            </tr>
-          </table>
-        </div>
-      </div>
-
+      
       <div style="clear: both"></div>
 
       <div id="customer">
-        Widget Corp. c/o Steve Widget
+        <!-- Widget Corp. c/o Steve Widget -->
         <table id="meta">
           <tr>
             <td class="meta-head">Consignee</td>
@@ -292,6 +288,7 @@
 
       <table id="items">
         <tr>
+          <th>No.</th>
           <th>Item</th>
           <th>Description</th>
           <th>HSN</th>
@@ -304,6 +301,7 @@
         extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
         <tr class="item-row">
+          <td class="item-name"><%= ++index%></td>
           <td class="item-name"><%= rows.Item.item_name%></td>
           <td class="item-name"><%= rows.description%></td>
           <td class="item-name"><%= rows.Item.hsn_code%></td>
@@ -316,25 +314,13 @@
         </tr>
         <% }); %> <% } else { %>
         <tr class="item-row">
-          <td colspan="13" class="text-center">No Record Found.</td>
+          <td colspan="14" class="text-center">No Record Found.</td>
         </tr>
         <% } %>
         <tr>
-          <td colspan="4" class="blank"></td>
+          <td colspan="5" class="blank"></td>
           <td colspan="2" class="total-line balance">Total</td>
           <td class="total-value"><%=extraVar.results.my_model.sub_total%></td>
-        </tr>
-        <tr>
-          <td colspan="4" class="blank"></td>
-          <td colspan="2" class="total-line balance">
-            Discount/Transportation
-          </td>
-          <td class="total-value">
-            <%=(extraVar.results.my_model.discount != "" ?
-            extraVar.results.my_model.discount :
-            0)%>/<%=(extraVar.results.my_model.transportation != "" ?
-            extraVar.results.my_model.transportation : 0)%>
-          </td>
         </tr>
         <!-- <tr>
           <td colspan="4" class="blank"></td>
@@ -348,8 +334,8 @@
             <%=extraVar.results.my_model.transportation%>
           </td>
         </tr> -->
-        <tr>
-          <td colspan="4" class="blank"></td>
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
           <td colspan="2" class="total-line balance">CGST/SGST</td>
           <td class="total-value">
             <%=(extraVar.results.my_model.cgst_amount != "" ?
@@ -359,15 +345,15 @@
           </td>
         </tr>
         <tr>
-          <td colspan="4" class="blank"></td>
+          <td colspan="5" class="blank"></td>
           <td colspan="2" class="total-line balance">IGST</td>
           <td class="total-value">
             <%=(extraVar.results.my_model.igst_amount != "" ?
             extraVar.results.my_model.igst_amount : 0)%>
           </td>
-        </tr>
-        <tr>
-          <td colspan="4" class="blank"></td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
           <td colspan="2" class="total-line balance">
             <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> <% var
             othTaxPer = 0; %> <%
@@ -380,16 +366,45 @@
             <%=(parseFloat(extraVar.results.my_model.sub_total) *
             parseFloat(othTaxPer) / 100) %>
           </td>
-        </tr>
+        </tr> -->
         <tr>
-          <td colspan="4" class="blank"></td>
+          <td colspan="5" class="blank"></td>
           <td colspan="2" class="total-line balance">Net Amount</td>
           <td class="total-value"><%=extraVar.results.my_model.net_amount%></td>
         </tr>
       </table>
 
+        <strong>Discount</strong><span>
+          <%=(extraVar.results.my_model.discount != "" ? extraVar.results.my_model.discount : 0)%>, 
+        </span>
+        <strong>Transportation</strong><span>
+          <%=(extraVar.results.my_model.transportation != "" ? extraVar.results.my_model.transportation : 0)%>, 
+        </span>
+        <strong>CGST</strong><span>
+          <%=(extraVar.results.my_model.cgst_amount != "" ? extraVar.results.my_model.cgst_amount : 0)%>, 
+        </span>
+        <strong>SGST</strong><span>
+          <%=(extraVar.results.my_model.sgst_amount != "" ? extraVar.results.my_model.sgst_amount : 0)%>, 
+        </span>
+        <strong>IGST</strong><span>
+          <%=(extraVar.results.my_model.igst_amount != "" ? extraVar.results.my_model.igst_amount : 0)%>,  
+        </span>
+        <strong>
+          <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> 
+            <% var othTaxPer = 0; %> 
+            <% extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+              othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+              <%= extraVar.results.taxKeyValue[rows.tax_id] %>(<%= rows.percentage%>%)
+               : 
+               <% let othTax = (parseFloat(extraVar.results.my_model.sub_total) * parseFloat(rows.percentage) / 100) %>
+               <% if(othTax){ %> <%= othTax%> <% } %>
+            <% }) 
+          } %>
+        </strong>
+
       <div id="terms">
         <h5>Terms</h5>
+        <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</span>
       </div>
     </div>
   </body>
