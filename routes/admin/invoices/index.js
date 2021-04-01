@@ -255,7 +255,7 @@ router.post('/add', function(req, res, next) {
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
                       let reqS1 = {};
-                      reqS1.where = {sub_item_id: value1.sub_item_id}
+                      reqS1.where = {sub_item_id: value1.sub_item_id, type: value1.type}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
                         if(data1){
@@ -277,7 +277,7 @@ router.post('/add', function(req, res, next) {
                     } else {
                       let reqS = {};
                       console.log('value1value1', value1);
-                      reqS.where = {item_id: value1.item_id, sub_item_id: null}
+                      reqS.where = {item_id: value1.item_id, sub_item_id: null, type: value1.type}
                       models.Stock.getFirstValues(reqS, function (data) {
                         if(data){
                           console.log('exist', data);
@@ -515,9 +515,9 @@ router.post('/edit', function(req, res, next) {
             // console.log("%%%", data2);return;
             data2[0].InvoiceItems.map(function(val2){
               if(val2.sub_item_id) {
-                previousInvoiceItemValue[val2.sub_item_id] = val2.quantity;
+                previousInvoiceItemValue[val2.sub_item_id+'-'+val2.type] = val2.quantity;
               } else {
-                previousInvoiceItemValue[val2.item_id] = val2.quantity;
+                previousInvoiceItemValue[val2.item_id+'-'+val2.type] = val2.quantity;
               }
             });
             callback(null, errors);
@@ -616,21 +616,47 @@ router.post('/edit', function(req, res, next) {
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
                       let reqS1 = {};
-                      reqS1.where = {sub_item_id: value1.sub_item_id}
+                      reqS1.where = {sub_item_id: value1.sub_item_id, type: value1.type}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
                         if(data1){
                           console.log("sub exist");
                           let stockDataUpdate = {};
-                          stockDataUpdate.body = {
-                            id: data1.id,
-                            quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
-                            no_of_pkg: parseInt(data1.no_of_pkg) - parseInt(value1.no_of_pkg),
-                          };
+                          if(previousInvoiceItemValue[data.sub_item_id+'-'+data.type]){
+
+                            console.log("&&&133");
+                            let tmpPre = parseInt(previousInvoiceItemValue[data.item_id+'-'+data.type]);
+                            let tmpPost = parseInt(value1.quantity);
+                            let qty = 0;
+                            console.log("&&&133", tmpPre , tmpPost);
+                            if(tmpPre > tmpPost){
+                              qty = parseInt(data.quantity) + parseInt(tmpPre - tmpPost);
+                            } else if(tmpPre < tmpPost){
+                              qty = parseInt(data.quantity) - parseInt(tmpPost - tmpPre);
+                            } else {
+                              qty = parseInt(data.quantity);
+                            }
+
+                            stockDataUpdate.body = {
+                              id: data.id,
+                              quantity: qty,
+                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                            };
+                            console.log('exist33', stockDataUpdate);
+                          } else {
+                            console.log("&&&2333");
+                            
+                            stockDataUpdate.body = {
+                              id: data.id,
+                              quantity: parseInt(data.quantity) - parseInt(value1.quantity),
+                              no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
+                            };
+                          }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
                           });
                         } else {
+                          console.log("Not in stock 555");
                           callback1();
                         }
                         // callback(null, data);
@@ -643,16 +669,16 @@ router.post('/edit', function(req, res, next) {
                         if(data){
                           console.log('exist', data);
                           let stockDataUpdate = {};
-                          if(previousInvoiceItemValue[data.item_id]){
+                          if(previousInvoiceItemValue[data.item_id+'-'+data.type]){
                             console.log("&&&1");
-                            let tmpPre = parseInt(previousInvoiceItemValue[data.item_id]);
+                            let tmpPre = parseInt(previousInvoiceItemValue[data.item_id+'-'+data.type]);
                             let tmpPost = parseInt(value1.quantity);
                             let qty = 0;
                             console.log("&&&1", tmpPre , tmpPost);
                             if(tmpPre > tmpPost){
-                              qty = parseInt(data.quantity) - parseInt(tmpPre - tmpPost);
+                              qty = parseInt(data.quantity) + parseInt(tmpPre - tmpPost);
                             } else if(tmpPre < tmpPost){
-                              qty = parseInt(data.quantity) + parseInt(tmpPost - tmpPre);
+                              qty = parseInt(data.quantity) - parseInt(tmpPost - tmpPre);
                             } else {
                               qty = parseInt(data.quantity);
                             }
@@ -674,26 +700,26 @@ router.post('/edit', function(req, res, next) {
                               item_id: value1.item_id,
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                              quantity: parseInt(value1.quantity) + parseInt(data.quantity),
-                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                              quantity: parseInt(data.quantity) - parseInt(value1.quantity),
+                              no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
                           });
                         } else {
-                          console.log("Not");
-                          let stockData = {};
-                          stockData.body = {
-                            item_id: value1.item_id,
-                            type: value1.type,
-                            sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                            quantity: value1.quantity,
-                            no_of_pkg: value1.no_of_pkg,
-                          };
-                          models.Stock.saveAllValues(stockData, function (results){
+                          console.log("Not in stock");
+                          // let stockData = {};
+                          // stockData.body = {
+                          //   item_id: value1.item_id,
+                          //   type: value1.type,
+                          //   sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                          //   quantity: value1.quantity,
+                          //   no_of_pkg: value1.no_of_pkg,
+                          // };
+                          // models.Stock.saveAllValues(stockData, function (results){
                             callback1();
-                          });
+                          // });
                         }
                       });
                     }
@@ -730,21 +756,6 @@ router.post('/edit', function(req, res, next) {
               res.status(200).send({status: false, url: '/admin/' + viewDirectory});
             }
           });
-
-
-          // if(results.headerStatus) {
-          //   req.session.sessionFlash = {
-          //     type: 'success',
-          //     message: 'New record created successfully!'
-          //   }
-          //   res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-          // } else {
-          //   req.session.sessionFlash = {
-          //     type: 'success',
-          //     message: 'errorrr ............'
-          //   }
-          //   res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-          // }
         });
       }
     })
