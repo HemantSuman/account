@@ -16,6 +16,7 @@
       }
       #page-wrap {
         width: 520px;
+        height: 800px;
         margin: 0 auto;
       }
 
@@ -28,23 +29,22 @@
       table {
         border-collapse: collapse;
       }
-      table td,
-      table th {
+      #items table td,
+      #items table th {
         border: 1px solid black;
         padding: 5px;
       }
 
       #header {
-        height: 15px;
+        height: 12px;
         width: 100%;
         margin-top: 20px;
-        background: #222;
         text-align: center;
-        color: white;
+        color: #0e0e0e;
         font: bold 15px Helvetica, Sans-Serif;
-        text-decoration: uppercase;
-        letter-spacing: 20px;
+        text-decoration: underline;
         padding: 8px 0px;
+        font-size: 10px;
       }
 
       #address {
@@ -134,7 +134,7 @@
         clear: both;
         width: 100%;
         margin: 30px 0 0 0;
-        border: 1px solid black;
+        /* border: 1px solid black; */
       }
       #items th {
         background: #eee;
@@ -224,62 +224,390 @@
   <body>
     <div id="page-wrap">
       <textarea id="header">INVOICE</textarea>
-      <H3 style="text-align: center;"><%= extraVar.siteVariable.session.user.Company.name%></H3> 
-      <strong>GSTIN: </strong><%= extraVar.siteVariable.session.user.Company.gstin%>, 
-      <strong>CIN: </strong><%= extraVar.siteVariable.session.user.Company.cin%>, 
-      <strong>PAN No.: </strong><%= extraVar.siteVariable.session.user.Company.pan_no%>
-      <%= extraVar.siteVariable.session.user.Company.address%>
+      <H3 style="text-align: center;font-size: 15px;"><%= extraVar.siteVariable.session.user.Company.name%></H3> 
+      <div style="text-align: center;">
+        <%= extraVar.siteVariable.session.user.Company.address%><br>
+        <strong>GSTIN: </strong><%= extraVar.siteVariable.session.user.Company.gstin%>, 
+        <strong>CIN: </strong><%= extraVar.siteVariable.session.user.Company.cin%>, 
+        <strong>PAN No.: </strong><%= extraVar.siteVariable.session.user.Company.pan_no%>
+      </div>     
       <br>
       <br>
       <br>
       <div style="clear: both"></div>
-      <table id="meta">
-        <tr>
-          <td class="meta-head">Invoice #</td>
-          <td><%=extraVar.results.my_model.invoice_no%></td>
-        </tr>
-        <tr>
-          <td class="meta-head">Date</td>
-          <td><%=extraVar.results.my_model.date%></td>
-        </tr>
-      </table>
-
-      
       <div style="clear: both"></div>
 
       <div id="customer">
         <!-- Widget Corp. c/o Steve Widget -->
-        <table id="meta">
+        <table id="items">
           <tr>
-            <td class="meta-head">Consignee</td>
+            <td class="" colspan="2" rowspan="2" width="50%">
+              <strong>Invoice #:</strong> <%=extraVar.results.my_model.invoice_no%><br />
+              <strong>Vechicle No:</strong> <%=extraVar.results.my_model.vehicle_no%><br />
+              <strong>Delivery At:</strong> <%=extraVar.results.my_model.delivery_at%><br />
+              <strong>Payment Terms:</strong> <%=extraVar.results.my_model.payment_terms%><br />
+              <strong>Time of Remeber:</strong> <%=extraVar.results.my_model.time_of_remeber%><br />
+            </td>
             <td>
-              <strong
-                ><%=
-                extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%></strong
-              ><br />
-              <%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
-              <strong>GSTIN: </strong><%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
-              <strong>PAN No.: </strong><%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
+              <strong>Consignee</strong><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
             </td>
           </tr>
           <tr>
-            <td class="meta-head">Buyer(If other than consignee)</td>
             <td>
+              <strong>Buyer(If other than consignee)</strong><br />
               <% if(extraVar.results.my_model.consignee_no !=
               extraVar.results.my_model.buyer){ %>
-              <strong
-                ><%=
-                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%></strong
-              ><br />
-              <%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
-              <strong>GSTIN: </strong><%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
-              <strong>PAN No.: </strong><%=
-              extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
+              <% } %>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <table id="items">
+        <tr>
+          <th>No.</th>
+          <th>Item</th>
+          <th>Description</th>
+          <th>HSN</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Total</th>
+          <th>GST</th>
+        </tr>
+        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+
+        <tr class="item-row">
+          <td class="item-name"><%= ++index%></td>
+          <td class="item-name"><%= rows.Item.item_name%></td>
+          <td class="item-name"><%= rows.description%></td>
+          <td class="item-name"><%= rows.Item.hsn_code%></td>
+          <td class="item-name"><%= rows.quantity%></td>
+          <td class="item-name"><%= rows.rate%></td>
+          <td class="item-name">
+            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+          </td>
+          <td class="item-name"><%= rows.gst%>%</td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr class="item-row">
+          <td colspan="14" class="text-center">No Record Found.</td>
+        </tr>
+        <% } %>
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">Total</td>
+          <td class="total-value"><%=extraVar.results.my_model.sub_total%></td>
+        </tr>
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Amount Paid</td>
+          <td class="total-value"><%=extraVar.results.my_model.amount%></td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Transportation</td>
+          <td class="total-value">
+            <%=extraVar.results.my_model.transportation%>
+          </td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">CGST/SGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.cgst_amount != "" ?
+            extraVar.results.my_model.cgst_amount :
+            0)%>/<%=(extraVar.results.my_model.sgst_amount != "" ?
+            extraVar.results.my_model.sgst_amount : 0)%>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">IGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.igst_amount != "" ?
+            extraVar.results.my_model.igst_amount : 0)%>
+          </td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">
+            <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> <% var
+            othTaxPer = 0; %> <%
+            extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+            othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+            <%=extraVar.results.taxKeyValue[rows.tax_id]%>:
+            <%=rows.percentage%>% <% }) %> <% } %>
+          </td>
+          <td class="total-value">
+            <%=(parseFloat(extraVar.results.my_model.sub_total) *
+            parseFloat(othTaxPer) / 100) %>
+          </td>
+        </tr> -->
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">Net Amount</td>
+          <td class="total-value"><%=extraVar.results.my_model.net_amount%></td>
+        </tr>
+      </table>
+
+        <strong>Discount</strong><span>
+          <%=(extraVar.results.my_model.discount != "" ? extraVar.results.my_model.discount : 0)%>, 
+        </span>
+        <strong>Transportation</strong><span>
+          <%=(extraVar.results.my_model.transportation != "" ? extraVar.results.my_model.transportation : 0)%>, 
+        </span>
+        <strong>CGST</strong><span>
+          <%=(extraVar.results.my_model.cgst_amount != "" ? extraVar.results.my_model.cgst_amount : 0)%>, 
+        </span>
+        <strong>SGST</strong><span>
+          <%=(extraVar.results.my_model.sgst_amount != "" ? extraVar.results.my_model.sgst_amount : 0)%>, 
+        </span>
+        <strong>IGST</strong><span>
+          <%=(extraVar.results.my_model.igst_amount != "" ? extraVar.results.my_model.igst_amount : 0)%>,  
+        </span>
+        <strong>
+          <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> 
+            <% var othTaxPer = 0; %> 
+            <% extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+              othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+              <%= extraVar.results.taxKeyValue[rows.tax_id] %>(<%= rows.percentage%>%)
+               : 
+               <% let othTax = (parseFloat(extraVar.results.my_model.sub_total) * parseFloat(rows.percentage) / 100) %>
+               <% if(othTax){ %> <%= othTax%> <% } %>
+            <% }) 
+          } %>
+        </strong>
+
+      <div id="terms">
+        <h5>Terms</h5>
+        <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</span>
+      </div>
+    </div>
+
+    <div id="page-wrap">
+      <textarea id="header">INVOICE</textarea>
+      <H3 style="text-align: center;font-size: 15px;"><%= extraVar.siteVariable.session.user.Company.name%></H3> 
+      <div style="text-align: center;">
+        <%= extraVar.siteVariable.session.user.Company.address%><br>
+        <strong>GSTIN: </strong><%= extraVar.siteVariable.session.user.Company.gstin%>, 
+        <strong>CIN: </strong><%= extraVar.siteVariable.session.user.Company.cin%>, 
+        <strong>PAN No.: </strong><%= extraVar.siteVariable.session.user.Company.pan_no%>
+      </div>     
+      <br>
+      <br>
+      <br>
+      <div style="clear: both"></div>
+      <div style="clear: both"></div>
+
+      <div id="customer">
+        <!-- Widget Corp. c/o Steve Widget -->
+        <table id="items">
+          <tr>
+            <td class="" colspan="2" rowspan="2" width="50%">
+              <strong>Invoice #:</strong> <%=extraVar.results.my_model.invoice_no%><br />
+              <strong>Vechicle No:</strong> <%=extraVar.results.my_model.vehicle_no%><br />
+              <strong>Delivery At:</strong> <%=extraVar.results.my_model.delivery_at%><br />
+              <strong>Payment Terms:</strong> <%=extraVar.results.my_model.payment_terms%><br />
+              <strong>Time of Remeber:</strong> <%=extraVar.results.my_model.time_of_remeber%><br />
+            </td>
+            <td>
+              <strong>Consignee</strong><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Buyer(If other than consignee)</strong><br />
+              <% if(extraVar.results.my_model.consignee_no !=
+              extraVar.results.my_model.buyer){ %>
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
+              <% } %>
+            </td>
+          </tr>
+        </table>
+      </div>
+
+      <table id="items">
+        <tr>
+          <th>No.</th>
+          <th>Item</th>
+          <th>Description</th>
+          <th>HSN</th>
+          <th>Quantity</th>
+          <th>Rate</th>
+          <th>Total</th>
+          <th>GST</th>
+        </tr>
+        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+
+        <tr class="item-row">
+          <td class="item-name"><%= ++index%></td>
+          <td class="item-name"><%= rows.Item.item_name%></td>
+          <td class="item-name"><%= rows.description%></td>
+          <td class="item-name"><%= rows.Item.hsn_code%></td>
+          <td class="item-name"><%= rows.quantity%></td>
+          <td class="item-name"><%= rows.rate%></td>
+          <td class="item-name">
+            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+          </td>
+          <td class="item-name"><%= rows.gst%>%</td>
+        </tr>
+        <% }); %> <% } else { %>
+        <tr class="item-row">
+          <td colspan="14" class="text-center">No Record Found.</td>
+        </tr>
+        <% } %>
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">Total</td>
+          <td class="total-value"><%=extraVar.results.my_model.sub_total%></td>
+        </tr>
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Amount Paid</td>
+          <td class="total-value"><%=extraVar.results.my_model.amount%></td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="4" class="blank"></td>
+          <td colspan="2" class="total-line balance">Transportation</td>
+          <td class="total-value">
+            <%=extraVar.results.my_model.transportation%>
+          </td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">CGST/SGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.cgst_amount != "" ?
+            extraVar.results.my_model.cgst_amount :
+            0)%>/<%=(extraVar.results.my_model.sgst_amount != "" ?
+            extraVar.results.my_model.sgst_amount : 0)%>
+          </td>
+        </tr>
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">IGST</td>
+          <td class="total-value">
+            <%=(extraVar.results.my_model.igst_amount != "" ?
+            extraVar.results.my_model.igst_amount : 0)%>
+          </td>
+        </tr> -->
+        <!-- <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">
+            <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> <% var
+            othTaxPer = 0; %> <%
+            extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+            othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+            <%=extraVar.results.taxKeyValue[rows.tax_id]%>:
+            <%=rows.percentage%>% <% }) %> <% } %>
+          </td>
+          <td class="total-value">
+            <%=(parseFloat(extraVar.results.my_model.sub_total) *
+            parseFloat(othTaxPer) / 100) %>
+          </td>
+        </tr> -->
+        <tr>
+          <td colspan="5" class="blank"></td>
+          <td colspan="2" class="total-line balance">Net Amount</td>
+          <td class="total-value"><%=extraVar.results.my_model.net_amount%></td>
+        </tr>
+      </table>
+
+        <strong>Discount</strong><span>
+          <%=(extraVar.results.my_model.discount != "" ? extraVar.results.my_model.discount : 0)%>, 
+        </span>
+        <strong>Transportation</strong><span>
+          <%=(extraVar.results.my_model.transportation != "" ? extraVar.results.my_model.transportation : 0)%>, 
+        </span>
+        <strong>CGST</strong><span>
+          <%=(extraVar.results.my_model.cgst_amount != "" ? extraVar.results.my_model.cgst_amount : 0)%>, 
+        </span>
+        <strong>SGST</strong><span>
+          <%=(extraVar.results.my_model.sgst_amount != "" ? extraVar.results.my_model.sgst_amount : 0)%>, 
+        </span>
+        <strong>IGST</strong><span>
+          <%=(extraVar.results.my_model.igst_amount != "" ? extraVar.results.my_model.igst_amount : 0)%>,  
+        </span>
+        <strong>
+          <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %> 
+            <% var othTaxPer = 0; %> 
+            <% extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){
+              othTaxPer = parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+              <%= extraVar.results.taxKeyValue[rows.tax_id] %>(<%= rows.percentage%>%)
+               : 
+               <% let othTax = (parseFloat(extraVar.results.my_model.sub_total) * parseFloat(rows.percentage) / 100) %>
+               <% if(othTax){ %> <%= othTax%> <% } %>
+            <% }) 
+          } %>
+        </strong>
+
+      <div id="terms">
+        <h5>Terms</h5>
+        <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</span>
+      </div>
+    </div>
+
+
+    <div id="page-wrap">
+      <textarea id="header">INVOICE</textarea>
+      <H3 style="text-align: center;font-size: 15px;"><%= extraVar.siteVariable.session.user.Company.name%></H3> 
+      <div style="text-align: center;">
+        <%= extraVar.siteVariable.session.user.Company.address%><br>
+        <strong>GSTIN: </strong><%= extraVar.siteVariable.session.user.Company.gstin%>, 
+        <strong>CIN: </strong><%= extraVar.siteVariable.session.user.Company.cin%>, 
+        <strong>PAN No.: </strong><%= extraVar.siteVariable.session.user.Company.pan_no%>
+      </div>     
+      <br>
+      <br>
+      <br>
+      <div style="clear: both"></div>
+      <div style="clear: both"></div>
+
+      <div id="customer">
+        <!-- Widget Corp. c/o Steve Widget -->
+        <table id="items">
+          <tr>
+            <td class="" colspan="2" rowspan="2" width="50%">
+              <strong>Invoice #:</strong> <%=extraVar.results.my_model.invoice_no%><br />
+              <strong>Vechicle No:</strong> <%=extraVar.results.my_model.vehicle_no%><br />
+              <strong>Delivery At:</strong> <%=extraVar.results.my_model.delivery_at%><br />
+              <strong>Payment Terms:</strong> <%=extraVar.results.my_model.payment_terms%><br />
+              <strong>Time of Remeber:</strong> <%=extraVar.results.my_model.time_of_remeber%><br />
+            </td>
+            <td>
+              <strong>Consignee</strong><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
+            </td>
+          </tr>
+          <tr>
+            <td>
+              <strong>Buyer(If other than consignee)</strong><br />
+              <% if(extraVar.results.my_model.consignee_no !=
+              extraVar.results.my_model.buyer){ %>
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%><br />
+              <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
+              GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
+              PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
               <% } %>
             </td>
           </tr>

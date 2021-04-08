@@ -11,6 +11,8 @@ var extraVar = [];
 var modelName = 'Payment';
 var viewDirectory = 'payments';
 var titleName = 'Add New Payment';
+var moduleSlug = "payments";
+var PermissionModule = require('../../../middlewares/Permission');
 
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
@@ -29,7 +31,7 @@ router.use(function(req, res, next) {
 //   res.render('admin/index', { helper, layout:'admin/layout/layout' });
 // });
 
-router.get('/', function(req, res, next) {
+router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   req.where = {};
   models[modelName].getAllValues(req, function (results) {
     res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
@@ -48,7 +50,7 @@ router.post('/getPurchasesByAccount', function(req, res, next) {
   });   
 });
 
-router.get('/add', function(req, res, next) {
+router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   async.parallel({
     accounts: function (callback) {
         req.where = {}
@@ -68,138 +70,7 @@ router.get('/add', function(req, res, next) {
   })  
 });
 
-router.post('/add1', function(req, res, next) {
-  ImageUpload.uploadFile(req, res, function (err) {
-    let modelBuild = models[modelName].build(req.body);
-    
-    let errors = [];
-    req.body.pay_date = helper.changeDateFormate(req.body.pay_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-    async.parallel([
-      function (callback) {
-
-        modelBuild.validate()
-        .then(function(){
-          callback(null);
-        })
-        .catch(function (err){
-          if (err != null) {
-              errors = errors.concat(err.errors);
-              callback(null, errors);
-          } else {
-              callback(null, errors);
-          }
-        })        
-      },
-      function (callback) {
-        if(!req.body.purchaseArr || req.body.purchaseArr.length <= 0){
-          errorsItem = 
-            {
-              message: 'Select atleast one amount',
-              type: 'Validation error',
-              path: 'purchaseArr',
-              value: '',
-          };
-          errors = errors.concat(errorsItem);
-        }
-        callback(null, errors);
-      },
-    ], function (err) {
-      console.log(req.body)
-      if (errors.length > 0) {
-        res.status(400).send({status: false, msg: ' saved d failed', data: errors});
-      } else {
-
-        req.where = {
-          id: {
-            [Op.in]: req.body.purchaseArr
-          }
-        };
-        req.order = [
-          [ models.sequelize.cast(models.sequelize.col('total_value'), 'SIGNED') , 'ASC' ]
-        ]
-        models["Purchase"].getAllValues(req, function (results) {
-
-          let remainingAmt = parseFloat(req.body.pay_amount);
-          // let payentArr = [];
-          async.forEachOf(results, function (value1, key, callback1) {
-            console.log("#", remainingAmt, value1.total_value, typeof remainingAmt, typeof value1.total_value);
-            if(remainingAmt !== 0) {
-              
-              let payObj = {};
-              let purchaseObj = {};
-              purchaseObj.body = {};
-              if(remainingAmt >= parseFloat(value1.total_value)){
-                console.log("#Innnn");
-                // payObj.purchase_id = value1.id;
-                // payObj.account_id = req.body.account_id;
-                // payObj.pay_date = req.body.pay_date;
-                // payObj.pay_mode = req.body.pay_mode;
-                payObj.pay_amount = value1.total_value;
-                // payObj.remark = req.body.remark;
-
-                // payentArr.push(payObj);
-                remainingAmt = remainingAmt - parseFloat(value1.total_value);
-
-                purchaseObj.body.payment_status = "complete";
-                purchaseObj.body.id = value1.id;
-                models["Purchase"].updateAllValues(purchaseObj, function (results1) {
-
-                });
-
-              } else if(remainingAmt < parseFloat(value1.total_value)){
-                console.log("#elseeee");
-                // payObj.purchase_id = value1.id;
-                // payObj.account_id = req.body.account_id;
-                // payObj.pay_date = req.body.pay_date;
-                // payObj.pay_mode = req.body.pay_mode;
-                // payObj.pay_amount = remainingAmt;
-                // payObj.remark = req.body.remark;
-
-                // payentArr.push(payObj);
-                remainingAmt = 0;
-
-                purchaseObj.body.payment_status = "partial";
-                purchaseObj.body.id = value1.id;
-                // console.log("#@", purchaseObj, payObj);
-                models["Purchase"].updateAllValues(purchaseObj, function (results2) {
-
-                });
-              }
-            }
-            callback1();
-          }, function (err) {
-            if (err) {
-              req.session.sessionFlash = {
-                type: 'error',
-                message: 'errorrr ............'
-              }
-              res.status(200).send({status: false, url: '/admin/' + viewDirectory});
-            } else {
-              let payentArr = {};
-              payentArr.body = {};
-              console.log("^^^^", req.body);
-              // payentArr.body.purchase_id = value1.id;
-              payentArr.body.account_id = req.body.account_id;
-              payentArr.body.pay_date = req.body.pay_date;
-              payentArr.body.pay_mode = req.body.pay_mode;
-              payentArr.body.pay_amount = req.body.total_value;
-              payentArr.body.remark = req.body.remark;
-              models[modelName].saveAllValues(payentArr, function (results3) {
-                req.session.sessionFlash = {
-                  type: 'success',
-                  message: 'New record created successfully!'
-                }
-                res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-              });
-            }
-          });
-        });
-      }
-    })
-  });  
-});
-
-router.post('/add', function(req, res, next) {
+router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
     
@@ -332,7 +203,7 @@ router.post('/add', function(req, res, next) {
   });  
 });
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
 
   var id = req.params.id;
   async.parallel({
@@ -354,7 +225,7 @@ router.get('/edit/:id', function(req, res, next) {
   });
 });
 
-router.post('/edit', function(req, res, next) {
+router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
 
     var modelBuild = models[modelName].build(req.body);
@@ -406,7 +277,7 @@ router.post('/edit', function(req, res, next) {
   });  
 });
 
-router.post('/delete/:id', function (req, res, next) {
+router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
   var id = req.params.id;
   req.where = {'id': id};
   models[modelName].deleteAllValues(req, function (data) {

@@ -91,7 +91,12 @@ module.exports = function (passport) {
                     let results = {};
                     results.User = rows;
                     results.Company = rows1;
-
+                    permissionModuleObj = {};
+                    rows.Role.Permissions.map(function(val){
+                        permissionModuleObj[val.Module.slug] = val;
+                    });
+                    results.permissionModuleObj = permissionModuleObj;
+                    // console.log("@@@@@", permissionModuleObj)
                     if (!results) {
                         return done(null, false, 'Invaild login details');
                     } else if (!bcrypt.compareSync(password, results.User.password)) {

@@ -10,6 +10,8 @@ var extraVar = [];
 var modelName = 'Item';
 var viewDirectory = 'items';
 var titleName = 'Add new item';
+var moduleSlug = "items";
+var PermissionModule = require('../../../middlewares/Permission');
 
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
@@ -28,7 +30,7 @@ router.use(function(req, res, next) {
 //   res.render('admin/index', { helper, layout:'admin/layout/layout' });
 // });
 
-router.get('/', function(req, res, next) {
+router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   req.where = {};
   models[modelName].getAllValues(req, function (results) {
     res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
@@ -43,7 +45,7 @@ router.post('/subItemById', function(req, res, next) {
   });   
 });
 
-router.get('/add', function(req, res, next) {
+router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   async.parallel({
     categories: function (callback) {
         req.where = {}
@@ -69,7 +71,7 @@ router.get('/add', function(req, res, next) {
   })  
 });
 
-router.post('/add', function(req, res, next) {
+router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
     
@@ -219,7 +221,7 @@ router.post('/add', function(req, res, next) {
   });  
 });
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
 
   var id = req.params.id;
   async.parallel({
@@ -254,7 +256,7 @@ router.get('/edit/:id', function(req, res, next) {
   });
 });
 
-router.post('/edit', function(req, res, next) {
+router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
     
@@ -427,7 +429,7 @@ router.post('/edit', function(req, res, next) {
   });  
 });
 
-router.post('/delete/:id', function (req, res, next) {
+router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
   var id = req.params.id;
 
   async.parallel([

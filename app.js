@@ -29,6 +29,7 @@ var invoicesRouter = require('./routes/admin/invoices');
 var usersRouter = require('./routes/admin/users');
 var paymentsRouter = require('./routes/admin/payments');
 var paymentModesRouter = require('./routes/admin/payment_modes');
+var rolesRouter = require('./routes/admin/roles');
 var loginRouter = require('./routes/admin/login');
 var logoutRouter = require('./routes/admin/logout');
 var flash = require('express-flash');
@@ -97,8 +98,27 @@ app.use('/admin/invoices', invoicesRouter);
 app.use('/admin/users', usersRouter);
 app.use('/admin/payments', paymentsRouter);
 app.use('/admin/payment_modes', paymentModesRouter);
+app.use('/admin/roles', rolesRouter);
 // 
-// 
+
+// start socket server
+// const http = require('http').createServer(app);
+// const io = require('socket.io')(http)
+// io.on('connection', (socket) => {
+//   socket.on('chat message', (msg) => {
+//     console.log('message: ' , msg);
+//     io.emit('chat message', msg);
+//   });
+// });
+// app.get('/socket', function(req, res, next) {
+//     var id = req.params.sessionId;
+//     console.log("iddddddddd", id, req.params);
+//   // res.render('admin/'+viewDirectory + '/socket.ejs');
+//     res.render('admin/accounts/socket', {layout:false });
+// });
+// http.listen(3001, () => {
+//   console.log('listening on *:3001');
+// });
 
 // catch 404 and forward to error handler
 app.use(function(req, res, next) {

@@ -10,10 +10,13 @@ var extraVar = [];
 var modelName = 'Stock';
 var viewDirectory = 'stocks';
 var titleName = 'Add new stock';
+var moduleSlug = "stocks";
+var PermissionModule = require('../../../middlewares/Permission');
 
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
 extraVar['titleName'] = titleName;
+
 
 var adminAuth = require('../../../middlewares/Auth');
 router.use(adminAuth.isLogin);
@@ -23,7 +26,7 @@ router.use(function(req, res, next) {
   next();
 });
 
-router.get('/', function(req, res, next) {
+router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   req.where = {};
   models[modelName].getAllValues(req, function (results) {
     console.log(results)

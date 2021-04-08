@@ -14,6 +14,8 @@ var titleName = 'Add New Purchase';
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
 extraVar['titleName'] = titleName;
+var moduleSlug = "purchases";
+var PermissionModule = require('../../../middlewares/Permission');
 
 var adminAuth = require('../../../middlewares/Auth');
 router.use(adminAuth.isLogin);
@@ -28,7 +30,7 @@ router.use(function(req, res, next) {
 //   res.render('admin/index', { helper, layout:'admin/layout/layout' });
 // });
 
-router.get('/', function(req, res, next) {
+router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   req.where = {};
   models[modelName].getAllValues(req, function (results) {
     console.log("@@@", results);
@@ -36,7 +38,7 @@ router.get('/', function(req, res, next) {
   });   
 });
 
-router.get('/add', function(req, res, next) {
+router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   async.parallel({
     items: function (callback) {
         req.where = {}
@@ -68,7 +70,7 @@ router.get('/add', function(req, res, next) {
   })  
 });
 
-router.post('/add', function(req, res, next) {
+router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
     // console.log("!!!!", req.body); return;
@@ -322,7 +324,7 @@ router.post('/add', function(req, res, next) {
   });  
 });
 
-router.get('/edit/:id', function(req, res, next) {
+router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
 
   var id = req.params.id;
   async.parallel({
@@ -364,7 +366,7 @@ router.get('/edit/:id', function(req, res, next) {
   });
 });
 
-router.post('/edit', function(req, res, next) {
+router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     let modelBuild = models[modelName].build(req.body);
     // console.log("!!!!", req.body); return;
@@ -710,7 +712,7 @@ router.post('/edit', function(req, res, next) {
   });  
 });
 
-router.post('/delete/:id', function (req, res, next) {
+router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
   var id = req.params.id;
   req.where = {'id': id};
   models[modelName].deleteAllValues(req, function (data) {
