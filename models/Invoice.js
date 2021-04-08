@@ -182,6 +182,22 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        payment_status: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
+        payment_remaining: {
+            type: DataTypes.STRING,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
     },
     {
       tableName: 'invoices',
@@ -191,7 +207,8 @@ module.exports = function (sequelize, DataTypes) {
     this.findAll({where: req.where, 
         include: [
             invoiceItemToInvoice
-        ]
+        ],
+        order: req.order
     })
         .then(function(results){
             res(results);
@@ -215,6 +232,16 @@ module.exports = function (sequelize, DataTypes) {
                 otherTaxToInvoice,
                 {association: invoiceItemToInvoice, include: [{association: InvoiceItemToItem, include: []}]},
             ]
+        }).then(function (results) {
+            res(results);
+        });
+    }
+    myModel.getInvoiceByAccount = function (req, res) {
+        var paymentToInvoice = myModel.hasMany(sequelize.models.PaymentReceivedInvoice, {foreignKey: 'invoice_id'});
+        this.findAll({where: req.where,
+            include: [
+                paymentToInvoice
+            ],
         }).then(function (results) {
             res(results);
         });

@@ -152,6 +152,16 @@
         </a>        
       </li>
       <%}%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments_received']['view'] == 1){%>
+      <li class="nav-item">
+        <a href="/admin/payments_received" class="nav-link">
+          <i class="nav-icon fas fa-edit"></i>
+          <p>
+            Payments Received
+          </p>
+        </a>        
+      </li>
+      <%}%>
       <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payment_modes']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/payment_modes" class="nav-link">

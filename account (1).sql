@@ -40,3 +40,53 @@ CREATE TABLE `permissions` (
   FOREIGN KEY (`role_id`) REFERENCES `roles` (`id`) ON DELETE RESTRICT,
   FOREIGN KEY (`module_id`) REFERENCES `modules` (`id`) ON DELETE RESTRICT
 );
+
+CREATE TABLE `payments_received` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `invoice_id` int(11) NULL,
+  `account_id` int(11) NULL,
+  `pay_date` date NOT NULL,
+  `pay_mode` varchar(100) NULL,
+  `pay_amount` varchar(100) NULL,
+  `remark` varchar(500) NULL,
+  `createdAt` datetime NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updatedAt` datetime NULL,
+  FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE RESTRICT,
+  FOREIGN KEY (`account_id`) REFERENCES `accounts` (`id`) ON DELETE RESTRICT
+);
+
+CREATE TABLE `payments_received_invoices` (
+  `id` int(11) NOT NULL AUTO_INCREMENT PRIMARY KEY,
+  `payments_received_id` int(11) NULL,
+  `invoice_id` int(11) NULL,
+  `pay_amount` varchar(250) NULL,
+  `createdAt` datetime NULL ON UPDATE CURRENT_TIMESTAMP,
+  `updatedAt` datetime NULL,
+  FOREIGN KEY (`payments_received_id`) REFERENCES `payments_received` (`id`) ON DELETE RESTRICT,
+  FOREIGN KEY (`invoice_id`) REFERENCES `invoices` (`id`) ON DELETE RESTRICT
+);
+
+ALTER TABLE `payments_received`
+DROP FOREIGN KEY `payments_received_ibfk_1`
+
+ALTER TABLE `payments_received`
+DROP `invoice_id`;
+
+ALTER TABLE `payments`
+DROP FOREIGN KEY `payments_ibfk_1`
+
+ALTER TABLE `payments`
+DROP `purchase_id`;
+
+INSERT INTO `modules` (`name`, `slug`, `createdAt`, `updatedAt`)
+VALUES ('Payment Received', 'payments_received', now(), now());
+
+ALTER TABLE `invoices`
+ADD `payment_remaining` varchar(100) COLLATE 'latin1_swedish_ci' NULL AFTER `net_amount`;
+
+ALTER TABLE `invoices`
+ADD `payment_status` varchar(50) COLLATE 'latin1_swedish_ci' NULL AFTER `net_amount`;
+
+update `invoices` SET payment_status = 'initial';
+
+update `invoices` SET payment_remaining = net_amount;

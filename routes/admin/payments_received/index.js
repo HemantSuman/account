@@ -8,10 +8,10 @@ const { Op } = require('sequelize')
 
 var extraVar = [];
 
-var modelName = 'Payment';
-var viewDirectory = 'payments';
+var modelName = 'PaymentReceived';
+var viewDirectory = 'payments_received';
 var titleName = 'Add New Payment';
-var moduleSlug = "payments";
+var moduleSlug = "payments_received";
 var PermissionModule = require('../../../middlewares/Permission');
 
 extraVar['modelName'] = modelName;
@@ -38,14 +38,14 @@ router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), func
   });   
 });
 
-router.post('/getPurchasesByAccount', function(req, res, next) {
+router.post('/getInvoiceByAccount', function(req, res, next) {
   req.where = {
-    account_id: req.body.id, 
+    consignee_no: req.body.id, 
     [Op.not]: {
       payment_status: ["complete"]
     }
   };
-  models.Purchase.getPurchasesByAccount(req, function (results) {
+  models.Invoice.getInvoiceByAccount(req, function (results) {
     res.json(results);
   });   
 });
@@ -129,9 +129,9 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
             }
           };
           req.order = [
-            [ models.sequelize.cast(models.sequelize.col('total_value'), 'SIGNED') , 'ASC' ]
+            [ models.sequelize.cast(models.sequelize.col('net_amount'), 'SIGNED') , 'ASC' ]
           ]
-          models["Purchase"].getAllValues(req, function (results) {
+          models["Invoice"].getAllValues(req, function (results) {
             
             let remainingAmt = parseFloat(req.body.pay_amount);
             let payentPur = [];
@@ -143,8 +143,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                 purchaseObj.body = {};
                 if(remainingAmt >= parseFloat(value1.payment_remaining)){
                   console.log("#Innnn");
-                  payObj.purchase_id = value1.id;
-                  payObj.payment_id = results3.id;
+                  payObj.invoice_id = value1.id;
+                  payObj.payments_received_id = results3.id;
                   payObj.pay_amount = value1.payment_remaining;
   
                   payentPur.push(payObj);
@@ -153,14 +153,14 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   purchaseObj.body.payment_status = "complete";
                   purchaseObj.body.payment_remaining = 0;
                   purchaseObj.body.id = value1.id;
-                  models["Purchase"].updateAllValues(purchaseObj, function (results1) {
+                  models["Invoice"].updateAllValues(purchaseObj, function (results1) {
   
                   });
   
                 } else if(remainingAmt < parseFloat(value1.payment_remaining)){
                   console.log("#elseeee", value1, remainingAmt, parseFloat(parseFloat(value1.payment_remaining) - parseFloat(remainingAmt)).toFixed(2));
-                  payObj.purchase_id = value1.id;
-                  payObj.payment_id = results3.id;
+                  payObj.invoice_id = value1.id;
+                  payObj.payments_received_id = results3.id;
                   payObj.pay_amount = remainingAmt;                  
   
                   purchaseObj.body.payment_status = "partial";
@@ -170,7 +170,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   payentPur.push(payObj);
                   remainingAmt = 0;
                   console.log("#@", purchaseObj, payObj);
-                  models["Purchase"].updateAllValues(purchaseObj, function (results2) {
+                  models["Invoice"].updateAllValues(purchaseObj, function (results2) {
   
                   });
                 }
@@ -181,7 +181,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                 res.status(400).send({status: false, msg: ' saved d failed', data: errors});
               } else {
 
-                models["PaymentPurchase"].saveAllBulkValues(payentPur, function (results4) {
+                models["PaymentReceivedInvoice"].saveAllBulkValues(payentPur, function (results4) {
                   req.session.sessionFlash = {
                     type: 'success',
                     message: 'New record created successfully!'
@@ -202,5 +202,6 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
     })
   });  
 });
+
 
 module.exports = router;
