@@ -32,26 +32,23 @@
                 <th>No.</th>
                 <th>Item Name</th>
                 <th>SubItem Name</th>
-                <th>Quantity</th>
-                <th>No. of Pkt.</th>
-                <th>Type</th>
-                <th>Actions</th>
+                <th>Opening</th>
+                <th>Purchase(Today)</th>
+                <th>Sale</th>
+                <th>Remaining</th>
               </tr>
               </thead>
                 <tbody>
-                  <% if(results.length > 0) { %>
-                    <% results.forEach(function(rows, index){ %>
+                  <% if(extraVar.remainingStock.length > 0) { %>
+                    <% extraVar.remainingStock.forEach(function(rows, index){ %>
                     <tr>
                       <td><%= ++index %></td>
-                      <td><%= rows.Item.item_name %></td>
-                      <td><%= rows.SubItem ? rows.SubItem.name : '' %></td>
-                      <td><%= rows.quantity %></td>
-                      <td><%= rows.no_of_pkg %></td>
+                      <td><%= extraVar.itemKeyValue[rows.item_id] %></td>
                       <td><%= rows.type %></td>
-                      <td>
-                        <!-- <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a>
-                        <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a> -->
-                      </td>
+                      <td><%= rows.old %></td>
+                      <td><%= rows.today %></td>
+                      <td><%= rows.sale %></td>
+                      <td><%= rows.remaining %></td>
                     </tr>                
                     <% }); %>
                   <% } else { %>
