@@ -48,4 +48,12 @@ router.post('/getBySubItemId', function(req, res, next) {
   });   
 });
 
+router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
+  req.where = {};
+  models[modelName].getAllValues(req, function (results) {
+    console.log(results)
+    res.render('admin/'+viewDirectory+'/stock_movement', {results, extraVar, helper, layout:'admin/layout/layout' });
+  });   
+});
+
 module.exports = router;
