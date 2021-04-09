@@ -192,7 +192,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
     ], function (err) {
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
-      } else {      
+      } else {  
+        req.body.payment_remaining = req.body.net_amount;    
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
