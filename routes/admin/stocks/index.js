@@ -180,19 +180,51 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
             if(invoiceItemsObj[val.sub_item_id+'_'+val.type]){
               invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity']) + parseInt(val.quantity);
               invoiceItemsObj[val.sub_item_id+'_'+val.type] = invoiceItemsObj[val.sub_item_id+'_'+val.type];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseInt(val.quantity);
+              } else {
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseInt(val.quantity);
+              }
               // invoiceItemsObj[val.sub_item_id+'_'+val.type] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]) + parseInt(val.quantity);
             } else {
+              // invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
+              // invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseInt(val.quantity);
               invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
               invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseInt(val.quantity);
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = 0;
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseInt(val.quantity);
+              } else {
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseInt(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseInt(val.quantity);
+              }
             }
           } else {
             if(invoiceItemsObj[val.item_id+'_'+val.type]) {
               invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]['quantity']) + parseInt(val.quantity);
               invoiceItemsObj[val.item_id+'_'+val.type] = invoiceItemsObj[val.item_id+'_'+val.type];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseInt(val.quantity);
+              } else {
+                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseInt(val.quantity);
+              }
               // invoiceItemsObj[val.item_id+'_'+val.type] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]) + parseInt(val.quantity);
             } else {
+              // invoiceItemsObj[val.item_id+'_'+val.type] = {};
+              // invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseInt(val.quantity);
               invoiceItemsObj[val.item_id+'_'+val.type] = {};
               invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseInt(val.quantity);
+              invoiceItemsObj[val.item_id+'_'+val.type]['today'] = 0;
+              invoiceItemsObj[val.item_id+'_'+val.type]['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseInt(val.quantity);
+              } else {
+                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseInt(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseInt(val.quantity);
+              }
             }            
           }
         });
@@ -219,23 +251,27 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
   ], function (err) {
 
     let stockIn = {...purchaseItemsObj, ...productionItemsObj};
-    // console.log('in', stockIn);
-    // console.log('out', invoiceItemsObj);
+    console.log('in', stockIn);
+    console.log('out', invoiceItemsObj);
     let remainingStock = [];
     async.forEachOf(stockIn, function (value, key, cb){
       let tmpObj = {};
       let arr = key.split('_');
       tmpObj.item_id = arr[0];
       tmpObj.type = arr[1];
-      tmpObj.today = value.today;
-      tmpObj.old = value.old;
+      tmpObj.todayIn = value.today;
+      tmpObj.oldIn = value.old;
       
 
       if(invoiceItemsObj[key]){
         tmpObj.sale = parseInt(invoiceItemsObj[key]['quantity']);
+        tmpObj.oldOut = parseInt(invoiceItemsObj[key]['old']);
+        tmpObj.todayOut = parseInt(invoiceItemsObj[key]['today']);
         tmpObj.remaining = parseInt(value.quantity) - parseInt(invoiceItemsObj[key]['quantity']);
       } else {
         tmpObj.sale = 0;
+        tmpObj.oldOut = 0;
+        tmpObj.todayOut = 0;
         tmpObj.remaining = value.quantity;
       }
       remainingStock.push(tmpObj);
@@ -245,7 +281,7 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
         console.error(err);
         callback();
       } else {
-        console.error("next", itemKeyValue);
+        console.error("next", remainingStock);
         extraVar['remainingStock'] = remainingStock;
         extraVar['itemKeyValue'] = itemKeyValue;
         res.render('admin/'+viewDirectory+'/stock_movement', {extraVar, helper, layout:'admin/layout/layout' });

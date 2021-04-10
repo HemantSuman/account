@@ -808,14 +808,13 @@ router.get('/print/:id', function(req, res, next) {
             let options = {
               "format": "A4", 
               // "orientation": "portrait",
-              // "height": "11.25in",
               // "width": "8.5in",
-              // "header": {
-              //     "height": "20mm"
-              // },
-              // "footer": {
-              //     "height": "20mm",
-              // },
+              "header": {
+                  "height": "30mm"
+              },
+              "footer": {
+                  "height": "40mm",
+              },
             };
             pdf.create(data, options).toFile("public/invoices/report.pdf", function (err, data) {
                 if (err) {

@@ -6,8 +6,7 @@
         <h1 class="m-0 text-dark">List <%=extraVar['viewDirectory']%></h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
-        <a href="/admin/<%= extraVar.viewDirectory %>/stock_movement" class="btn btn-primary float-right">Stock Movement</a>
-        <a href="/admin/<%= extraVar.viewDirectory %>/add" class="btn btn-primary float-right">Add</a>
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
       </div><!-- /.col -->
     </div><!-- /.row -->
   </div><!-- /.container-fluid -->
@@ -35,6 +34,8 @@
                 <th>Opening</th>
                 <th>Purchase(Today)</th>
                 <th>Sale</th>
+                <th>Sale(Today)</th>
+                <!-- <th>Sale</th> -->
                 <th>Remaining</th>
               </tr>
               </thead>
@@ -45,9 +46,11 @@
                       <td><%= ++index %></td>
                       <td><%= extraVar.itemKeyValue[rows.item_id] %></td>
                       <td><%= rows.type %></td>
-                      <td><%= rows.old %></td>
-                      <td><%= rows.today %></td>
-                      <td><%= rows.sale %></td>
+                      <td><%= rows.oldIn %></td>
+                      <td><%= rows.todayIn %></td>
+                      <td><%= rows.oldOut %></td>
+                      <td><%= rows.todayOut %></td>
+                      <!-- <td><%= rows.sale %></td> -->
                       <td><%= rows.remaining %></td>
                     </tr>                
                     <% }); %>

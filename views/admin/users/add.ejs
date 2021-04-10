@@ -24,18 +24,30 @@
           <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/add">
             <div class="card-body">
               <div class="row">
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
                     <label for="">First Name</label>
                     <input name="first_name" type="text" class="form-control" placeholder="">
                     <div class="first_name-error-message error-message"></div>
                   </div>
                 </div>
-                <div class="col-sm-6">
+                <div class="col-sm-4">
                   <div class="form-group">
                     <label for="">Last Name</label>
                     <input name="last_name" type="text" class="form-control" placeholder="">
                     <div class="last_name-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Roles</label>
+                    <select name="role_id" class="form-control select2 buyerAccount">
+                      <option value="">Select Role</option>
+                      <% extraVar.results.roles.forEach(function(data){ %>
+                        <option value="<%= data.id %>"><%= data.name %></option>
+                      <% }); %>                  
+                    </select>
+                    <div class="role_id-error-message error-message"></div>
                   </div>
                 </div>
               </div>

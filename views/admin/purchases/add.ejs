@@ -114,37 +114,34 @@
                         <h3 class="card-title">Item Detail</h3>
                       </div>
                       <div class="card-body">
-                        <div class="row itemHead">
+                        <!-- <div class="row itemHead">
                           <div class="col-sm-2">
                             <label for="">Item</label>
                           </div>
                           <div class="col-sm-2">
                             <label for="">Sub Item</label>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">No.</label>
                           </div>
-                          <!-- <div class="col-sm-1">
-                            <label for="">Unit</label>
-                          </div> -->
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">Quantity</label>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">Rate</label>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">GST</label>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">Item GST</label>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">Item value</label>
                           </div>
                           <div class="col-sm-2">
                           </div>
-                        </div>
+                        </div> -->
                         <div class="gridTable itemDiv">                          
                         </div>
                       </div>
@@ -152,6 +149,7 @@
                         <div class="row">
                             <div class="col-sm-2">
                                 <div class="form-group">
+                                  <small><b>Item: </b></small>
                                   <select class="form-control select2 selectItem item_item_id_" indexValue="0">
                                     <option value="">Select Items</option>
                                     <% extraVar.results.items.forEach(function(data){ %>
@@ -164,15 +162,17 @@
                             </div>
                             <div class="col-sm-2">
                                 <div class="form-group">
+                                  <small><b>Sub Item: </b></small>
                                   <select class="form-control select2 item_sub_item_id_ selectSubItem selectSubItem_0">                                              
                                   </select>
                                   <div class="item_sub_item_id_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
-                                    <div class="item_no_of_pkg_-error-message error-message"></div>
+                                  <small><b>No.: </b></small>
+                                  <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_" placeholder="">
+                                  <div class="item_no_of_pkg_-error-message error-message"></div>
                                 </div>
                             </div>
                             <!-- <div class="col-sm-1">
@@ -185,32 +185,37 @@
                                 <div class="item_unit_-error-message error-message"></div>
                               </div>
                             </div> -->
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
-                                    <div class="item_quantity_-error-message error-message"></div>
+                                  <small><b>Quantity: </b></small>
+                                  <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                  <div class="item_quantity_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemRate item_rate_" placeholder="">
-                                    <div class="item_rate_-error-message error-message"></div>
+                                  <small><b>Rate: </b></small>
+                                  <input type="text" class="form-control itemRate item_rate_" placeholder="">
+                                  <div class="item_rate_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" class="form-control itemGst item_gst_" placeholder="">
-                                    <div class="item_gst_-error-message error-message"></div>
+                                  <small><b>GST: </b></small>
+                                  <input type="text" class="form-control itemGst item_gst_" placeholder="">
+                                  <div class="item_gst_-error-message error-message"></div>
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control item_gst_amount_" placeholder="">
+                                  <small><b>Item GST: </b></small>
+                                  <input type="text" disabled class="form-control item_gst_amount_" placeholder="">
                                 </div>
                             </div>
-                            <div class="col-sm-1">
+                            <div class="col-sm-2">
                                 <div class="form-group">
-                                    <input type="text" disabled class="form-control item_value_" placeholder="">
+                                  <small><b>Item Value: </b></small>
+                                  <input type="text" disabled class="form-control item_value_" placeholder="">
                                 </div>
                             </div>
                             <div class="col-sm-2">
@@ -446,11 +451,11 @@
         }
         subItemOptions += "<option " + selectedSubItem + " value='"+ this.value +"'>"+this.text+"</option>";
       });
-      let selectSubItemHtml = "<select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
+      let selectSubItemHtml = "<small><b>Sub Item: </b></small><select disabled onchange='subItemName(this, "+itemIndexValue+")' class='form-control select2 selectSubItem_"+itemIndexValue+" item_sub_item_id_"+itemIndexValue+"'>"+subItemOptions+"</select>";
       selectSubItemHtml += "<input class='sub_item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue2+"' name='item["+itemIndexValue+"][sub_item_id]' >";
       
 
-      let selectHtml = "<select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
+      let selectHtml = "<small><b>Item: </b></small><select disabled indexValue='"+itemIndexValue+"' onchange='itemName(this, "+itemIndexValue+")' class='form-control select2 selectItem item_item_id_"+itemIndexValue+"'>"+itemOptions+"</select>";
       selectHtml += "<input class='item_name_hidden_"+itemIndexValue+"' type='hidden' value='"+selectedValue1+"' name='item["+itemIndexValue+"][item_id]' >";
       
       let itemHtml = "<div class='row itemRow'>";
@@ -461,32 +466,32 @@
       
       itemHtml += "<div class='col-sm-2'><div class='form-group'>"+selectSubItemHtml+"<div class='item_sub_item_id_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>No.: </b></small><input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       // itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       // itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_"+itemIndexValue+"'>"+unitOptions+"</select>";
       // itemHtml += "<div class='item_unit_1-error-message error-message'></div></div></div>";
 
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>Quantity: </b></small><input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][rate]' type='number' value='"+itemRate+"' class='form-control rate item_rate_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>Rate: </b></small><input readonly name='item["+itemIndexValue+"][rate]' type='number' value='"+itemRate+"' class='form-control rate item_rate_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_rate_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][gst]' type='number' value='"+itemGst+"' class='form-control gst item_gst_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>GST: </b></small><input readonly name='item["+itemIndexValue+"][gst]' type='number' value='"+itemGst+"' class='form-control gst item_gst_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_gst_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input disabled type='number' class='form-control gstAmount item_gst_amount_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>Item GST: </b></small><input disabled type='number' class='form-control gstAmount item_gst_amount_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "</div></div>";
       
-      itemHtml += "<div class='col-sm-1'><div class='form-group'>";
-      itemHtml += "<input disabled type='number' class='form-control itemValue item_value_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+      itemHtml += "<small><b>Item Value: </b></small><input disabled type='number' class='form-control itemValue item_value_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "</div></div>";
 
       itemHtml += "<div class='col-sm-2 ' style='display: flex;align-items: center;'>";

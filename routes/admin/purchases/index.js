@@ -361,7 +361,7 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
   }, function (err, results) {
       extraVar['results'] = results;
       extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
-      console.log("####",extraVar.results.my_model.OtherTaxes);
+      console.log("####",extraVar.results.my_model.PurchaseItems);
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
 });

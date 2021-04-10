@@ -22,7 +22,7 @@
     <ul class="nav nav-pills nav-sidebar flex-column" data-widget="treeview" role="menu" data-accordion="false">
       <!-- Add icons to the links using the .nav-icon class
            with font-awesome or any other icon font library -->
-           <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['groups']['view'] == 1){%>
+           <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['groups'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['groups']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/groups" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -32,7 +32,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['brands']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['brands'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['brands']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/brands" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -42,7 +42,7 @@
         </a>        
       </li>
       <% } %>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['states']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['states'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['states']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/states" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -52,7 +52,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['categories']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['categories'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['categories']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/categories" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -62,7 +62,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['companies']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['companies'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['companies']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/companies" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -72,7 +72,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['accounts']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['accounts'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['accounts']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/accounts" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -82,7 +82,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['items']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['items'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['items']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/items" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -92,7 +92,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['invoices']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['invoices'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['invoices']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/invoices" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -102,7 +102,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['taxes']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['taxes'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['taxes']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/taxes" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -112,7 +112,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['purchases']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['purchases'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['purchases']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/purchases" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -122,7 +122,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['productions']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['productions'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['productions']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/productions" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -132,7 +132,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['stocks']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['stocks'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['stocks']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/stocks" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -142,7 +142,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/payments" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -152,7 +152,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments_received']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments_received'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['payments_received']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/payments_received" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -162,7 +162,7 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payment_modes']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['payment_modes'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['payment_modes']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/payment_modes" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
@@ -172,12 +172,22 @@
         </a>        
       </li>
       <%}%>
-      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['roles']['view'] == 1){%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['roles'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['roles']['view'] == 1){%>
       <li class="nav-item">
         <a href="/admin/roles" class="nav-link">
           <i class="nav-icon fas fa-edit"></i>
           <p>
             Roles
+          </p>
+        </a>        
+      </li>
+      <%}%>
+      <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['users'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['users']['view'] == 1){%>
+      <li class="nav-item">
+        <a href="/admin/users" class="nav-link">
+          <i class="nav-icon fas fa-edit"></i>
+          <p>
+            Users
           </p>
         </a>        
       </li>

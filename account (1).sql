@@ -79,3 +79,7 @@ CHANGE `updatedAt` `updatedAt` date NULL AFTER `createdAt`;
 ALTER TABLE `users`
 CHANGE `createdAt` `createdAt` date NULL AFTER `status`,
 CHANGE `updatedAt` `updatedAt` date NULL AFTER `createdAt`;
+
+
+INSERT INTO `modules` (`name`, `slug`, `createdAt`, `updatedAt`)
+VALUES ('Users', 'users', now(), now());

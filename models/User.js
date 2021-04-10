@@ -35,6 +35,14 @@ module.exports = function (sequelize, DataTypes) {
         },
         last_name: {
             type: DataTypes.STRING,
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
+        },
+        role_id: {
+            type: DataTypes.STRING,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')

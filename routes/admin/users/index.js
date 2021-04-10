@@ -41,15 +41,9 @@ router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), func
 
 router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   async.parallel({
-    groups: function (callback) {
-        req.where = {}
-        models.Group.getAllValues(req, function (data) {
-            callback(null, data);
-        });
-    },
-    states: function (callback) {
+    roles: function (callback) {
       req.where = {}
-      models.State.getAllValues(req, function (data) {
+      models.Role.getAllValues(req, function (data) {
           callback(null, data);
       });
     },
