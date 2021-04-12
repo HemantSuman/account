@@ -1,5 +1,6 @@
 var createError = require('http-errors');
 var express = require('express');
+var cors = require('cors')
 var bodyParser = require('body-parser')
 var expressLayouts = require('express-ejs-layouts');
 var path = require('path');
@@ -37,6 +38,7 @@ var flash = require('express-flash');
 const session = require('express-session');
 var sessionStore = new session.MemoryStore;
 var app = express();
+app.use(cors());
 require('./middlewares/passport')(passport);
 
 // view engine setup
