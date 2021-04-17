@@ -17,6 +17,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         code: {
             type: DataTypes.STRING,
             validate: {
@@ -109,13 +117,15 @@ module.exports = function (sequelize, DataTypes) {
     {
       tableName: 'accounts',
   });  
-  myModel.getAllValues = function (req, res) {
-    this.findAll({where: req.where})
+    myModel.getAllValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
+        this.findAll({where: req.where})
         .then(function(results){
             res(results);
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

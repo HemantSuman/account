@@ -17,6 +17,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         purchase_invoice_no: {
             type: DataTypes.STRING,  
             validate: {
@@ -220,6 +228,8 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'purchases',
   });  
   myModel.getAllValues = function (req, res) {
+    console.log("!!!!!!!", req.siteVariable)
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
     var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
@@ -240,6 +250,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         var purchaseToPurchaseItems = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
         var purchaseToOtherTax = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'purchase_id'});
         this.findOne({where: req.where, 
@@ -252,6 +263,7 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
     myModel.getPurchasesByAccount = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
         this.findAll({where: req.where,
             include: [

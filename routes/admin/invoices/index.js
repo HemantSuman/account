@@ -151,7 +151,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
               value1.sub_item_id = null;
             }
 
-            let reqS1 = {};
+            let reqS1 = Object.assign({}, req);
             reqS1.where = {
               type: value1.type,
               item_id: value1.item_id,
@@ -193,7 +193,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
       } else {  
-        req.body.payment_remaining = req.body.net_amount;    
+        req.body.payment_remaining = req.body.net_amount;  
+        req.body.company_id = extraVar.siteVariable.session.user.Company.id;  
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
@@ -257,7 +258,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   if(typeof  value1 != "undefined"){
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
-                      let reqS1 = {};
+                      let reqS1 = Object.assign({}, req);
                       reqS1.where = {sub_item_id: value1.sub_item_id, type: value1.type}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
@@ -473,7 +474,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
       //         value1.sub_item_id = null;
       //       }
 
-      //       let reqS1 = {};
+      //       let reqS1 = Object.assign({}, req);
       //       reqS1.where = {
       //         item_id: value1.item_id,
       //         sub_item_id: value1.sub_item_id,
@@ -512,7 +513,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
       },
       function (callback) {
         if (errors.length == 0) {
-          let reqS1 = {}
+          let reqS1 = Object.assign({}, req);
           reqS1.where = {id: req.body.id};
           models[modelName].getAllValues(reqS1, function (data2) {
             // console.log("%%%", data2);return;
@@ -618,41 +619,41 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                   if(typeof  value1 != "undefined"){
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
-                      let reqS1 = {};
+                      let reqS1 = Object.assign({}, req);
                       reqS1.where = {sub_item_id: value1.sub_item_id, type: value1.type}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
                         if(data1){
                           console.log("sub exist");
                           let stockDataUpdate = {};
-                          if(previousInvoiceItemValue[data.sub_item_id+'-'+data.type]){
+                          if(previousInvoiceItemValue[data1.sub_item_id+'-'+data1.type]){
 
                             console.log("&&&133");
-                            let tmpPre = parseInt(previousInvoiceItemValue[data.item_id+'-'+data.type]);
+                            let tmpPre = parseInt(previousInvoiceItemValue[data1.item_id+'-'+data1.type]);
                             let tmpPost = parseInt(value1.quantity);
                             let qty = 0;
                             console.log("&&&133", tmpPre , tmpPost);
                             if(tmpPre > tmpPost){
-                              qty = parseInt(data.quantity) + parseInt(tmpPre - tmpPost);
+                              qty = parseInt(data1.quantity) + parseInt(tmpPre - tmpPost);
                             } else if(tmpPre < tmpPost){
-                              qty = parseInt(data.quantity) - parseInt(tmpPost - tmpPre);
+                              qty = parseInt(data1.quantity) - parseInt(tmpPost - tmpPre);
                             } else {
-                              qty = parseInt(data.quantity);
+                              qty = parseInt(data1.quantity);
                             }
 
                             stockDataUpdate.body = {
-                              id: data.id,
+                              id: data1.id,
                               quantity: qty,
-                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
                             };
                             console.log('exist33', stockDataUpdate);
                           } else {
                             console.log("&&&2333");
                             
                             stockDataUpdate.body = {
-                              id: data.id,
-                              quantity: parseInt(data.quantity) - parseInt(value1.quantity),
-                              no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
+                              id: data1.id,
+                              quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
+                              no_of_pkg: parseInt(data1.no_of_pkg) - parseInt(value1.no_of_pkg),
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {

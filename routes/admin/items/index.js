@@ -152,6 +152,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved d failed', data: errors});
       } else {
+        req.body.company_id = extraVar.siteVariable.session.user.Company.id;
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
@@ -183,6 +184,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                 async.forEachOf(req.body.subItem, function (value1, key, callback1) {
                   if(typeof  value1 != "undefined"){
                     value1.item_id = results.id;
+                    value1.company_id = extraVar.siteVariable.session.user.Company.id;
                     bulkData.push(value1);                  
                   }
                   callback1(null);
@@ -388,6 +390,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                     } else {
                       console.log("2222")
                       value1.item_id = req.body.id;
+                      value1.company_id = extraVar.siteVariable.session.user.Company.id;
                       bulkData.push(value1);
                       callback1(null);
                     }                                       

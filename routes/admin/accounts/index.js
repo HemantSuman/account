@@ -79,7 +79,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar),  
     ], function (err) {
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved d failed', data: errors});
-      } else {        
+      } else {       
+        req.body.company_id = extraVar.siteVariable.session.user.Company.id;
         models[modelName].saveAllValues(req, function (results) {
           if(results.headerStatus) {
             req.session.sessionFlash = {

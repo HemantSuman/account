@@ -25,6 +25,14 @@ module.exports = function (sequelize, DataTypes) {
             //     },   
             // }          
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         brand_id: {
             type: DataTypes.INTEGER,
             validate: {
@@ -62,6 +70,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'productions',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var brandToProduction = myModel.belongsTo(sequelize.models.Brand, {foreignKey: 'brand_id'});
     this.findAll({where: req.where, 
             include: [
@@ -74,6 +83,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

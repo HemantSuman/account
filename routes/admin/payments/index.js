@@ -121,6 +121,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
         payentArr.body.pay_mode = req.body.pay_mode;
         payentArr.body.pay_amount = req.body.pay_amount;
         payentArr.body.remark = req.body.remark;
+        payentArr.body.company_id = extraVar.siteVariable.session.user.Company.id;
         models[modelName].saveAllValues(payentArr, function (results3) {
 
           req.where = {
@@ -146,6 +147,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   payObj.purchase_id = value1.id;
                   payObj.payment_id = results3.id;
                   payObj.pay_amount = value1.payment_remaining;
+                  payObj.company_id = extraVar.siteVariable.session.user.Company.id;
   
                   payentPur.push(payObj);
                   remainingAmt = remainingAmt - parseFloat(value1.payment_remaining);
@@ -162,6 +164,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   payObj.purchase_id = value1.id;
                   payObj.payment_id = results3.id;
                   payObj.pay_amount = remainingAmt;                  
+                  payObj.company_id = extraVar.siteVariable.session.user.Company.id;                  
   
                   purchaseObj.body.payment_status = "partial";
                   purchaseObj.body.payment_remaining = parseFloat(parseFloat(value1.payment_remaining) - parseFloat(remainingAmt)).toFixed(2);

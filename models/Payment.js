@@ -25,6 +25,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         pay_date: {
             type: DataTypes.DATE,
             validate: {
@@ -57,6 +65,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'payments',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var accountToPayment = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     this.findAll({where: req.where, 
         include: [
@@ -68,6 +77,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

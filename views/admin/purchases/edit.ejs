@@ -174,7 +174,12 @@
                                   <div class="form-group">
                                     <small><b>Sub Item: </b></small>
                                     <select disabled onchange="subItemName(this, <%=index%>)" class="form-control select2 selectSubItem_<%=index%> item_sub_item_id_<%=index%>" >
-                                        <option value="">Select Sub Item</option>
+                                      <option value="">Select Sub Item</option>
+                                      <% if(extraVar.results.itemsSubItem[item.item_id] && extraVar.results.itemsSubItem[item.item_id].length){ %>
+                                        <% extraVar.results.itemsSubItem[item.item_id].forEach(function(data){ %>
+                                          <option <%= data.id == item.sub_item_id ? 'selected' : '' %> value="<%= data.id%>"><%= data.name%></option>
+                                        <% }); %>
+                                      <% } %>
                                     </select>
                                     <input class="sub_item_name_hidden_<%=index%>" type="hidden" value="<%= item.sub_item_id%>" name="item[<%=index%>][sub_item_id]">
                                     <div class="item_sub_item_id_<%=index%>-error-message error-message"></div>
@@ -234,11 +239,11 @@
                               <div class="col-sm-2 " style="display: flex;align-items: center;">
                                   <!-- <button onclick="removeItems(this)" type="button" class="btn btn-danger float-right">
                                       <i class="fas fa-times"></i>
-                                  </button>
+                                  </button> -->
                                   &nbsp;<button onclick="editItems(this)" type="button" itemindexvalue="<%=index%>" class="btn btn-danger float-right editItemsBtn_<%=index%>">Edit</button>
                                   &nbsp;<button style="display:none;" itemindexvalue="" onclick="updateItems(this)" type="button" class="btn btn-info updateItemsBtn_<%=index%>">
                                       <i class="fas fa-plus"></i> Update Item
-                                      </button> -->
+                                      </button>
                               </div>
                             </div>     
                           <% }); %>             

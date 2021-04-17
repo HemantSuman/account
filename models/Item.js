@@ -17,6 +17,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         item_name: {
             type: DataTypes.STRING,
             validate: {
@@ -48,7 +56,12 @@ module.exports = function (sequelize, DataTypes) {
             type: DataTypes.STRING,            
         },
         gstin: {
-            type: DataTypes.STRING,            
+            type: DataTypes.STRING,  
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }          
         },
         status: {
             type: DataTypes.INTEGER,
@@ -58,12 +71,15 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'items',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var itemToCategory = myModel.belongsTo(sequelize.models.Category, {foreignKey: 'category_id'});
+    var itemToSub = myModel.hasMany(sequelize.models.SubItem, {foreignKey: 'item_id'});
     this.findAll({
         where: req.where, 
         order: ['item_name'],
         include: [
-            itemToCategory
+            itemToCategory,
+            itemToSub
         ]
     })
         .then(function(results){
@@ -71,6 +87,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         var itemToSubItem = myModel.hasMany(sequelize.models.SubItem, {foreignKey: 'item_id'});
         var itemToFinishedItem = myModel.hasMany(sequelize.models.FinishedItem, {foreignKey: 'item_id'});
         this.findOne({where: req.where,

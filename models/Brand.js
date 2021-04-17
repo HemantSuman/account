@@ -19,18 +19,28 @@ module.exports = function (sequelize, DataTypes) {
                 //     msg: i18n_Validation.__('Please_Enter', 'Valid Email Address')
                 // },
             }
-        }
+        },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
     },
     {
       tableName: 'brands',
   });  
     myModel.getAllValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findAll({where: req.where})
             .then(function(results){
                 res(results);
             })
     }
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

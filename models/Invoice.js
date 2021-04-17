@@ -17,6 +17,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         // account_no: {
         //     type: DataTypes.STRING,
         // },
@@ -203,6 +211,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'invoices',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
     this.findAll({where: req.where, 
         include: [
@@ -215,6 +224,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
         var otherTaxToInvoice = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'invoice_id'});
         // if( !myModel.hasAlias('Consignee') ){
@@ -237,6 +247,7 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
     myModel.getInvoiceByAccount = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         var paymentToInvoice = myModel.hasMany(sequelize.models.PaymentReceivedInvoice, {foreignKey: 'invoice_id'});
         this.findAll({where: req.where,
             include: [

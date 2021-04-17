@@ -21,6 +21,7 @@ var adminAuth = require('../../../middlewares/Auth');
 router.use(adminAuth.isLogin);
 
 router.use(function(req, res, next) {
+  console.log("@@@@@@@@", req.siteVariable);
   extraVar['siteVariable'] = req.siteVariable;
   next();
 });
@@ -149,6 +150,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
       } else {
         // console.log("@@@", taxObj);return;
         req.body.payment_remaining = req.body.total_value;
+        req.body.company_id = extraVar.siteVariable.session.user.Company.id;
         models[modelName].saveAllValues(req, function (results) {
 
           async.parallel([
@@ -214,7 +216,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                   if(typeof  value1 != "undefined"){
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
-                      let reqS1 = {};
+                      let reqS1 = Object.assign({}, req);
                       reqS1.where = {sub_item_id: value1.sub_item_id, type: "purchase"}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
@@ -337,7 +339,18 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
     items: function (callback) {
       req.where = {}
       models.Item.getAllValues(req, function (data) {
+        console.log("$$$$$$$", data)
           callback(null, data);
+      });
+    },    
+    itemsSubItem: function (callback) {
+      req.where = {}
+      models.Item.getAllValues(req, function (data) {
+        let itemsSubItem = {};
+        data.map(function(v, i){
+          itemsSubItem[v.id] = v.SubItems;
+        })
+        callback(null, itemsSubItem);
       });
     },    
     accounts: function (callback) {
@@ -361,7 +374,7 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
   }, function (err, results) {
       extraVar['results'] = results;
       extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
-      console.log("####",extraVar.results.my_model.PurchaseItems);
+      console.log("####",results.itemsSubItem['67']);
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
 });
@@ -442,7 +455,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
       },
       function (callback) {
         if (errors.length == 0) {
-          let reqS1 = {}
+          let reqS1 = Object.assign({}, req);
           reqS1.where = {id: req.body.id};
           models[modelName].getAllValues(reqS1, function (data2) {
             data2[0].PurchaseItems.map(function(val2){
@@ -524,6 +537,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                         value1.sub_item_id = null;
                       }
                       value1.purchase_id = req.body.id;
+                      value1.company_id = extraVar.siteVariable.session.user.Company.id;
                       bulkData1.push(value1); 
                       callback1();
                     }                                     
@@ -550,26 +564,26 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                   if(typeof  value1 != "undefined"){
 
                     if(value1.sub_item_id && value1.sub_item_id != ""){
-                      let reqS1 = {};
+                      let reqS1 = Object.assign({}, req);
                       reqS1.where = {sub_item_id: value1.sub_item_id, type: "purchase"}
                       models.Stock.getFirstValues(reqS1, function (data1) {
 
                         if(data1){
-                          console.log("sub exist");
-                          if(previousPurchaseItemValue[data.item_id]){
-
-                            let tmpPre = parseInt(previousPurchaseItemValue[data.item_id]);
+                          console.log("sub exist", previousPurchaseItemValue[data1.sub_item_id]);
+                          let stockDataUpdate = {};
+                          if(previousPurchaseItemValue[data1.sub_item_id]){
+                            console.log("sub exist22222222")
+                            let tmpPre = parseInt(previousPurchaseItemValue[data1.sub_item_id]);
                             let tmpPost = parseInt(value1.quantity);
                             let qty = 0;
                             
                             if(tmpPre > tmpPost){
-                              qty = parseInt(data.quantity) - parseInt(tmpPre - tmpPost);
+                              qty = parseInt(data1.quantity) - parseInt(tmpPre - tmpPost);
                             } else if(tmpPre < tmpPost){
-                              qty = parseInt(data.quantity) + parseInt(tmpPost - tmpPre);
+                              qty = parseInt(data1.quantity) + parseInt(tmpPost - tmpPre);
                             } else {
-                              qty = parseInt(data.quantity);
+                              qty = parseInt(data1.quantity);
                             }
-                            let stockDataUpdate = {};
                             stockDataUpdate.body = {
                               id: data1.id,
                               item_id: value1.item_id,
@@ -578,8 +592,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               quantity: qty,
                               no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
                             };
+                            console.log("sub exist22222222", stockDataUpdate)
                           } else {
-                            let stockDataUpdate = {};
                             stockDataUpdate.body = {
                               id: data1.id,
                               item_id: value1.item_id,
@@ -589,7 +603,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
                             };
                           }
-                          
+                          console.log("sub exist3333", stockDataUpdate)
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
                           });
@@ -610,7 +624,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                         // callback(null, data);
                       });
                     } else {
-                      let reqS = {};
+                      let reqS = Object.assign({}, req);
                       console.log('value1value1', value1);
                       reqS.where = {item_id: value1.item_id, sub_item_id: null, type: "purchase"}
                       models.Stock.getFirstValues(reqS, function (data) {
