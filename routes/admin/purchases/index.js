@@ -252,7 +252,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         // callback(null, data);
                       });
                     } else {
-                      let reqS = {};
+                      let reqS = Object.assign({}, req);
                       console.log('value1value1', value1);
                       reqS.where = {item_id: value1.item_id, sub_item_id: null, type: "purchase"}
                       models.Stock.getFirstValues(reqS, function (data) {

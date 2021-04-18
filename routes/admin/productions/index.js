@@ -182,7 +182,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                     }
                   });
                 } else {
-                  let reqS = {};
+                  let reqS = Object.assign({}, req);
                   console.log('value1value1', req.body);
                   reqS.where = {item_id: req.body.item_id, sub_item_id: null, type: "production"}
                   models.Stock.getFirstValues(reqS, function (data) {
