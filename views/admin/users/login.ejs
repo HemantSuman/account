@@ -137,7 +137,7 @@
         },
         method: 'post',
         success: function(response){
-          $(".overlay").show();
+          $(".overlay").hide();
           if(response.status){
             window.location.href = '/admin' + '/' + response.url;
             //bootstrapNotify.showMessage(response.msg,'success');

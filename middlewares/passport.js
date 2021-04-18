@@ -86,27 +86,31 @@ module.exports = function (passport) {
 
             console.log(req.body.company_id)
             models.User.getUserByEmail(email, function (rows) {
-                req.where = {id: req.body.company_id};
-                models.Company.getFirstValues(req, function (rows1) {
-                    let results = {};
-                    results.User = rows;
-                    results.Company = rows1;
-                    permissionModuleObj = {};
-                    rows.Role.Permissions.map(function(val){
-                        permissionModuleObj[val.Module.slug] = val;
+                if(rows){
+                    req.where = {id: req.body.company_id};
+                    models.Company.getFirstValues(req, function (rows1) {
+                        let results = {};
+                        results.User = rows;
+                        results.Company = rows1;
+                        permissionModuleObj = {};
+                        rows.Role.Permissions.map(function(val){
+                            permissionModuleObj[val.Module.slug] = val;
+                        });
+                        results.permissionModuleObj = permissionModuleObj;
+                        // console.log("@@@@@", permissionModuleObj)
+                        if (!results) {
+                            return done(null, false, 'Invaild login details');
+                        } else if (!bcrypt.compareSync(password, results.User.password)) {
+
+                            return done(null, false, 'Invaild login details');
+                        } else {
+                            return done(null, results);
+                        }
+
                     });
-                    results.permissionModuleObj = permissionModuleObj;
-                    // console.log("@@@@@", permissionModuleObj)
-                    if (!results) {
-                        return done(null, false, 'Invaild login details');
-                    } else if (!bcrypt.compareSync(password, results.User.password)) {
-
-                        return done(null, false, 'Invaild login details');
-                    } else {
-                        return done(null, results);
-                    }
-
-                });
+                } else {
+                    return done(null, false, 'Invaild login details');
+                }              
             });
 
         })
