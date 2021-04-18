@@ -24,7 +24,15 @@ module.exports = function (sequelize, DataTypes) {
                     msg: i18n_Validation.__('required')
                 },   
             }
-        },        
+        },    
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },    
         pay_amount: {
             type: DataTypes.STRING,
             validate: {
@@ -38,6 +46,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'payments_received_invoices',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var accountToPayment = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'consignee_no'});
     this.findAll({where: req.where, 
         include: [
@@ -49,6 +58,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

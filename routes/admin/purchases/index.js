@@ -243,6 +243,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,
+                            company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
                             callback1();
@@ -279,6 +280,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,
+                            company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
                             callback1();
@@ -616,6 +618,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,
+                            company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
                             callback1();
@@ -679,6 +682,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
                             no_of_pkg: value1.no_of_pkg,
+                            company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
                             callback1();

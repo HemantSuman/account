@@ -25,6 +25,14 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         quantity: {
             type: DataTypes.INTEGER,
             validate: {
@@ -49,6 +57,7 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'stocks',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     var itemToStock = myModel.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     var itemSubToStock = myModel.belongsTo(sequelize.models.SubItem, {foreignKey: 'sub_item_id'});
 
@@ -63,6 +72,7 @@ module.exports = function (sequelize, DataTypes) {
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

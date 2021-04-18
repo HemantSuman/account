@@ -174,6 +174,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
                         no_of_pkg: req.body.no_of_pkg,
+                        company_id: extraVar.siteVariable.session.user.Company.id
                       };
                       models.Stock.saveAllValues(stockData, function (results){
                         callback();
@@ -206,6 +207,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
                         no_of_pkg: req.body.no_of_pkg,
+                        company_id: extraVar.siteVariable.session.user.Company.id
                       };
                       models.Stock.saveAllValues(stockData, function (results){
                         callback();
