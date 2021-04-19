@@ -57,11 +57,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         gstin: {
             type: DataTypes.STRING,  
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }          
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }          
         },
         status: {
             type: DataTypes.INTEGER,

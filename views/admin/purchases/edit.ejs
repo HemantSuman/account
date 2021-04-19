@@ -757,9 +757,9 @@
       let otherTax = 0;
       $(".tcs_value option:selected").each(function(val, index){
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((totalPrice * parseFloat($(this).attr("percentage"))) / 100) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((total_value * parseFloat($(this).attr("percentage"))) / 100) + ", ";
       })
-      withTcs = (totalPrice * otherTax) / 100;
+      withTcs = (total_value * otherTax) / 100;
       $(".otherTaxInfo").html(otherTaxInfo);
       total_value = parseFloat(total_value + withTcs);
     } else {

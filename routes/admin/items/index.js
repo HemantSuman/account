@@ -85,6 +85,9 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
       req.body.finishedItem = [];
       req.body.subItem = [];
     }
+    if(!req.body.gstin){
+      req.body.gstin = 0;
+    }
     async.parallel([
       function (callback) {
 
