@@ -233,6 +233,7 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
       });      
     },
     function (callback) {
+      req.where = {};
       models['Item'].getAllValues(req, function (data2) {
         data2.map(function(val2){
           itemKeyValue[val2.id] = val2.item_name;
@@ -241,6 +242,7 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
       });     
     },
     function (callback) {
+      req.where = {};
       models['SubItem'].getAllValues(req, function (data2) {
         data2.map(function(val2){
           itemKeyValue[val2.id] = val2.name;

@@ -31,6 +31,14 @@ module.exports = function (sequelize, DataTypes) {
         sub_item_id: {
             type: DataTypes.INTEGER,  
         },
+        company_id: {
+            type: DataTypes.INTEGER,
+            validate: {
+                notEmpty: {
+                    msg: i18n_Validation.__('required')
+                },   
+            }
+        },
         description: {
             type: DataTypes.STRING,
             validate: {
@@ -100,12 +108,14 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'invoice_items',
   });  
   myModel.getAllValues = function (req, res) {
+    req.where.company_id = req.siteVariable.session.user.Company.id;
     this.findAll({where: req.where})
         .then(function(results){
             res(results);
         })
     }    
     myModel.getFirstValues = function (req, res) {
+        req.where.company_id = req.siteVariable.session.user.Company.id;
         this.findOne({where: req.where}).then(function (results) {
             res(results);
         });

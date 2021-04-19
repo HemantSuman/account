@@ -235,6 +235,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       value1.sub_item_id = null;
                     }
                     value1.invoice_id = results.id;
+                    value1.company_id = extraVar.siteVariable.session.user.Company.id;
                     bulkData1.push(value1);                  
                   }
                   callback1();
@@ -243,6 +244,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                     console.error(err.message);
                     callback();
                   } else {
+                    console.log("^^^^^^^^^", bulkData1)
                     models.InvoiceItem.saveAllBulkValues(bulkData1, function (results){
                       callback();
                     });
@@ -279,7 +281,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         // callback(null, data);
                       });
                     } else {
-                      let reqS = {};
+                      let reqS = Object.assign({}, req);
                       console.log('value1value1', value1);
                       reqS.where = {item_id: value1.item_id, sub_item_id: null, type: value1.type}
                       models.Stock.getFirstValues(reqS, function (data) {
@@ -584,6 +586,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                       if(tmpData.body.sub_item_id === ""){
                         tmpData.body.sub_item_id = null;
                       }
+                      tmpData.body.company_id = extraVar.siteVariable.session.user.Company.id;
                       models.InvoiceItem.updateAllValues(tmpData, function (results) {
                         callback1(null);
                       });
@@ -592,6 +595,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                         value1.sub_item_id = null;
                       }
                       value1.invoice_id = req.body.id;
+                      value1.company_id = extraVar.siteVariable.session.user.Company.id;
                       bulkData1.push(value1);
                       callback1();
                     }

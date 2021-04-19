@@ -193,6 +193,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       value1.sub_item_id = null;
                     }
                     value1.purchase_id = results.id;
+                    value1.company_id = extraVar.siteVariable.session.user.Company.id;
                     bulkData1.push(value1);                  
                   }
                   callback1();
@@ -497,6 +498,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                       tmpObj.purchase_id = req.body.id;
                       tmpObj.tax_id = value1;
                       tmpObj.percentage = taxObj[value1];
+                      tmpObj.company_id = extraVar.siteVariable.session.user.Company.id;
                       bulkData1.push(tmpObj);                  
                     }
                     callback1();
