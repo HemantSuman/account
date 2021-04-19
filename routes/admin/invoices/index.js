@@ -372,6 +372,16 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
           callback(null, data);
       });
     },
+    itemsSubItem: function (callback) {
+      req.where = {}
+      models.Item.getAllValues(req, function (data) {
+        let itemsSubItem = {};
+        data.map(function(v, i){
+          itemsSubItem[v.id] = v.SubItems;
+        })
+        callback(null, itemsSubItem);
+      });
+    }, 
     accounts: function (callback) {
         req.where = {}
         models.Account.getAllValues(req, function (data) {

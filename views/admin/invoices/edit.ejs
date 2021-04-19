@@ -248,7 +248,12 @@
                                   <div class="form-group">
                                       <small><b>Sub Item: </b></small>
                                       <select disabled indexvalue="<%= index%>" onchange="subItemName(this, <%= index%>)" class="form-control select2 selectSubItem selectSubItem_<%= index%> item_sub_item_id_<%= index%>">
-                                          <option selected="" value="">Select Sub Item</option>
+                                        <option value="">Select Sub Item</option>
+                                        <% if(extraVar.results.itemsSubItem[item.item_id] && extraVar.results.itemsSubItem[item.item_id].length){ %>
+                                          <% extraVar.results.itemsSubItem[item.item_id].forEach(function(data){ %>
+                                            <option <%= data.id == item.sub_item_id ? 'selected' : '' %> value="<%= data.id%>"><%= data.name%></option>
+                                          <% }); %>
+                                        <% } %>  
                                       </select>
                                       <input class="sub_item_name_hidden_<%= index%>" type="hidden" value="<%= item.sub_item_id%>" name="item[<%= index%>][sub_item_id]">
                                       <div class="item_sub_item_id_<%= index%>-error-message error-message"></div>
