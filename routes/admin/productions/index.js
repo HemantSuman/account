@@ -112,10 +112,13 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
         async.forEachOf(req.body.items, function (value1, key, callback1) {
           let reqS1 = Object.assign({}, req);
           reqS1.where = {
-            item_id: value1.item_id,
-            quantity: {
-              [Op.gte]: value1.quantity
-            }
+          item_id: value1.item_id,
+            [Op.and]: [
+              models.sequelize.literal("cast(quantity as SIGNED) >= "+value1.quantity),
+            ],
+            // quantity: {
+            //   [Op.gte]: value1.quantity
+            // }
           }
           models.Stock.getFirstValues(reqS1, function (data1) {
             if(!data1){
@@ -159,8 +162,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       let stockDataUpdate = {};
                       stockDataUpdate.body = {
                         id: data1.id,
-                        quantity: parseInt(data1.quantity) + parseInt(req.body.quantity),
-                        no_of_pkg: parseInt(data1.no_of_pkg) + parseInt(req.body.no_of_pkg),
+                        quantity: parseFloat(data1.quantity) + parseFloat(req.body.quantity),
+                        no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(req.body.no_of_pkg),
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -192,8 +195,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       let stockDataUpdate = {};
                       stockDataUpdate.body = {
                         id: data.id,
-                        quantity: parseInt(data.quantity) + parseInt(req.body.quantity),
-                        no_of_pkg: parseInt(data.no_of_pkg) + parseInt(req.body.no_of_pkg),
+                        quantity: parseFloat(data.quantity) + parseFloat(req.body.quantity),
+                        no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(req.body.no_of_pkg),
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -225,16 +228,19 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                 let reqS1 = Object.assign({}, req);
                 reqS1.where = {
                   item_id: value1.item_id,
-                  quantity: {
-                    [Op.gte]: value1.quantity
-                  }
+                  [Op.and]: [
+                    models.sequelize.literal("cast(quantity as SIGNED) >= "+value1.quantity),
+                  ],
+                  // quantity: {
+                  //   [Op.gte]: value1.quantity
+                  // }
                 }
                 models.Stock.getFirstValues(reqS1, function (data1) {
                   if(data1){
                     let stockDataUpdate = {};
                     stockDataUpdate.body = {
                       id: data1.id,
-                      quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
+                      quantity: parseFloat(data1.quantity) - parseFloat(value1.quantity),
                     };
                     models.Stock.updateAllValues(stockDataUpdate, function (results) {
                       callback1();

@@ -156,9 +156,12 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
               type: value1.type,
               item_id: value1.item_id,
               sub_item_id: value1.sub_item_id,
-              quantity: {
-                [Op.gte]: value1.quantity
-              }
+              [Op.and]: [
+                models.sequelize.literal("cast(quantity as SIGNED) >= "+value1.quantity),
+              ],
+              // quantity: {
+              //   [Op.gte]: value1.quantity
+              // }
             }
             models.Stock.getFirstValues(reqS1, function (data1) {
               if(!data1){
@@ -269,8 +272,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           let stockDataUpdate = {};
                           stockDataUpdate.body = {
                             id: data1.id,
-                            quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
-                            no_of_pkg: parseInt(data1.no_of_pkg) - parseInt(value1.no_of_pkg),
+                            quantity: parseFloat(data1.quantity) - parseFloat(value1.quantity),
+                            no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
@@ -291,8 +294,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           let stockDataUpdate = {};
                           stockDataUpdate.body = {
                             id: data.id,
-                            quantity: parseInt(data.quantity) - parseInt(value1.quantity),
-                            no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
+                            quantity: parseFloat(data.quantity) - parseFloat(value1.quantity),
+                            no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
@@ -644,21 +647,21 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
 
                             console.log("&&&133");
                             let tmpPre = parseInt(previousInvoiceItemValue[data1.item_id+'-'+data1.type]);
-                            let tmpPost = parseInt(value1.quantity);
+                            let tmpPost = parseFloat(value1.quantity);
                             let qty = 0;
                             console.log("&&&133", tmpPre , tmpPost);
                             if(tmpPre > tmpPost){
-                              qty = parseInt(data1.quantity) + parseInt(tmpPre - tmpPost);
+                              qty = parseFloat(data1.quantity) + parseFloat(tmpPre - tmpPost);
                             } else if(tmpPre < tmpPost){
-                              qty = parseInt(data1.quantity) - parseInt(tmpPost - tmpPre);
+                              qty = parseFloat(data1.quantity) - parseFloat(tmpPost - tmpPre);
                             } else {
-                              qty = parseInt(data1.quantity);
+                              qty = parseFloat(data1.quantity);
                             }
 
                             stockDataUpdate.body = {
                               id: data1.id,
                               quantity: qty,
-                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data1.no_of_pkg),
+                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
                             };
                             console.log('exist33', stockDataUpdate);
                           } else {
@@ -666,8 +669,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             
                             stockDataUpdate.body = {
                               id: data1.id,
-                              quantity: parseInt(data1.quantity) - parseInt(value1.quantity),
-                              no_of_pkg: parseInt(data1.no_of_pkg) - parseInt(value1.no_of_pkg),
+                              quantity: parseFloat(data1.quantity) - parseFloat(value1.quantity),
+                              no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
@@ -690,15 +693,15 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                           if(previousInvoiceItemValue[data.item_id+'-'+data.type]){
                             console.log("&&&1");
                             let tmpPre = parseInt(previousInvoiceItemValue[data.item_id+'-'+data.type]);
-                            let tmpPost = parseInt(value1.quantity);
+                            let tmpPost = parseFloat(value1.quantity);
                             let qty = 0;
                             console.log("&&&1", tmpPre , tmpPost);
                             if(tmpPre > tmpPost){
-                              qty = parseInt(data.quantity) + parseInt(tmpPre - tmpPost);
+                              qty = parseFloat(data.quantity) + parseFloat(tmpPre - tmpPost);
                             } else if(tmpPre < tmpPost){
-                              qty = parseInt(data.quantity) - parseInt(tmpPost - tmpPre);
+                              qty = parseFloat(data.quantity) - parseFloat(tmpPost - tmpPre);
                             } else {
-                              qty = parseInt(data.quantity);
+                              qty = parseFloat(data.quantity);
                             }
 
                             stockDataUpdate.body = {
@@ -707,7 +710,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                               quantity: qty,
-                              no_of_pkg: parseInt(value1.no_of_pkg) + parseInt(data.no_of_pkg),
+                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
                             };
                             console.log('exist', stockDataUpdate);
                           } else {
@@ -718,8 +721,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               item_id: value1.item_id,
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                              quantity: parseInt(data.quantity) - parseInt(value1.quantity),
-                              no_of_pkg: parseInt(data.no_of_pkg) - parseInt(value1.no_of_pkg),
+                              quantity: parseFloat(data.quantity) - parseFloat(value1.quantity),
+                              no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {

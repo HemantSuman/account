@@ -206,7 +206,7 @@
     let qty = $(".qty").val();
     $(".itemRow").each(function(index, value){
       let tempQty = $(".quantity_hidden_"+index, value).val();
-      $(".quantity_"+index, value).val(tempQty * qty);
+      $(".quantity_"+index, value).val((tempQty * qty).toFixed(2));
     });
   }
 
