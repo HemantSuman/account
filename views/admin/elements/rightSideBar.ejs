@@ -84,6 +84,18 @@
             </a>        
           </li>
         <%}%>
+
+        <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['users'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['users']['view'] == 1){%>
+          <li class="nav-item">
+            <a href="/admin/users" class="nav-link">
+              <i class="nav-icon fas fa-edit"></i>
+              <p>
+                Users
+              </p>
+            </a>        
+          </li>
+        <%}%>
+        
         <% if(extraVar['siteVariable']['session']['user']['permissionModuleObj']['roles'] && extraVar['siteVariable']['session']['user']['permissionModuleObj']['roles']['view'] == 1){%>
           <li class="nav-item">
             <a href="/admin/roles" class="nav-link">

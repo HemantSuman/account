@@ -114,7 +114,6 @@ module.exports = function (sequelize, DataTypes) {
         // if(req.body.order === ''){
         //     req.body.order = 0;
         // }
-        console.log("update", req.body)
         myModel.update(req.body, {where: {id: req.body.id}}).then(function (results) {
             results.headerStatus = true;
             res(results);

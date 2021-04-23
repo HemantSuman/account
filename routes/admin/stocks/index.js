@@ -49,6 +49,107 @@ router.post('/getBySubItemId', function(req, res, next) {
   });   
 });
 
+router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
+  async.parallel({
+    stockItemObj: function (callback) {
+      req.where = {}
+      models[modelName].getAllValues(req, function (data) {
+        stockItemObj = {};
+        data.map(function(val, index){
+          if(val.sub_item_id){
+            stockItemObj[val.sub_item_id+"_"+val.type] = val;
+          } else{
+            stockItemObj[val.item_id+"_"+val.type] = val;
+          }            
+        });
+        callback(null, stockItemObj);
+      });
+    },
+    items: function (callback) {
+      req.where = {}
+      models.Item.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },    
+    subItems: function (callback) {
+      req.where = {}
+      models.SubItem.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },    
+    // itemsSubItem: function (callback) {
+    //   req.where = {}
+    //   models.Item.getAllValues(req, function (data) {
+    //     let itemsSubItem = {};
+    //     data.map(function(v, i){
+    //       itemsSubItem[v.id] = v.SubItems;
+    //     })
+    //     callback(null, itemsSubItem);
+    //   });
+    // },
+  }, function (err, results) {
+      extraVar['results'] = results;
+      // extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
+      console.log("####",results);
+      res.render('admin/' + viewDirectory + '/add', {extraVar, layout: 'admin/layout/layout'});
+  });
+});
+
+router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
+  ImageUpload.uploadFile(req, res, function (err) {
+    console.log(req.body)
+    const addStockArr = [];
+    async.forEachOf(req.body.id, function (value1, key, callback) {
+
+      if(value1 !== ""){
+        let stockDataUpdate = {};
+        stockDataUpdate.body = {
+          id: value1,
+          quantity: req.body.quantity[key],
+          type: req.body.type[key],
+        };
+        console.log("stockDataUpdate",stockDataUpdate);
+        models.Stock.updateAllValues(stockDataUpdate, function (results) {
+          callback();
+        });
+
+      } else if(req.body.quantity[key] != "") {
+        let tempObj = {};
+
+        tempObj.item_id = req.body.item_id[key];
+        tempObj.sub_item_id = (req.body.sub_item_id[key] == '' ? null : req.body.sub_item_id[key]);
+        tempObj.company_id = extraVar.siteVariable.session.user.Company.id;
+        tempObj.quantity = req.body.quantity[key];
+        tempObj.no_of_pkg = 1;
+        tempObj.type = req.body.type[key];
+        addStockArr.push(tempObj);
+        callback();
+      } else {
+        callback();
+      }
+
+    }, function (err) {
+      console.log("$$$", addStockArr)
+      models.Stock.saveAllBulkValues(addStockArr, function (results){
+        if(results.headerStatus){
+          req.session.sessionFlash = {
+            type: 'success',
+            message: 'New record created successfully!'
+          }
+          res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+        } else {
+          req.session.sessionFlash = {
+            type: 'error',
+            message: 'errorrr ............'
+          }
+          res.status(200).send({status: false, url: '/admin/' + viewDirectory});
+        }
+      });
+    });
+
+  });
+});
+
 router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   let purchaseItemsObj = {};
   let productionItemsObj = {};
