@@ -253,7 +253,7 @@
                       </div>
                       <div class="sameStates" style="display: none;"> 
                         <div class="row">
-                          <div class="col-sm-3">
+                          <div class="col-sm-6">
                             <div class="form-group">
                               <label for="">CGST Amount</label>
                               <input name="cgst_amount" type="number" class="cgstAmount form-control"  placeholder="">
@@ -263,7 +263,7 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-sm-3">
+                          <div class="col-sm-6">
                             <div class="form-group">
                               <label for="">SGST Amount</label>
                               <input name="sgst_amount" type="number" class="sgstAmount form-control"  placeholder="">
@@ -274,7 +274,7 @@
                       </div>
 
                       <div class="row diffStates" style="display: none;">
-                        <div class="col-sm-3">
+                        <div class="col-sm-6">
                           <div class="form-group">
                             <label for="">IGST Amount</label>
                             <input name="igst_amount" type="number" class="igstAmount form-control"  placeholder="">
@@ -624,13 +624,13 @@
       let gst = parseFloat($(".gst", val).val());
       totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
       let gstPerItem = ((rate * qty) * gst) / 100;
-      $(".gstAmount", val).val(gstPerItem);
+      $(".gstAmount", val).val(setFloatValAfterDecimal(gstPerItem, 4));
       totalGST = totalGST + gstPerItem;
-      $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
+      $(".itemValue", val).val(setFloatValAfterDecimal(parseFloat(rate * qty) + parseFloat(gstPerItem), 4))
       
     });
-    $(".taxableValue").val(totalPrice);
-    $(".totalGST").val(totalGST);
+    $(".taxableValue").val(setFloatValAfterDecimal(totalPrice, 4));
+    $(".totalGST").val(setFloatValAfterDecimal(totalGST, 4));
 
     let total_value = parseFloat(totalPrice + totalGST);
 
@@ -644,11 +644,11 @@
 
         $(".sameStates").show();
         $(".diffStates").hide();
-        $(".cgstAmount").val(totalGST / 2);
-        $(".sgstAmount").val(totalGST / 2);
+        $(".cgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 4));
+        $(".sgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 4));
         $(".igstAmount").val("");
       } else {
-        $(".igstAmount").val(totalGST);
+        $(".igstAmount").val(setFloatValAfterDecimal(totalGST, 4));
         $(".cgstAmount").val("");
         $(".sgstAmount").val("");
         $(".diffStates").show();
@@ -662,7 +662,7 @@
       let otherTax = 0;
       $(".tcs_value option:selected").each(function(val, index){
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((total_value * parseFloat($(this).attr("percentage"))) / 100) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat((total_value * parseFloat($(this).attr("percentage"))) / 100), 4) + ", ";
       })
       withTcs = (total_value * otherTax) / 100;
       total_value = parseFloat(total_value + withTcs);
@@ -670,7 +670,7 @@
     } else {
       $(".otherTaxInfo").html("");
     }
-    $(".total_value").val(total_value);
+    $(".total_value").val(setFloatValAfterDecimal(total_value, 4));
   }
 
   $(document).ready(function() {

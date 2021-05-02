@@ -32,6 +32,7 @@ var paymentsRouter = require('./routes/admin/payments');
 var paymentModesRouter = require('./routes/admin/payment_modes');
 var rolesRouter = require('./routes/admin/roles');
 var paymentsReceivedRouter = require('./routes/admin/payments_received');
+var reportsRouter = require('./routes/admin/reports');
 var loginRouter = require('./routes/admin/login');
 var logoutRouter = require('./routes/admin/logout');
 var flash = require('express-flash');
@@ -103,6 +104,7 @@ app.use('/admin/payments', paymentsRouter);
 app.use('/admin/payment_modes', paymentModesRouter);
 app.use('/admin/roles', rolesRouter);
 app.use('/admin/payments_received', paymentsReceivedRouter);
+app.use('/admin/reports', reportsRouter);
 // 
 
 // start socket server

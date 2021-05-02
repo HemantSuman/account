@@ -210,12 +210,22 @@ module.exports = function (sequelize, DataTypes) {
     {
       tableName: 'invoices',
   });  
+
+    myModel.associate = (models) => {
+        myModel.belongsTo(sequelize.models.Account, {foreignKey: 'consignee_no', as: 'Consignee'});
+    };
+
   myModel.getAllValues = function (req, res) {
     req.where.company_id = req.siteVariable.session.user.Company.id;
     var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
+    // if( !myModel.hasAlias('Consignee') ){
+        // var consigneeToInvoice = myModel.belongsTo(sequelize.models.Account, {as: "Consignee", foreignKey: 'consignee_no'});
+    // }
     this.findAll({where: req.where, 
         include: [
-            invoiceItemToInvoice
+            invoiceItemToInvoice,
+            {model: sequelize.models.Account, as: 'Consignee'}
+            // consigneeToInvoice
         ],
         order: req.order
     })

@@ -3,7 +3,6 @@ function MyModelClass() {
 
     this.Permission = function (action, moduleSlug, extraVar) {
         return function (req, res, next) {
-            console.log("#@#@", moduleSlug, action, req.siteVariable.session.user.permissionModuleObj[moduleSlug]);
             if(req.siteVariable.session.user.permissionModuleObj[moduleSlug] && req.siteVariable.session.user.permissionModuleObj[moduleSlug][action] == 1){
                 next()
             } else {

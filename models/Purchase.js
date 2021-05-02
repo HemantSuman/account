@@ -3,6 +3,7 @@ var i18n_Validation = new (require('i18n-2'))({
   // setup some locales - other locales default to the first locale
   locales: ['en_valiation']
 });
+var moment = require('moment');
 
 i18n_Validation.setLocale('en_valiation');
 
@@ -35,6 +36,13 @@ module.exports = function (sequelize, DataTypes) {
         },
         purchase_invoice_date: {
             type: DataTypes.DATE,
+            get() {
+                console.log("4111")
+                if(this.getDataValue('purchase_invoice_date') && typeof this.getDataValue('purchase_invoice_date') !== "undefined"){
+                    return moment(this.getDataValue('purchase_invoice_date'), "YYYY-MM-DD").format("DD-MM-YYYY");
+                }
+                return null;
+            },
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
@@ -227,6 +235,9 @@ module.exports = function (sequelize, DataTypes) {
     {
       tableName: 'purchases',
   });  
+//   myModel.associate = (models) => {
+//     myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id', as: 'aaa'});
+//   };
   myModel.getAllValues = function (req, res) {
     console.log("!!!!!!!", req.siteVariable)
     req.where.company_id = req.siteVariable.session.user.Company.id;
@@ -237,6 +248,7 @@ module.exports = function (sequelize, DataTypes) {
     this.findAll({
             where: req.where,
             include: [
+                // {model: sequelize.models.Account, as: 'aaa'}
                 accountToPurchae,
                 purchaseItemToPurchae,
                 paymentToPurchae

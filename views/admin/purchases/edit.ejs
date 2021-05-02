@@ -719,13 +719,13 @@
       let gst = parseFloat($(".gst", val).val());
       totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
       let gstPerItem = ((rate * qty) * gst) / 100;
-      $(".gstAmount", val).val(gstPerItem);
+      $(".gstAmount", val).val(setFloatValAfterDecimal(gstPerItem, 4));
       totalGST = totalGST + gstPerItem;
-      $(".itemValue", val).val(parseFloat(rate * qty) + parseFloat(gstPerItem))
+      $(".itemValue", val).val(setFloatValAfterDecimal(parseFloat(rate * qty) + parseFloat(gstPerItem), 4))
       
     });
-    $(".taxableValue").val(totalPrice);
-    $(".totalGST").val(totalGST);
+    $(".taxableValue").val(setFloatValAfterDecimal(totalPrice, 4));
+    $(".totalGST").val(setFloatValAfterDecimal(totalGST, 4));
 
     let total_value = parseFloat(totalPrice + totalGST);
 
@@ -739,11 +739,11 @@
 
         $(".sameStates").show();
         $(".diffStates").hide();
-        $(".cgstAmount").val(totalGST / 2);
-        $(".sgstAmount").val(totalGST / 2);
+        $(".cgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 4));
+        $(".sgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 4));
         $(".igstAmount").val("");
       } else {
-        $(".igstAmount").val(totalGST);
+        $(".igstAmount").val(setFloatValAfterDecimal(totalGST, 4));
         $(".cgstAmount").val("");
         $(".sgstAmount").val("");
         $(".diffStates").show();
@@ -757,11 +757,11 @@
       let otherTax = 0;
       $(".tcs_value option:selected").each(function(val, index){
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + parseFloat((total_value * parseFloat($(this).attr("percentage"))) / 100) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat((total_value * parseFloat($(this).attr("percentage"))) / 100), 4) + ", ";
       })
       withTcs = (total_value * otherTax) / 100;
       $(".otherTaxInfo").html(otherTaxInfo);
-      total_value = parseFloat(total_value + withTcs);
+      total_value = parseFloat(setFloatValAfterDecimal(total_value + withTcs, 4));
     } else {
       $(".otherTaxInfo").html("");
     }
