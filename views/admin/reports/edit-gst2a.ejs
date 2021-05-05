@@ -1,0 +1,198 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Edit GST2a</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>/gst2a" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <ol class="breadcrumb float-sm-left">
+          <li class="breadcrumb-item"><a href="#">Home</a></li>
+          <li class="breadcrumb-item active">Dashboard v2</li>
+        </ol>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div> 
+<!-- /.content-header -->
+<section class="content">
+  <div class="container-fluid">
+    <div class="row">
+      <!-- left column -->
+      <div class="col-md-12">
+        <!-- general form elements -->
+        <div class="card card-primary">
+          <!-- <div class="card-header">
+            <h3 class="card-title">Edit <%=extraVar['modelName']%></h3>
+          </div> -->
+          <!-- /.card-header -->
+          <!-- form start -->
+          <form method="post" id="formId" action="/admin/<%=extraVar.viewDirectory%>/edit-gst2a">
+            <input type='hidden' name='id' value='<%= extraVar.results.my_model.id %>'>
+            <div class="card-body">
+              <div class="row">                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Buyer Account</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.Account.account_name %>" class="form-control" id="" >
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice No.</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.purchase_invoice_no %>" class="form-control" id="" >
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Purchase Invoice Date</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.purchase_invoice_date %>" class="form-control date1" >
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">GST In</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.Account.gstin %>" class="form-control date1" >
+                  </div>
+                </div>              
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">Total Value</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.total_value %>" class="form-control date1" >
+                  </div>
+                </div>  
+                <% if(extraVar.results.my_model.igst_amount){ %>            
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">IGST</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.igst_amount %>" class="form-control date1" >
+                  </div>
+                </div>  
+                <% } %>    
+                <% if(extraVar.results.my_model.cgst_amount){ %>          
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">CGST</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.cgst_amount %>" class="form-control date1" >
+                  </div>
+                </div>  
+                <% } %>  
+                <% if(extraVar.results.my_model.sgst_amount){ %>          
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">SGST</label>
+                    <input disabled type="text" value="<%= extraVar.results.my_model.sgst_amount %>" class="form-control date1" >
+                  </div>
+                </div>  
+                <% } %>              
+              </div>   
+              
+              <div class="row">
+                
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">ITC Mon/Yr</label>
+                    <input name="itc" type="month" value="<%= extraVar.results.my_model.itc %>" class="form-control" >
+                    <div class="itc-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">GST2A Mon/Yr</label>
+                    <input name="gst2a" type="month" value="<%= extraVar.results.my_model.gst2a %>" class="form-control" >
+                    <div class="gst2a-error-message error-message"></div>
+                  </div>
+                </div>
+                <div class="col-sm-4">
+                  <div class="form-group">
+                    <label for="">GST Receive Amt</label>
+                    <input name="gst_receive_amt" type="text" value="<%= extraVar.results.my_model.gst_receive_amt %>" class="form-control" >
+                    <div class="gst_receive_amt-error-message error-message"></div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <!-- /.card-body -->
+
+            <div class="card-footer">
+              <button type="submit" class="btn btn-primary submitBtn">Submit</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <!--/.col (left) -->
+    </div>
+    <!-- /.row -->
+  </div><!-- /.container-fluid -->
+</section>
+<script src="/admin/plugins/summernote/summernote-bs4.min.js"></script>
+<script type="text/javascript">
+
+  $(document).ready(function() {
+    // $.notify(data.message, { className:"success",position:"bottom right" });
+    var formId = 'formId';
+    $(document).on('click', '.submitBtn', function(){
+      $('.error-message').html('');
+      $('#'+formId).validate({
+        rules: {
+          name: {
+            // required: true,
+          }
+        },
+        messages: {
+          name: {
+            required: "This field is required!",
+          },
+        },
+        errorElement: 'span',
+        errorPlacement: function (error, element) {
+          error.addClass('invalid-feedback');
+          element.closest('.form-group').append(error);
+        },
+        highlight: function (element, errorClass, validClass) {
+          $(element).addClass('is-invalid');
+        },
+        unhighlight: function (element, errorClass, validClass) {
+          $(element).removeClass('is-invalid');
+        },
+        submitHandler: function(form) {
+
+          var form = $('#'+formId);
+          errorFieldObj = [];
+          $.ajax({
+            url: $('#'+formId).attr('action'),
+            type: 'POST',
+            dataType: "json",
+            data: new FormData(form[0]),
+            processData: false,
+            contentType: false,
+            cache: false,
+            success: function (data, status)
+            {
+              if (data.status) {
+                window.location.href = data.url;
+              }
+            },
+            error: function (xhr, desc, err)
+            {
+              xhr.responseJSON.data.map(function(val){
+                console.log(val)
+                if(!errorFieldObj.includes(val.path)){
+                  
+                  $('.'+val.path+'-error-message').html(val.message)
+                  errorFieldObj.push(val.path)
+                }
+              })
+
+            }
+          })
+        }
+      });
+    });
+  });
+</script>

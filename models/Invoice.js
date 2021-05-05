@@ -5,6 +5,7 @@ var i18n_Validation = new (require('i18n-2'))({
 });
 
 i18n_Validation.setLocale('en_valiation');
+var moment = require('moment');
 
 module.exports = function (sequelize, DataTypes) {
   var myModel = sequelize.define("Invoice",
@@ -30,6 +31,12 @@ module.exports = function (sequelize, DataTypes) {
         // },
         date: {
             type: DataTypes.DATEONLY,
+            get() {
+                if(this.getDataValue('date') && typeof this.getDataValue('date') !== "undefined"){
+                    return moment(this.getDataValue('date'), "YYYY-MM-DD").format("DD-MM-YYYY");
+                }
+                return null;
+            },
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')

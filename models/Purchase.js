@@ -37,7 +37,6 @@ module.exports = function (sequelize, DataTypes) {
         purchase_invoice_date: {
             type: DataTypes.DATE,
             get() {
-                console.log("4111")
                 if(this.getDataValue('purchase_invoice_date') && typeof this.getDataValue('purchase_invoice_date') !== "undefined"){
                     return moment(this.getDataValue('purchase_invoice_date'), "YYYY-MM-DD").format("DD-MM-YYYY");
                 }
@@ -231,13 +230,22 @@ module.exports = function (sequelize, DataTypes) {
         payment_remaining: {
             type: DataTypes.STRING,
         },
+        itc: {
+            type: DataTypes.STRING,
+        },
+        gst2a: {
+            type: DataTypes.STRING,
+        },
+        gst_receive_amt: {
+            type: DataTypes.STRING,
+        },
     },
     {
       tableName: 'purchases',
   });  
-//   myModel.associate = (models) => {
-//     myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id', as: 'aaa'});
-//   };
+  myModel.associate = (models) => {
+    myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id', as: 'Account'});
+  };
   myModel.getAllValues = function (req, res) {
     console.log("!!!!!!!", req.siteVariable)
     req.where.company_id = req.siteVariable.session.user.Company.id;
@@ -248,7 +256,7 @@ module.exports = function (sequelize, DataTypes) {
     this.findAll({
             where: req.where,
             include: [
-                // {model: sequelize.models.Account, as: 'aaa'}
+                // {model: sequelize.models.Account, as: 'Account'}
                 accountToPurchae,
                 purchaseItemToPurchae,
                 paymentToPurchae
@@ -267,6 +275,7 @@ module.exports = function (sequelize, DataTypes) {
         var purchaseToOtherTax = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'purchase_id'});
         this.findOne({where: req.where, 
             include: [
+                {model: sequelize.models.Account, as: 'Account'},
                 purchaseToPurchaseItems,
                 purchaseToOtherTax
             ]

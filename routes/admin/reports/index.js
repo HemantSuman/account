@@ -100,7 +100,7 @@ router.get('/accounts', function(req, res, next) {
 
 router.get('/gst2a', function(req, res, next) {
   async.parallel({
-    invoices: function (callback) {
+    purchases: function (callback) {
       req.where = {};
       if(req.query.from_date && req.query.to_date){
 
@@ -108,12 +108,12 @@ router.get('/gst2a', function(req, res, next) {
         req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
         req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
         req.where = {
-          date: {
+          purchase_invoice_date: {
             [Op.between]: [req.query.from_date, req.query.to_date],
           }
         };
       }      
-      models.Invoice.getAllValues(req, function (data) {
+      models.Purchase.getAllValues(req, function (data) {
           callback(null, data);
       });
     },            
@@ -121,12 +121,12 @@ router.get('/gst2a', function(req, res, next) {
 
     if(req.query.submit === "print"){
       let writeArr = [];
-      async.forEachOf(results.invoices, function (value, key, callback) {
+      async.forEachOf(results.purchases, function (value, key, callback) {
         let writeObj = {};
-        writeObj["Invoice No."] = value.invoice_no;
-        writeObj["Date"] = value.date;
-        writeObj["Name"] = value.Consignee.account_name;
-        writeObj["GST In"] = value.Consignee.gstin;
+        writeObj["Invoice No."] = value.purchase_invoice_no;
+        writeObj["Date"] = value.purchase_invoice_date;
+        writeObj["Name"] = value.Account.account_name;
+        writeObj["GST In"] = value.Account.gstin;
         writeObj["Total Value"] = value.total_value;
         writeObj["IGST"] = value.igst_amount?parseFloat(value.igst_amount):"";
         writeObj["CGST"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
@@ -161,6 +161,77 @@ router.get('/gst2a', function(req, res, next) {
       res.render('admin/'+viewDirectory+'/gst2a', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
+});
+
+router.get('/edit-gst2a/:id', function(req, res, next) {
+
+  var id = req.params.id;
+  async.parallel({
+    my_model: function (callback) {
+        req.where = {'id': id}
+        models[modelName].getFirstValues(req, function (data) {
+            callback(null, data);
+        });
+    },    
+    accounts: function (callback) {
+        req.where = {}
+        models.Account.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },        
+  }, function (err, results) {
+    console.log("###", results.my_model.Account.gstin)
+      extraVar['results'] = results;
+      extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
+      res.render('admin/' + viewDirectory + '/edit-gst2a', {extraVar, layout: 'admin/layout/layout'});
+  });
+});
+
+router.post('/edit-gst2a', function(req, res, next) {
+  ImageUpload.uploadFile(req, res, function (err) {
+    console.log(req.body);
+    var modelBuild = models[modelName].build(req.body);
+    var errors = [];
+    async.parallel([
+      function (callback) {
+
+        modelBuild.validate()
+        .then(function(){
+          callback(null);
+        })
+        .catch(function (err){
+          if (err != null) {
+              errors = errors.concat(err.errors);
+              callback(null, errors);
+          } else {
+              callback(null, errors);
+          }
+        });        
+      }
+    ], function (err) {
+      if (errors.length > 0) {
+        res.status(400).send({status: false, msg: ' saved d failed', data: errors});
+      } else {
+
+        models[modelName].updateAllValues(req, function (results) {
+          if(results.headerStatus) {
+            req.session.sessionFlash = {
+              type: 'success',
+              message: 'Record updated successfully!'
+            }
+            res.status(200).send({status: true, url: '/admin/' + viewDirectory + '/gst2a'});
+          } else {
+            req.session.sessionFlash = {
+              type: 'success',
+              message: 'errorrr ............'
+            }
+            res.status(200).send({status: true, url: '/admin/' + viewDirectory + '/gst2a'});
+          }
+        });
+      }
+    })
+
+  });  
 });
 
 // router.get('/print', function(req, res, next) {

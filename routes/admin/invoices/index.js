@@ -272,7 +272,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           let stockDataUpdate = {};
                           stockDataUpdate.body = {
                             id: data1.id,
-                            quantity: parseFloat(data1.quantity) - parseFloat(value1.quantity),
+                            quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) - parseFloat(value1.quantity), 4),
                             no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
@@ -294,7 +294,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           let stockDataUpdate = {};
                           stockDataUpdate.body = {
                             id: data.id,
-                            quantity: parseFloat(data.quantity) - parseFloat(value1.quantity),
+                            quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) - parseFloat(value1.quantity), 4),
                             no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
@@ -660,7 +660,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
 
                             stockDataUpdate.body = {
                               id: data1.id,
-                              quantity: qty,
+                              quantity: helper.setFloatValAfterDecimal(qty, 4),
                               no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
                             };
                             console.log('exist33', stockDataUpdate);
@@ -669,7 +669,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             
                             stockDataUpdate.body = {
                               id: data1.id,
-                              quantity: parseFloat(data1.quantity) - parseFloat(value1.quantity),
+                              quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) - parseFloat(value1.quantity), 4),
                               no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
                             };
                           }
@@ -709,7 +709,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               item_id: value1.item_id,
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                              quantity: qty,
+                              quantity: helper.setFloatValAfterDecimal(qty, 4),
                               no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
                             };
                             console.log('exist', stockDataUpdate);
@@ -721,7 +721,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               item_id: value1.item_id,
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
-                              quantity: parseFloat(data.quantity) - parseFloat(value1.quantity),
+                              quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) - parseFloat(value1.quantity), 4),
                               no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
                             };
                           }
@@ -793,6 +793,16 @@ router.get('/print/:id', function(req, res, next) {
             callback(null, data);
         });
     },
+    stateKeyValue: function (callback) {
+        req.where = {}
+        models.State.getAllValues(req, function (data) {
+          let stateKeyValue = {};
+          data.map(function(data) {
+            stateKeyValue[data.id] = data.name;
+          });
+          callback(null, stateKeyValue);
+        });
+    },
     taxKeyValue: function (callback) {
       req.where = {}
       models.Tax.getAllValues(req, function (data) {
@@ -816,7 +826,8 @@ router.get('/print/:id', function(req, res, next) {
     },
   }, function (err, results) {
       extraVar['results'] = results;
-      console.log("####",extraVar.results);
+      extraVar['helper'] = helper;
+      console.log("####",extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].state_id);
       // console.log("##", __dirname)
       ejs.renderFile(path.join('views/admin/invoices/', "invoice-template.ejs"), {extraVar: extraVar}, (err, data) => {
         console.log(err)

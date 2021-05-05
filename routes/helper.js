@@ -28,6 +28,11 @@ function compareDate(dateA, dateB, givenFormate) {
     else if (momentA < momentB) return -1;
     else return 0;
 }
+function setFloatValAfterDecimal(str,val) {
+    str = str.toString();
+    str = str.slice(0, (str.indexOf(".")) + val + 1); 
+    return Number(str);   
+}
 function html(key) {
     return "<div class='form-group'><label>Email address</label><input type='email' class='form-control' id='' placeholder='Enter email'></div>";
     //function body
@@ -39,5 +44,6 @@ module.exports = {
     truncateString,
     html,
     curDate,
-    compareDate
+    compareDate,
+    setFloatValAfterDecimal
 }
