@@ -31,6 +31,71 @@ router.get('/', function(req, res, next) {
   res.redirect('/admin/reports/accounts');
 });
 
+router.get('/sell', function(req, res, next) {
+  async.parallel({
+    invoices: function (callback) {
+      req.where = {};
+      if(req.query.from_date && req.query.to_date){
+
+
+        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        req.where = {
+          date: {
+            [Op.between]: [req.query.from_date, req.query.to_date],
+          }
+        };
+      }      
+      models.Invoice.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },            
+  }, function (err, results) {
+
+    if(req.query.submit === "print"){
+      let writeArr = [];
+      async.forEachOf(results.invoices, function (value, key, callback) {
+        let writeObj = {};
+        writeObj["Invoice No."] = value.invoice_no;
+        writeObj["Date"] = value.date;
+        writeObj["Name"] = value.Consignee.account_name;
+        writeObj["GST In"] = value.Consignee.gstin;
+        writeObj["Total Value"] = value.net_amount;
+        writeObj["IGST"] = value.igst_amount?parseFloat(value.igst_amount):"";
+        writeObj["CGST"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
+        writeObj["SGST"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+        writeArr.push(writeObj);
+        callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          console.log("XXXXXXX", writeArr)
+          const ws = reader.utils.json_to_sheet(writeArr);
+  
+          let wb = reader.utils.book_new();
+          reader.utils.book_append_sheet(wb, ws);
+          reader.writeFile(wb, "public/invoices/sell-report.xlsx");
+          res.redirect("/invoices/sell-report.xlsx");
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.from_date && req.query.to_date){
+        //again convert date format for dispaly input - filled
+        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      console.log("here", req.query, extraVar);
+      res.render('admin/'+viewDirectory+'/sell', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
 router.get('/accounts', function(req, res, next) {
   async.parallel({
     purchases: function (callback) {

@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">List Purchase Report</h1>
+        <h1 class="m-0 text-dark">List Sell Report</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         
@@ -21,7 +21,7 @@
 
       <div class="col-md-12">
         <div class="card card-primary">
-          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/accounts">
+          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/sell">
             <div class="card-body">
                 <div class="row">                
                     <div class="col-sm-3">
@@ -40,7 +40,7 @@
             </div>
             <div class="card-footer">
               <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button>
-              <a href="/admin/reports/accounts" class="btn btn-primary">Clear</a>
+              <a href="/admin/reports/sell" class="btn btn-primary">Clear</a>
               <button type="submit" name="submit" value="print" class="btn btn-primary submitBtn">Print</button>
             </div>
           </form>
@@ -71,14 +71,14 @@
               </tr>
               </thead>
                 <tbody>
-                  <% if(extraVar.results.purchases.length > 0) { %>
-                    <% extraVar.results.purchases.forEach(function(rows, index){ %>
+                  <% if(extraVar.results.invoices.length > 0) { %>
+                    <% extraVar.results.invoices.forEach(function(rows, index){ %>
                     <tr>
                       <td><%= ++index %></td>
-                      <td><%= rows.purchase_invoice_no %></td>
-                      <td><%= rows.purchase_invoice_date %></td>
-                      <td><%= rows.Account.account_name %></td>
-                      <td><%= rows.Account.gstin %></td>
+                      <td><%= rows.invoice_no %></td>
+                      <td><%= rows.date %></td>
+                      <td><%= rows.Consignee.account_name %></td>
+                      <td><%= rows.Consignee.gstin %></td>
                       <td><%= rows.total_value %></td>
                       <td><%= rows.igst_amount?parseFloat(rows.igst_amount):"" %></td>
                       <td><%= rows.cgst_amount?parseFloat(rows.cgst_amount):"" %></td>
