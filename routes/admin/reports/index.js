@@ -56,21 +56,27 @@ router.get('/sell', function(req, res, next) {
       let writeArr = [];
       async.forEachOf(results.invoices, function (value, key, callback) {
         let writeObj = {};
-        writeObj["Invoice No."] = value.invoice_no;
-        writeObj["Date"] = value.date;
+        writeObj["Invoice Number"] = value.invoice_no;
+        writeObj["Invoice Date"] = value.date;
         writeObj["Name"] = value.Consignee.account_name;
-        writeObj["GST In"] = value.Consignee.gstin;
-        writeObj["Total Value"] = value.net_amount;
-        writeObj["IGST"] = value.igst_amount?parseFloat(value.igst_amount):"";
-        writeObj["CGST"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
-        writeObj["SGST"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+        writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
+        writeObj["Invoice Value"] = value.net_amount;
+        writeObj["Rate %"] = value.InvoiceItems[0].gst;
+        writeObj["Taxable Value"] = value.total_GST;
+        writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
+        writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
+        writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+        writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
+        writeObj["Description"] = value.InvoiceItems[0].description;
+        writeObj["UQC"] = '';
+        writeObj["Total Quantity"] = '';
         writeArr.push(writeObj);
         callback();
       }, function (err) {
         if (err) {
           console.error(err.message);
         } else {
-          console.log("XXXXXXX", writeArr)
+          
           const ws = reader.utils.json_to_sheet(writeArr);
   
           let wb = reader.utils.book_new();
@@ -90,7 +96,6 @@ router.get('/sell', function(req, res, next) {
       } else {
         extraVar['query'] = {};
       }
-      console.log("here", req.query, extraVar);
       res.render('admin/'+viewDirectory+'/sell', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
@@ -135,7 +140,6 @@ router.get('/accounts', function(req, res, next) {
         if (err) {
           console.error(err.message);
         } else {
-          console.log("XXXXXXX", writeArr)
           const ws = reader.utils.json_to_sheet(writeArr);
   
           let wb = reader.utils.book_new();
@@ -157,7 +161,6 @@ router.get('/accounts', function(req, res, next) {
       } else {
         extraVar['query'] = {};
       }
-      console.log("here", req.query, extraVar);
       res.render('admin/'+viewDirectory+'/accounts', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
@@ -202,7 +205,6 @@ router.get('/gst2a', function(req, res, next) {
         if (err) {
           console.error(err.message);
         } else {
-          console.log("XXXXXXX", writeArr)
           const ws = reader.utils.json_to_sheet(writeArr);
   
           let wb = reader.utils.book_new();
@@ -222,7 +224,6 @@ router.get('/gst2a', function(req, res, next) {
       } else {
         extraVar['query'] = {};
       }
-      console.log("here", req.query, extraVar.results.invoices);
       res.render('admin/'+viewDirectory+'/gst2a', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
@@ -245,7 +246,6 @@ router.get('/edit-gst2a/:id', function(req, res, next) {
         });
     },        
   }, function (err, results) {
-    console.log("###", results.my_model.Account.gstin)
       extraVar['results'] = results;
       extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
       res.render('admin/' + viewDirectory + '/edit-gst2a', {extraVar, layout: 'admin/layout/layout'});
@@ -254,7 +254,6 @@ router.get('/edit-gst2a/:id', function(req, res, next) {
 
 router.post('/edit-gst2a', function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
-    console.log(req.body);
     var modelBuild = models[modelName].build(req.body);
     var errors = [];
     async.parallel([

@@ -228,9 +228,10 @@ module.exports = function (sequelize, DataTypes) {
     // if( !myModel.hasAlias('Consignee') ){
         // var consigneeToInvoice = myModel.belongsTo(sequelize.models.Account, {as: "Consignee", foreignKey: 'consignee_no'});
     // }
+    InvoiceItemToItem = sequelize.models.InvoiceItem.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({where: req.where, 
         include: [
-            invoiceItemToInvoice,
+            {association: invoiceItemToInvoice, include: [{association: InvoiceItemToItem, include: []}]},
             {model: sequelize.models.Account, as: 'Consignee'}
             // consigneeToInvoice
         ],

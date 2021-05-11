@@ -839,7 +839,7 @@ router.get('/print/:id', function(req, res, next) {
               // "orientation": "portrait",
               // "width": "8.5in",
               "header": {
-                  "height": "50mm"
+                  "height": "55mm"
               },
               "footer": {
                   "height": "40mm",
