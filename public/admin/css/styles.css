@@ -34,3 +34,7 @@
 .itemRow .form-group {
   margin-bottom: 0;
 }
+
+.noWrape {
+  white-space: nowrap;
+}

@@ -130,8 +130,8 @@
       #items {
         clear: both;
         width: 100%;
-        margin: 30px 0 0 0;
-        height: 250px;
+        margin: 0px 0 0 0;
+        /* height: 250px; */
         border: 1px #ccc solid;
         /* border: 1px solid black; */
       }
@@ -362,38 +362,40 @@
         </table>
       </div>
 
-      <table id="items">
-        <tr>
-          <th>No.</th>
-          <th>Item Description</th>
-          <!-- <th>Description</th> -->
-          <th>HSN</th>
-          <th>Quantity</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <!-- <th>GST</th> -->
-        </tr>
-        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
-        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+      <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
+        <table id="items">
+          <tr>
+            <th>No.</th>
+            <th>Item Description</th>
+            <!-- <th>Description</th> -->
+            <th>HSN</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <!-- <th>GST</th> -->
+          </tr>
+          <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+          extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
-        <tr class="item-row">
-          <td class="item-name"><%= ++index%></td>
-          <td class="item-name"><%= rows.Item.item_name%></td>
-          <!-- <td class="item-name"><%= rows.description%></td> -->
-          <td class="item-name"><%= rows.Item.hsn_code%></td>
-          <td class="item-name"><%= rows.quantity%></td>
-          <td class="item-name"><%= rows.rate%></td>
-          <td class="item-name">
-            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
-          </td>
-          <!-- <td class="item-name"><%= rows.gst%>%</td> -->
-        </tr>
-        <% }); %> <% } else { %>
-        <tr class="item-row">
-          <td colspan="13" class="text-center">No Record Found.</td>
-        </tr>
-        <% } %>
-      </table>
+          <tr class="item-row">
+            <td class="item-name"><%= ++index%></td>
+            <td class="item-name"><%= rows.Item.item_name%></td>
+            <!-- <td class="item-name"><%= rows.description%></td> -->
+            <td class="item-name"><%= rows.Item.hsn_code%></td>
+            <td class="item-name"><%= rows.quantity%></td>
+            <td class="item-name"><%= rows.rate%></td>
+            <td class="item-name">
+              <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+            </td>
+            <!-- <td class="item-name"><%= rows.gst%>%</td> -->
+          </tr>
+          <% }); %> <% } else { %>
+          <tr class="item-row">
+            <td colspan="13" class="text-center">No Record Found.</td>
+          </tr>
+          <% } %>
+        </table>
+      </div>
       <table class="table4">
         <tr>
           <td width="60%" class="blank">&nbsp;</td>
@@ -510,38 +512,40 @@
         </table>
       </div>
 
-      <table id="items">
-        <tr>
-          <th>No.</th>
-          <th>Item Description</th>
-          <!-- <th>Description</th> -->
-          <th>HSN</th>
-          <th>Quantity</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <!-- <th>GST</th> -->
-        </tr>
-        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
-        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+      <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
+        <table id="items">
+          <tr>
+            <th>No.</th>
+            <th>Item Description</th>
+            <!-- <th>Description</th> -->
+            <th>HSN</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <!-- <th>GST</th> -->
+          </tr>
+          <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+          extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
-        <tr class="item-row">
-          <td class="item-name"><%= ++index%></td>
-          <td class="item-name"><%= rows.Item.item_name%></td>
-          <!-- <td class="item-name"><%= rows.description%></td> -->
-          <td class="item-name"><%= rows.Item.hsn_code%></td>
-          <td class="item-name"><%= rows.quantity%></td>
-          <td class="item-name"><%= rows.rate%></td>
-          <td class="item-name">
-            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
-          </td>
-          <!-- <td class="item-name"><%= rows.gst%>%</td> -->
-        </tr>
-        <% }); %> <% } else { %>
-        <tr class="item-row">
-          <td colspan="13" class="text-center">No Record Found.</td>
-        </tr>
-        <% } %>
-      </table>
+          <tr class="item-row">
+            <td class="item-name"><%= ++index%></td>
+            <td class="item-name"><%= rows.Item.item_name%></td>
+            <!-- <td class="item-name"><%= rows.description%></td> -->
+            <td class="item-name"><%= rows.Item.hsn_code%></td>
+            <td class="item-name"><%= rows.quantity%></td>
+            <td class="item-name"><%= rows.rate%></td>
+            <td class="item-name">
+              <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+            </td>
+            <!-- <td class="item-name"><%= rows.gst%>%</td> -->
+          </tr>
+          <% }); %> <% } else { %>
+          <tr class="item-row">
+            <td colspan="13" class="text-center">No Record Found.</td>
+          </tr>
+          <% } %>
+        </table>
+      </div>
       <table class="table4">
         <tr>
           <td width="60%" class="blank">&nbsp;</td>
@@ -656,38 +660,40 @@
         </table>
       </div>
 
-      <table id="items">
-        <tr>
-          <th>No.</th>
-          <th>Item Description</th>
-          <!-- <th>Description</th> -->
-          <th>HSN</th>
-          <th>Quantity</th>
-          <th>Rate</th>
-          <th>Amount</th>
-          <!-- <th>GST</th> -->
-        </tr>
-        <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
-        extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
+      <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
+        <table id="items">
+          <tr>
+            <th>No.</th>
+            <th>Item Description</th>
+            <!-- <th>Description</th> -->
+            <th>HSN</th>
+            <th>Quantity</th>
+            <th>Rate</th>
+            <th>Amount</th>
+            <!-- <th>GST</th> -->
+          </tr>
+          <% if(extraVar.results.my_model.InvoiceItems.length > 0) { %> <%
+          extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
-        <tr class="item-row">
-          <td class="item-name"><%= ++index%></td>
-          <td class="item-name"><%= rows.Item.item_name%></td>
-          <!-- <td class="item-name"><%= rows.description%></td> -->
-          <td class="item-name"><%= rows.Item.hsn_code%></td>
-          <td class="item-name"><%= rows.quantity%></td>
-          <td class="item-name"><%= rows.rate%></td>
-          <td class="item-name">
-            <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
-          </td>
-          <!-- <td class="item-name"><%= rows.gst%>%</td> -->
-        </tr>
-        <% }); %> <% } else { %>
-        <tr class="item-row">
-          <td colspan="13" class="text-center">No Record Found.</td>
-        </tr>
-        <% } %>
-      </table>
+          <tr class="item-row">
+            <td class="item-name"><%= ++index%></td>
+            <td class="item-name"><%= rows.Item.item_name%></td>
+            <!-- <td class="item-name"><%= rows.description%></td> -->
+            <td class="item-name"><%= rows.Item.hsn_code%></td>
+            <td class="item-name"><%= rows.quantity%></td>
+            <td class="item-name"><%= rows.rate%></td>
+            <td class="item-name">
+              <%= parseFloat(rows.quantity) * parseFloat(rows.rate)%>
+            </td>
+            <!-- <td class="item-name"><%= rows.gst%>%</td> -->
+          </tr>
+          <% }); %> <% } else { %>
+          <tr class="item-row">
+            <td colspan="13" class="text-center">No Record Found.</td>
+          </tr>
+          <% } %>
+        </table>
+      </div>
       <table class="table4">
         <tr>
           <td width="60%" class="blank">&nbsp;</td>
