@@ -683,7 +683,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                         // callback(null, data);
                       });
                     } else {
-                      let reqS = {};
+                      let reqS = Object.assign({}, req);
                       console.log('value1value1', value1);
                       reqS.where = {item_id: value1.item_id, sub_item_id: null, type: value1.type}
                       models.Stock.getFirstValues(reqS, function (data) {
@@ -872,14 +872,178 @@ router.get('/print/:id', function(req, res, next) {
 
 router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
   var id = req.params.id;
-  req.where = {'id': id};
-  models[modelName].deleteAllValues(req, function (data) {
-    req.session.sessionFlash = {
-      type: 'success',
-      message: 'Deleted successfully!'
+  let previousInvoiceItemValue = {};
+  async.parallel({
+    invoice: function (callback) {
+      req.where = {id: id}
+      models[modelName].getFirstValues(req, function (data) {
+          callback(null, data);
+      });
     }
-    res.status(200).send({status: true, url: '/admin/' + viewDirectory});
-  });
+  }, function (err, results){
+    console.log("#@1", results.invoice);
+
+    async.forEachOf(results.invoice.InvoiceItems, function (value1, key, callback1) {
+      console.log("#@2", value1);
+
+      if(value1.sub_item_id && value1.sub_item_id != ""){
+        let reqS1 = Object.assign({}, req);
+        reqS1.where = {sub_item_id: value1.sub_item_id, type: value1.type}
+        models.Stock.getFirstValues(reqS1, function (data1) {
+
+          if(data1){
+            console.log("sub exist");
+            let stockDataUpdate = {};
+              stockDataUpdate.body = {
+                id: data1.id,
+                quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) + parseFloat(value1.quantity), 4),
+                no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(value1.no_of_pkg),
+              };
+            models.Stock.updateAllValues(stockDataUpdate, function (results) {
+              callback1();
+            });
+          } else {
+            console.log("Not in stock 555");
+            callback1();
+          }
+        });
+      } else {
+        let reqS = Object.assign({}, req);
+        reqS.where = {item_id: value1.item_id, sub_item_id: null, type: value1.type}
+        models.Stock.getFirstValues(reqS, function (data) {
+          if(data){
+            console.log('exist', data);
+            let stockDataUpdate = {};
+            
+              stockDataUpdate.body = {
+                id: data.id,
+                item_id: value1.item_id,
+                type: value1.type,
+                sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
+                quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) + parseFloat(value1.quantity), 4),
+                no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(value1.no_of_pkg),
+              };
+            models.Stock.updateAllValues(stockDataUpdate, function (results) {
+              callback1();
+            });
+          } else {
+            console.log("Not in stock");
+            callback1();
+          }
+        });
+      }
+    }, function (err) {
+      if (err) {
+        callback();
+        console.error(err.message);
+      } else {
+        req.where = {'invoice_id': id};
+        models["InvoiceItem"].deleteAllValues(req, function (data) {
+
+          req.where = {'id': id};
+          models[modelName].deleteAllValues(req, function (data) {
+            req.session.sessionFlash = {
+              type: 'success',
+              message: 'Deleted successfully!'
+            }
+            res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+          });
+        });
+      }
+    });
+  })
+});
+
+router.post('/deleteInvoiceItem/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
+  var id = req.params.id;
+
+  async.parallel({
+    invoiceItem: function (callback) {
+      req.where = {id: id}
+      models.InvoiceItem.getFirstValues(req, function (data) {
+          callback(null, data);
+      });
+    },
+  }, function (err, results){
+    console.log("#@", results.invoiceItem.description);
+
+    async.parallel([
+      function(callback) {
+
+        if(results.invoiceItem.sub_item_id && results.invoiceItem.sub_item_id != ""){
+          let reqS1 = Object.assign({}, req);
+          reqS1.where = {sub_item_id: results.invoiceItem.sub_item_id, type: results.invoiceItem.type}
+          models.Stock.getFirstValues(reqS1, function (data1) {
+    
+            if(data1){
+              console.log("sub exist");
+              let stockDataUpdate = {};
+              stockDataUpdate.body = {
+                id: data1.id,
+                quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) + parseFloat(results.invoiceItem.quantity), 4),
+                no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+              };
+              models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                callback();
+              });
+            } else {
+              callback();
+            }
+            // callback(null, data);
+          });
+        } else {
+          let reqS = Object.assign({}, req);
+          console.log('value1value1', results);
+          reqS.where = {item_id: results.invoiceItem.item_id, sub_item_id: null, type: results.invoiceItem.type}
+          models.Stock.getFirstValues(reqS, function (data) {
+            if(data){
+              console.log('exist', data);
+              
+              let stockDataUpdate = {};
+              stockDataUpdate.body = {
+                id: data.id,
+                quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) + parseFloat(results.invoiceItem.quantity), 4),
+                no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+              };
+              console.log("#@", stockDataUpdate)
+              models.Stock.updateAllValues(stockDataUpdate, function (results) {
+                callback();
+              });
+            } else {
+              callback();
+            }
+          });
+        }
+      }
+    ], function(err){
+
+      if(err === null){
+        req.where = {'id': id};
+        models["InvoiceItem"].deleteAllValues(req, function (data) {
+          req.session.sessionFlash = {
+            type: 'success',
+            message: 'Deleted successfully!'
+          }
+          res.status(200).send({status: true, url: '/admin/invoices/edit/' + results.invoiceItem.invoice_id});
+        });
+      } else {
+        req.session.sessionFlash = {
+          type: 'error',
+          message: 'errorrr ............'
+        }
+        res.status(200).send({status: false, url: '/admin/invoices/edit/' + results.invoiceItem.invoice_id});
+      }
+    });
+    
+  })
+  // req.where = {'id': id};
+  // models[modelName].deleteAllValues(req, function (data) {
+  //   req.session.sessionFlash = {
+  //     type: 'success',
+  //     message: 'Deleted successfully!'
+  //   }
+  //   res.status(200).send({status: true, url: '/admin/' + viewDirectory});
+  // });
 });
 
 module.exports = router;

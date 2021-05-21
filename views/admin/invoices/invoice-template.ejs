@@ -15,9 +15,10 @@
         font: 10px Georgia, serif;
       }
       #page-wrap {
-        width: 520px;
-        /* height: 800px; */
-        margin: 0 auto;
+         width: 520px;
+        /*height: 800px;*/
+        margin: 0 auto; 
+        display: block; 
       }
 
       textarea {
@@ -272,6 +273,9 @@
       .table4 tr td {
         padding: 4px;
       }
+      .noWrape {
+        width: 30%;
+      }
     </style>
   </head>
 
@@ -313,8 +317,8 @@
     <div id="pageHeader"></div>
     <div id="pageFooter"></div>
 
-    <div id="page-wrap" style="page-break-after:always;">
-      <div>
+    <div id="page-wrap" style="page-break-after:always;" >
+      <div >
         <table class="table0">
           <tr>
             <td>
@@ -365,8 +369,7 @@
       <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
         <table id="items">
           <tr>
-            <th>No.</th>
-            <th>Item Description</th>
+            <th style="width:35%">Item Description</th>
             <!-- <th>Description</th> -->
             <th>HSN</th>
             <th>Quantity</th>
@@ -378,7 +381,6 @@
           extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
           <tr class="item-row">
-            <td class="item-name"><%= ++index%></td>
             <td class="item-name"><%= rows.Item.item_name%></td>
             <!-- <td class="item-name"><%= rows.description%></td> -->
             <td class="item-name"><%= rows.Item.hsn_code%></td>
@@ -463,8 +465,8 @@
 
     
 
-    <div id="page-wrap" style="page-break-after:always;">
-      <div>
+    <div id="page-wrap" style="page-break-after:always;" >
+      <div >
         <table class="table0">
           <tr>
             <td>
@@ -515,8 +517,7 @@
       <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
         <table id="items">
           <tr>
-            <th>No.</th>
-            <th>Item Description</th>
+            <th style="width:35%">Item Description</th>
             <!-- <th>Description</th> -->
             <th>HSN</th>
             <th>Quantity</th>
@@ -528,7 +529,6 @@
           extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
           <tr class="item-row">
-            <td class="item-name"><%= ++index%></td>
             <td class="item-name"><%= rows.Item.item_name%></td>
             <!-- <td class="item-name"><%= rows.description%></td> -->
             <td class="item-name"><%= rows.Item.hsn_code%></td>
@@ -612,7 +612,7 @@
 
 
     <div id="page-wrap" style="page-break-after:always;">
-      <div>
+      <div >
         <table class="table0">
           <tr>
             <td>
@@ -663,8 +663,7 @@
       <div style="min-height: 230px;display: inline-block;border: 1px #ccc solid">
         <table id="items">
           <tr>
-            <th>No.</th>
-            <th>Item Description</th>
+            <th style="">Item Description</th>
             <!-- <th>Description</th> -->
             <th>HSN</th>
             <th>Quantity</th>
@@ -676,7 +675,6 @@
           extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
 
           <tr class="item-row">
-            <td class="item-name"><%= ++index%></td>
             <td class="item-name"><%= rows.Item.item_name%></td>
             <!-- <td class="item-name"><%= rows.description%></td> -->
             <td class="item-name"><%= rows.Item.hsn_code%></td>

@@ -315,7 +315,7 @@ module.exports = function (sequelize, DataTypes) {
         });
     }
     myModel.deleteAllValues = function (req, res) {
-
+        console.log("@@@", req.body);
         myModel.destroy({
             where: req.where
         }).then(function (results) {
