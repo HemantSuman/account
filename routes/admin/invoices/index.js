@@ -556,7 +556,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
             function(callback) {
               if(results.headerStatus && req.body.tcs_check && req.body.tcs.length > 0){
 
-                req.where = {'purchase_id': req.body.id};
+                req.where = {'invoice_id': req.body.id};
                 models.OtherTax.deleteAllValues(req, function (data) {
 
                   let bulkData1 = [];
