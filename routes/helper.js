@@ -41,7 +41,8 @@ function html(key) {
 function getNumber(inputNumber) {
     var resultNumber = [];
     resultNumber =  get_number_to_word(inputNumber, resultNumber);
-    return resultNumber.join(" ");
+    let jStr = resultNumber.join(" ");
+    return jStr.charAt(0).toUpperCase() + jStr.slice(1);
 }
 
 function get_number_to_word(inputNumber, resultNumber) {
