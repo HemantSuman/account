@@ -41,11 +41,11 @@ module.exports = function (sequelize, DataTypes) {
         },
         description: {
             type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
+            // validate: {
+            //     notEmpty: {
+            //         msg: i18n_Validation.__('required')
+            //     },   
+            // }
         },
         no_of_pkg: {
             type: DataTypes.STRING,

@@ -38,11 +38,14 @@ module.exports = function (sequelize, DataTypes) {
         },
         hsn_code: {
             type: DataTypes.STRING,
-            // validate: {
-            //     notEmpty: {
-            //         msg: i18n_Validation.__('required')
-            //     },   
-            // }
+            validate: {
+                min: function (value) {
+                    console.log("!!!!", value.length)
+                    if (parseInt(value.length) != 0 && parseInt(value.length) !== 8) {
+                        throw new Error(i18n_Validation.__('fix_length', '8'))
+                    }
+                },    
+            }
         },
         unit: {
             type: DataTypes.STRING,

@@ -271,6 +271,7 @@
                                   <div class="form-group">
                                       <small><b>Quantity: </b></small>
                                       <input readonly name="item[<%= index%>][quantity]" type="number" value="<%= item.quantity%>" class="form-control qty item_quantity_<%= index%>" placeholder="">
+                                      <small><b>Stocks: </b><span  class="item_quantity_display_<%= index%>"></span></small>
                                       <div class="item_quantity_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
@@ -378,6 +379,7 @@
                               <div class="form-group">
                                   <small><b>Quantity: </b></small>
                                   <input type="text" class="form-control itemQuantity item_quantity_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
+                                  <small><b>Stocks: </b><span  class="item_quantity_display_<%=extraVar.results.my_model.InvoiceItems.length%>"></span></small>
                                   <div class="item_quantity_-error-message error-message"></div>
                               </div>
                           </div>
@@ -606,6 +608,9 @@ $('.date1').daterangepicker({
     let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
 
     let itemType = $('.item_type_'+itemIndexValue ).val();
+    let selectedPurchaseType = {};
+    selectedPurchaseType[itemType] = "selected";
+
     let selectItem = $('.item_item_id_'+itemIndexValue ).val();
     let itemDescription = $('.itemDescription').val();
     let itemNoOfPkt = $('.itemNoOfPkt').val();
@@ -669,7 +674,8 @@ $('.date1').daterangepicker({
 
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";
       itemHtml += "<small><b>Item Type: </b></small><select disabled indexValue='"+itemIndexValue+"' name='item["+itemIndexValue+"][type]' onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
-      itemHtml += "<option "+ (itemType == 'production' ? 'selected':'') +" value='production'>From Production</option><option "+(itemType == 'purchase' ? 'selected':'')+" value='purchase'>From Purchase</option></select>";
+      itemHtml += "<option "+ selectedPurchaseType["production"] +" value='production'>From Production</option>";
+      itemHtml += "<option "+ selectedPurchaseType["purchase"] +" value='purchase'>From Purchase</option></select>";
       itemHtml += "<input class='item_type_hidden_"+itemIndexValue+"' type='hidden' value='"+itemType+"' name='item["+itemIndexValue+"][type]'>";
       itemHtml += "<div class='item_type_"+itemIndexValue+"-error-message error-message'></div></div></div>";
                                     
@@ -697,6 +703,7 @@ $('.date1').daterangepicker({
       
       itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>Quantity: </b></small>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<small><b>Stocks: </b><span  class='item_quantity_display_"+itemIndexValue+"'></span></small>";
       itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>Rate: </b></small>";
@@ -760,6 +767,7 @@ $('.date1').daterangepicker({
     $('.item_no_of_pkg_'+indexvalue).val("");
     // $('.item_unit_'+indexvalue).val("").trigger('change');
     $('.item_quantity_'+indexvalue).val("");
+    $('.item_quantity_display_'+indexvalue).text("");
     $('.item_rate_'+indexvalue).val("");
     $('.item_gst_'+indexvalue).val("");
     $('.item_gst_amount_'+indexvalue).val("");
@@ -1026,6 +1034,7 @@ $('.date1').daterangepicker({
     });
     let type = $(".item_type_"+indexValue).val();
     $(".item_quantity_"+indexValue).val('');
+    $(".item_quantity_display_"+indexValue).text('');
     
     if(id){
       $.ajax({
@@ -1037,7 +1046,8 @@ $('.date1').daterangepicker({
         cache: false,
         success: function (response) {
           if(response){
-            $(".item_quantity_"+indexValue).val(response.quantity);
+            // $(".item_quantity_"+indexValue).val();
+            $(".item_quantity_display_"+indexValue).text(response.quantity);
           }
 
         }, error: function (resData) {
@@ -1055,6 +1065,7 @@ $('.date1').daterangepicker({
     let id = thisObj.val();
     let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
     $(".item_quantity_"+indexValue).val('');
+    $(".item_quantity_display_"+indexValue).text('');
 
     if(id){
       
@@ -1068,7 +1079,8 @@ $('.date1').daterangepicker({
           cache: false,
           success: function (response) {
             if(response){
-              $(".item_quantity_"+indexValue).val(response.quantity);
+              $(".item_quantity_"+indexValue).val("");
+              $(".item_quantity_display_"+indexValue).text(response.quantity);
             }
           }, error: function (resData) {
               console.log(resData);

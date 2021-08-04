@@ -17,6 +17,29 @@
   <div class="container-fluid">
     
     <div class="row">
+
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/sell">
+            <div class="card-body">
+                <div class="row">                
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                          <label for="">Accounts</label>
+                          <input name="from_date" value="<%=extraVar.query? extraVar.query.from_date: ''%>" type="text" class="form-control date1">
+                      </div>
+                    </div>                            
+                </div>          
+            </div>
+            <div class="card-footer">
+              <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button>
+              <a href="/admin/reports/sell" class="btn btn-primary">Clear</a>
+              <!-- <button type="submit" name="submit" value="print" class="btn btn-primary submitBtn">Print</button> -->
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="col-12">
 
         <div class="card">          

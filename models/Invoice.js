@@ -220,22 +220,27 @@ module.exports = function (sequelize, DataTypes) {
 
     myModel.associate = (models) => {
         myModel.belongsTo(sequelize.models.Account, {foreignKey: 'consignee_no', as: 'Consignee'});
+        myModel.belongsTo(sequelize.models.Account, {as: 'Buyer', foreignKey: 'buyer'});
+        // sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
     };
 
   myModel.getAllValues = function (req, res) {
+    // let grpCond = req.condition && req.condition.grp ? req.condition.grp : {};
     req.where.company_id = req.siteVariable.session.user.Company.id;
     var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
     // if( !myModel.hasAlias('Consignee') ){
         // var consigneeToInvoice = myModel.belongsTo(sequelize.models.Account, {as: "Consignee", foreignKey: 'consignee_no'});
     // }
-    InvoiceItemToItem = sequelize.models.InvoiceItem.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var InvoiceItemToItem = sequelize.models.InvoiceItem.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var AccountToGroup = sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
     this.findAll({where: req.where, 
         include: [
             {association: invoiceItemToInvoice, include: [{association: InvoiceItemToItem, include: []}]},
-            {model: sequelize.models.Account, as: 'Consignee'}
+            {model: sequelize.models.Account, as: 'Consignee'},
+            {model: sequelize.models.Account, as: 'Buyer', include: [{association: AccountToGroup, include: []}]}
             // consigneeToInvoice
         ],
-        order: req.order
+        order: [["createdAt", "DESC"]]
     })
         .then(function(results){
             res(results);

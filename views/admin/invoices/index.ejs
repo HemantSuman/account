@@ -24,6 +24,34 @@
 <section class="content">
   <div class="container-fluid">
     <div class="row">
+
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>">
+            <div class="card-body">
+                <div class="row">                
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                          <label for="">Groups</label>
+                          <select name="group_id" class="form-control select2">
+                            <option value="">Select Groups</option>
+                            <% extraVar.groups.forEach(function(data){ %>
+                              <option <%=extraVar.query.group_id == data.id ? 'selected': ''%> value="<%= data.id %>"><%= data.name %></option>
+                            <% }); %>                  
+                          </select>
+                      </div>
+                    </div>                            
+                </div>          
+            </div>
+            <div class="card-footer">
+              <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button>
+              <a href="/admin/<%=extraVar.viewDirectory%>" class="btn btn-primary">Clear</a>
+              <!-- <button type="submit" name="submit" value="print" class="btn btn-primary submitBtn">Print</button> -->
+            </div>
+          </form>
+        </div>
+      </div>
+
       <div class="col-12">
         <div class="card">
           <!-- <div class="card-header">
@@ -53,8 +81,8 @@
                   <td><%= ++index %></td>
                   <td><%= rows.invoice_no %></td>
                   <td class="noWrape"><%= rows.date %></td>
-                  <td><%= rows.consignee_no %></td>
-                  <td><%= rows.buyer %></td>
+                  <td><%= rows.Consignee.account_name %></td>
+                  <td><%= rows.Buyer ? rows.Buyer.account_name : '' %></td>
                   <td><%= rows.net_amount %></td>
                   <td><%= rows.total_GST %></td>
                   <td>

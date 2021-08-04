@@ -308,6 +308,7 @@
                               <div class="form-group">
                                   <small><b>Quantity: </b></small>
                                   <input type="text" class="form-control itemQuantity item_quantity_" placeholder="">
+                                  <small><b>Stocks: </b><span  class="item_quantity_display_"></span></small>
                                   <div class="item_quantity_-error-message error-message"></div>
                               </div>
                           </div>
@@ -522,6 +523,9 @@
     emptyItemErrors();
 
     let selectItemType = $('.item_type_').val();
+    let selectedPurchaseType = {};
+    selectedPurchaseType[selectItemType] = "selected";
+
     let selectItem = $('.item_item_id_').val();
     let itemDescription = $('.itemDescription').val();
     let itemNoOfPkt = $('.itemNoOfPkt').val();
@@ -533,7 +537,7 @@
     // let selectUnit = $('.selectUnit').val();
     let selectUnit = $('.item_unit_ span').html();
     let valid = validateItems();
-
+    console.log("@@", selectItemType)
     if(valid){
       let itemIndexValue = parseInt($('.itemIndexValue').val()) + 1;
       $('.itemIndexValue').val(itemIndexValue); 
@@ -585,7 +589,8 @@
 
       itemHtml += "<div class='col-sm-2'><div class='form-group'>";
       itemHtml += "<small><b>Item Type: </b></small><select disabled indexValue='"+itemIndexValue+"'  onchange='itemType(this, "+itemIndexValue+")' class='form-control select2 item_type_"+itemIndexValue+"'>";
-      itemHtml += "<option value='production'>From Production</option><option value='purchase'>From Purchase</option></select>";
+      itemHtml += "<option "+ selectedPurchaseType["production"] +" value='production'>From Production</option>";
+      itemHtml += "<option " + selectedPurchaseType["purchase"] + " value='purchase'>From Purchase</option></select>";
       itemHtml += "<input class='item_type_hidden_"+itemIndexValue+"' type='hidden' value='"+selectItemType+"' name='item["+itemIndexValue+"][type]' >";
       itemHtml += "<div class='item_type_"+itemIndexValue+"-error-message error-message'></div></div></div>";
                                     
@@ -613,6 +618,7 @@
       
       itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>Quantity: </b></small>";
       itemHtml += "<input readonly name='item["+itemIndexValue+"][quantity]' type='number' value='"+itemQuantity+"' class='form-control qty item_quantity_"+itemIndexValue+"' placeholder=''>";
+      itemHtml += "<small><b>Stocks: </b><span  class='item_quantity_display_"+itemIndexValue+"'></span></small>";
       itemHtml += "<div class='item_quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>Rate: </b></small>";
@@ -676,6 +682,7 @@
     $('.item_no_of_pkg_'+indexvalue).val("");
     // $('.item_unit_'+indexvalue).val("").trigger('change');
     $('.item_quantity_'+indexvalue).val("");
+    $('.item_quantity_display_'+indexvalue).text("");
     $('.item_rate_'+indexvalue).val("");
     $('.item_gst_'+indexvalue).val("");
     $('.item_gst_amount_'+indexvalue).val("");
@@ -906,6 +913,7 @@
     });
     let type = $(".item_type_"+indexValue).val();
     $(".item_quantity_"+indexValue).val('');
+    $(".item_quantity_display_"+indexValue).text('');
     
     if(id){
       $.ajax({
@@ -917,7 +925,8 @@
         cache: false,
         success: function (response) {
           if(response){
-            $(".item_quantity_"+indexValue).val(response.quantity);
+            $(".item_quantity_"+indexValue).val("");
+            $(".item_quantity_display_"+indexValue).text(response.quantity);
           }
 
         }, error: function (resData) {
@@ -926,6 +935,7 @@
       });
     } else {
       $(".item_quantity_"+indexValue).val("");
+      $(".item_quantity_display_"+indexValue).text("");
     }    
   });
 
@@ -935,6 +945,7 @@
     let id = thisObj.val();
     let indexValue = (thisObj.attr('indexValue') == 0 ? '' : thisObj.attr('indexValue'));
     $(".item_quantity_"+indexValue).val('');
+    $(".item_quantity_display_"+indexValue).text('');
 
     if(id){
       
@@ -948,7 +959,8 @@
           cache: false,
           success: function (response) {
             if(response){
-              $(".item_quantity_"+indexValue).val(response.quantity);
+              $(".item_quantity_"+indexValue).val("");
+              $(".item_quantity_display_"+indexValue).text(response.quantity);
             }
           }, error: function (resData) {
               console.log(resData);
