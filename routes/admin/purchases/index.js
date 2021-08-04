@@ -33,10 +33,24 @@ router.use(function(req, res, next) {
 
 router.get('/', PermissionModule.Permission('view', moduleSlug,  extraVar), function(req, res, next) {
   req.where = {};
-  models[modelName].getAllValues(req, function (results) {
-    console.log("@@@", results);
-    res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
-  });   
+
+  models.Group.getAllValues(req, function (groups) {
+    req.where = {};
+    if(req.query.group_id != '' &&req.query.submit === "submit"){
+      req.where = {'$Account.Group.id$': Number(req.query.group_id)}
+    }
+    models[modelName].getAllValues(req, function (results) {
+      extraVar['groups'] = groups;
+
+      if(req.query.group_id){
+        req.query.group_id = req.query.group_id;
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout:'admin/layout/layout' });
+    }); 
+  });  
 });
 
 router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {

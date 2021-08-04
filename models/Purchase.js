@@ -252,6 +252,7 @@ module.exports = function (sequelize, DataTypes) {
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
     var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
+    var AccountToGroup = sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
     // var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({
             where: req.where,
@@ -259,8 +260,8 @@ module.exports = function (sequelize, DataTypes) {
                 // {model: sequelize.models.Account, as: 'Account'}
                 accountToPurchae,
                 purchaseItemToPurchae,
-                paymentToPurchae
-                // {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
+                paymentToPurchae,
+                {association: accountToPurchae, include: [{association: AccountToGroup, include: []}]},
             ],
             order: req.order    
         },    
