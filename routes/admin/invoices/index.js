@@ -67,10 +67,10 @@ router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), fu
         });
     },
     accounts: function (callback) {
-        req.where = {}
-        models.Account.getAllValues(req, function (data) {
-            callback(null, data);
-        });
+      req.where = {'$Group.name$': 'Sundry Debtors'}
+      models.Account.getAllValues(req, function (data) {
+          callback(null, data);
+      });
     },
     units: function (callback) {
         req.where = {}

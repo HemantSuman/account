@@ -118,8 +118,13 @@ module.exports = function (sequelize, DataTypes) {
       tableName: 'accounts',
   });  
     myModel.getAllValues = function (req, res) {
+        var AccountToGroup = myModel.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
         req.where.company_id = req.siteVariable.session.user.Company.id;
-        this.findAll({where: req.where})
+        this.findAll({where: req.where,
+            include: [
+                AccountToGroup
+            ]
+        })
         .then(function(results){
             res(results);
         })

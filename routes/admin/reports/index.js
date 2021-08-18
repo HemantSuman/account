@@ -55,24 +55,28 @@ router.get('/sell', function(req, res, next) {
     if(req.query.submit === "print"){
       let writeArr = [];
       let qty = 0;
+      
       async.forEachOf(results.invoices, function (value, key, callback) {
-        let writeObj = {};
-        qty = qty + value.InvoiceItems[0].quantity;
-        writeObj["Invoice Number"] = value.invoice_no;
-        writeObj["Invoice Date"] = value.date;
-        writeObj["Name"] = value.Consignee.account_name;
-        writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
-        writeObj["Invoice Value"] = value.net_amount;
-        writeObj["Rate %"] = value.InvoiceItems[0].gst;
-        writeObj["Taxable Value"] = value.total_GST;
-        writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
-        writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
-        writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
-        writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
-        writeObj["Description"] = value.InvoiceItems[0].description;
-        writeObj["UQC"] = 'BOX';
-        writeObj["Total Quantity"] = qty;
-        writeArr.push(writeObj);
+        console.log(value.InvoiceItems)
+        if(value.InvoiceItems && value.InvoiceItems.length != 0){
+          let writeObj = {};
+          qty = qty + value.InvoiceItems[0].quantity;
+          writeObj["Invoice Number"] = value.invoice_no;
+          writeObj["Invoice Date"] = value.date;
+          writeObj["Name"] = value.Consignee.account_name;
+          writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
+          writeObj["Invoice Value"] = value.net_amount;
+          writeObj["Rate %"] = value.InvoiceItems[0].gst;
+          writeObj["Taxable Value"] = value.total_GST;
+          writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
+          writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
+          writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+          writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
+          writeObj["Description"] = value.InvoiceItems[0].description;
+          writeObj["UQC"] = 'BOX';
+          writeObj["Total Quantity"] = qty;
+          writeArr.push(writeObj);
+        }
         callback();
       }, function (err) {
         if (err) {
@@ -124,7 +128,7 @@ router.get('/accounts', function(req, res, next) {
     },            
   }, function (err, results) {
 
-    if(req.query.submit === "print"){
+    if(req.query.submit === "xls"){
       let writeArr = [];
       async.forEachOf(results.purchases, function (value, key, callback) {
         let writeObj = {};

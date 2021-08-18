@@ -77,7 +77,7 @@
         padding: 2px 2px;
         text-align: right;
         border-collapse: collapse;
-        /* border-bottom: none; */
+        border-bottom: none;
       }
       .table0 tr td {
         padding: 5px 0;
@@ -86,36 +86,29 @@
         display: inline-block;
         width: 49%;
         float: left;
-        border-right: 1px #ccc solid;
+        border: 1px #ccc solid;
         padding: 2px;
         border-collapse: collapse;
-        border-top: none;
+        border-right: none;
       }
       .table1 tr td {
         padding: 2px 0;
-      }
-      .table1_2_3 {
-        border: 1px #ccc solid;
-      }
-      .table2_1 td{
-        border: 1px #ccc solid;
-        border-collapse: collapse;
       }
       .table2 {
         display: inline-block;
         width: 48%;
         float: left;
-        border-bottom: 1px #ccc solid;
+        border: 1px #ccc solid;
         font-size: 11px;
         padding: 2px;
         border-collapse: collapse;
-        /* border-bottom: none; */
+        border-bottom: none;
       }
       .table3 {
         display: inline-block;
         width: 48%;
         float: left;
-        /* border: 1px #ccc solid; */
+        border: 1px #ccc solid;
         padding: 2px;
         min-height: 70px;
         border-collapse: collapse;
@@ -166,61 +159,43 @@
             </td>
           </tr>
         </table>
-        <table class="table1_2_3">
-          <tr>
-            <td>
-              <table class="table1">
-                <tr><td><strong>Invoice #:</strong></td><td> <%=extraVar.results.my_model.invoice_no%></td></tr>
-                <tr><td><strong>Challan No & Date:</strong></td><td> <%=extraVar.results.my_model.challan_no%></td></tr>
-                <tr><td><strong>Order No & Date:</strong> </td><td> MOBILE</td></tr>
-                <tr><td><strong>Dispach Through:</strong> </td><td> <%=extraVar.results.my_model.dispach_through%></td></tr>
-                <tr><td><strong>Vechicle No:</strong></td><td>  <%=extraVar.results.my_model.vehicle_no%></td></tr>
-                <tr><td><strong>RR/GR No & Date:</strong></td><td>  <%=extraVar.results.my_model.rr_gr_no%></td></tr>
-                <tr><td><strong>Freight To Pay/Paid:</strong></td><td>  <%=extraVar.results.my_model.freight%></td></tr>
-                <tr><td><strong>Payment Terms:</strong></td><td>  <%=extraVar.results.my_model.payment_terms%></td></tr>
-                <tr><td><strong>Time of Removal:</strong></td><td>  <%=extraVar.results.my_model.time_of_remeber%></td></tr>
-                <tr><td><strong>Reverse Charge Mechanism:</strong></td><td>NO</td></tr>
-              </table>
-    
-              <table class="table2">
-                  <tr>
-                      <td><strong>Buyer</strong><br />
-                        <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%><br />
-                        <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
-                        <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].city%><br />
-                        <%= extraVar.results.stateKeyValue[extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].state_id]%>
-                        <tr style="border-top: 1px solid #ccc;">
-                          <td>GSTIN:</td>
-                          <td><%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%></td>
-                        </tr>
-                        <tr style="border-top: 1px solid #ccc;">
-                          <td>PAN No.:</td>
-                          <td> <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%></td>
-                        </tr>
-                        <tr style="border-top: 1px solid #ccc;">
-                          <td>Delivery At:</td>
-                          <td><%=extraVar.results.my_model.delivery_at%></td>
-                        </tr>
-                      </td>
-                  </tr>
-              </table>
-              <table class="table3">
-                  <tr>
-                      <td>
-                      <strong>Delivery Address (If other than buyer address)</strong><br />
-                      <% if(extraVar.results.my_model.consignee_no !=
-                      extraVar.results.my_model.buyer){ %>
-                      <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%><br />
-                      <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
-                      GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
-                      PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
-                      <% } %>
-                      </td>
-                  </tr>
-              </table>
-            </td>
-          </tr>
-          
+        <table class="table1">
+          <tr><td><strong>Invoice #:</strong></td><td> <%=extraVar.results.my_model.invoice_no%></td></tr>
+          <tr><td><strong>Challan No & Date:</strong></td><td> <%=extraVar.results.my_model.challan_no%></td></tr>
+          <tr><td><strong>Order No & Date:</strong> </td><td> MOBILE</td></tr>
+          <tr><td><strong>Dispach Through:</strong> </td><td> <%=extraVar.results.my_model.dispach_through%></td></tr>
+          <tr><td><strong>Vechicle No:</strong></td><td>  <%=extraVar.results.my_model.vehicle_no%></td></tr>
+          <tr><td><strong>Delivery At:</strong></td><td>  <%=extraVar.results.my_model.delivery_at%></td></tr>
+          <tr><td><strong>RR/GR No & Date:</strong></td><td>  <%=extraVar.results.my_model.rr_gr_no%></td></tr>
+          <tr><td><strong>Freight To Pay/Paid:</strong></td><td>  <%=extraVar.results.my_model.freight%></td></tr>
+          <tr><td><strong>Payment Terms:</strong></td><td>  <%=extraVar.results.my_model.payment_terms%></td></tr>
+          <tr><td><strong>Time of Removal:</strong></td><td>  <%=extraVar.results.my_model.time_of_remeber%></td></tr>
+        </table>
+        <table class="table2">
+            <tr>
+                <td><strong>Consignee</strong><br />
+                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].account_name%><br />
+                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].address%><br />
+                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].city%><br />
+                <%= extraVar.results.stateKeyValue[extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].state_id]%><br />
+                GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].gstin%><br />
+                PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.consignee_no].pan_no%><br />
+                </td>
+            </tr>
+        </table>
+        <table class="table3">
+            <tr>
+                <td>
+                <strong>Buyer(If other than consignee)</strong><br />
+                <% if(extraVar.results.my_model.consignee_no !=
+                extraVar.results.my_model.buyer){ %>
+                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%><br />
+                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%><br />
+                GSTIN: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%><br />
+                PAN No.: <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%><br />
+                <% } %>
+                </td>
+            </tr>
         </table>
       </div>
 

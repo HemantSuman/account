@@ -247,7 +247,7 @@ module.exports = function (sequelize, DataTypes) {
     myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id', as: 'Account'});
   };
   myModel.getAllValues = function (req, res) {
-    console.log("!!!!!!!", req.siteVariable)
+
     req.where.company_id = req.siteVariable.session.user.Company.id;
     var accountToPurchae = myModel.belongsTo(sequelize.models.Account, {foreignKey: 'account_id'});
     var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});

@@ -62,8 +62,9 @@ router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), fu
         });
     },    
     accounts: function (callback) {
-        req.where = {}
+        req.where = {'$Group.name$': 'Sundry Creditors'}
         models.Account.getAllValues(req, function (data) {
+          console.log(data)
             callback(null, data);
         });
     },    
