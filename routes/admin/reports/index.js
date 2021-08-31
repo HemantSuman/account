@@ -6,6 +6,9 @@ var ImageUpload = require('../../../middlewares/ImageUpload');
 var async = require("async");
 const reader = require('xlsx')
 const { Op } = require('sequelize');
+var pdf = require('html-pdf');
+var ejs = require('ejs');
+let path = require("path");
 var extraVar = [];
 
 var modelName = 'Purchase';
@@ -53,6 +56,41 @@ router.get('/sell', function(req, res, next) {
   }, function (err, results) {
 
     if(req.query.submit === "print"){
+      // console.log("@@@", JSON.stringify(results)); return;
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "sell-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/sell-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    console.log(data);
+                    res.redirect("/reports/sell-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
       let writeArr = [];
       let qty = 0;
       
@@ -128,7 +166,41 @@ router.get('/accounts', function(req, res, next) {
     },            
   }, function (err, results) {
 
-    if(req.query.submit === "xls"){
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "purchase-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/purchase-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    console.log(data);
+                    res.redirect("/reports/purchase-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
       let writeArr = [];
       async.forEachOf(results.purchases, function (value, key, callback) {
         let writeObj = {};
@@ -302,6 +374,117 @@ router.post('/edit-gst2a', function(req, res, next) {
     })
 
   });  
+});
+
+router.get('/stock', function(req, res, next) {
+  async.parallel({
+    invoices: function (callback) {
+      req.where = {};
+      if(req.query.from_date && req.query.to_date){
+
+
+        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        req.where = {
+          createdAt: {
+            [Op.between]: [req.query.from_date, req.query.to_date],
+          }
+        };
+      }      
+      models.Stock.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },            
+  }, function (err, results) {
+    // console.log("@@@", JSON.stringify(results)); return;
+    if(req.query.submit === "print"){
+      
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "stock-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/stock-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    console.log(data);
+                    res.redirect("/reports/stock-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      let qty = 0;
+      
+      async.forEachOf(results.invoices, function (value, key, callback) {
+        console.log(value.InvoiceItems)
+        if(value.InvoiceItems && value.InvoiceItems.length != 0){
+          let writeObj = {};
+          qty = qty + value.InvoiceItems[0].quantity;
+          writeObj["Invoice Number"] = value.invoice_no;
+          writeObj["Invoice Date"] = value.date;
+          writeObj["Name"] = value.Consignee.account_name;
+          writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
+          writeObj["Invoice Value"] = value.net_amount;
+          writeObj["Rate %"] = value.InvoiceItems[0].gst;
+          writeObj["Taxable Value"] = value.total_GST;
+          writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
+          writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
+          writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+          writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
+          writeObj["Description"] = value.InvoiceItems[0].description;
+          writeObj["UQC"] = 'BOX';
+          writeObj["Total Quantity"] = qty;
+          writeArr.push(writeObj);
+        }
+        callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          
+          const ws = reader.utils.json_to_sheet(writeArr);
+  
+          let wb = reader.utils.book_new();
+          reader.utils.book_append_sheet(wb, ws);
+          reader.writeFile(wb, "public/invoices/sell-report.xlsx");
+          res.redirect("/invoices/sell-report.xlsx");
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.from_date && req.query.to_date){
+        //again convert date format for dispaly input - filled
+        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/stock', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
 });
 
 // router.get('/print', function(req, res, next) {
