@@ -876,12 +876,6 @@ router.get('/print/:id', function(req, res, next) {
       });
       // res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
-
-  
-
-
-
-  
 });
 
 router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  extraVar), function (req, res, next) {
