@@ -3,7 +3,7 @@
   <div class="container-fluid">
     <div class="row mb-2">
       <div class="col-sm-6">
-        <h1 class="m-0 text-dark">List <%=extraVar['viewDirectory']%></h1>
+        <h1 class="m-0 text-dark">Day Book</h1>
       </div><!-- /.col -->
       <div class="col-sm-6">
         <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
@@ -18,6 +18,35 @@
     
     <div class="row">
       <div class="col-12">
+
+        <div class="col-md-12">
+          <div class="card card-primary">
+            <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/stock_movement">
+              <!-- <div class="card-body">
+                  <div class="row">                
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">From Date</label>
+                            <input name="from_date" value="<%=extraVar.query? extraVar.query.from_date: ''%>" type="text" class="form-control date1">
+                        </div>
+                      </div>              
+                      <div class="col-sm-3">
+                        <div class="form-group">
+                            <label for="">From Date</label>
+                            <input name="to_date" value="<%=extraVar.query? extraVar.query.to_date:''%>" type="text" class="form-control date2">
+                        </div>
+                      </div>              
+                  </div>          
+              </div> -->
+              <div class="card-footer">
+                <!-- <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button> -->
+                <!-- <a href="/admin/<%=extraVar.viewDirectory%>/stock_movement" class="btn btn-primary">Clear</a> -->
+                <!-- <button type="submit" name="submit" value="xls" class="btn btn-primary submitBtn">XLS</button> -->
+                <button type="submit" formtarget="_blank" name="submit" value="print_day_book" class="btn btn-primary submitBtn">Print Report</button>
+              </div>
+            </form>
+          </div>
+        </div>
 
         <div class="card">          
           <!-- <div class="card-header">

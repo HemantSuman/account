@@ -5,6 +5,9 @@ var models = require('../../../models');
 var ImageUpload = require('../../../middlewares/ImageUpload');
 var async = require("async");
 var moment = require('moment');
+var pdf = require('html-pdf');
+var ejs = require('ejs');
+let path = require("path");
 
 var extraVar = [];
 
@@ -387,7 +390,44 @@ router.get('/stock_movement', PermissionModule.Permission('view', moduleSlug,  e
         console.error("next", remainingStock);
         extraVar['remainingStock'] = remainingStock;
         extraVar['itemKeyValue'] = itemKeyValue;
-        res.render('admin/'+viewDirectory+'/stock_movement', {extraVar, helper, layout:'admin/layout/layout' });
+        extraVar['helper'] = helper;
+        console.log("@@@@@@@@@@@@@@@@", req.query)
+        if(req.query.submit == 'print_day_book'){
+
+          ejs.renderFile(path.join('views/admin/'+viewDirectory+'/', "day_book_template.ejs"), {extraVar: extraVar}, (err, data) => {
+            console.log(err)
+            if (err) {
+                  res.send(err);
+            } else {
+                let options = {
+                  "format": "A4", 
+                  // "orientation": "portrait",
+                  // "width": "400px",
+                  // "header": {
+                  //     "height": "55mm"
+                  // },
+                  "footer": {
+                      "height": "45mm",
+                  },
+                };
+                pdf.create(data, options).toFile("public/reports/day-book-template.pdf", function (err, data) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                      // fs.open('public/invoices/report.pdf', function (err, file) {
+                      //   if (err) throw err;
+                      //   console.log('Saved!');
+                      // });
+                        console.log(data);
+                        res.redirect("/reports/day-book-template.pdf");
+                        // res.send("File created successfully");
+                    }
+                });
+            }
+          });
+        } else {
+          res.render('admin/'+viewDirectory+'/stock_movement', {extraVar, helper, layout:'admin/layout/layout' });
+        }
       }
     });
   });
