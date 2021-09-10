@@ -233,7 +233,10 @@
   padding:0in 5.4pt 0in 5.4pt'>
                                         <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
   normal'>
-                                                <o:p>&nbsp;</o:p>
+                                                <%=extraVar.results.my_model.buyer%>
+                                                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer]['account_name']%> <br />
+                                                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer]['address']%> <br />
+                                                <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer]['city']%>, <%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer]['pin']%>
                                         </p>
                                 </td>
                         </tr>
@@ -403,25 +406,7 @@
   mso-border-left-alt:solid #D9D9D9 .5pt;mso-border-left-themecolor:background1;
   mso-border-left-themeshade:217;padding:0in 5.4pt 0in 5.4pt'>
                                         <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
-  normal'>
-                                                <o:p>
-                                                        <% if(extraVar.results.my_model.consignee_no
-                                                                !=extraVar.results.my_model.buyer){ %>
-                                                                <%=
-                                                                        extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%>
-                                                                        <br />
-                                                                        <%=
-                                                                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%>
-                                                                                <br />
-                                                                                GSTIN: <%=
-                                                                                        extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%>
-                                                                                        <br />
-                                                                                        PAN No.: <%=
-                                                                                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%>
-                                                                                                <br />
-                                                                                                <% } %>
-                                                </o:p>
-                                        </p>
+  normal'>&nbsp;</p>
                                 </td>
                                 <td width=200 valign=top style='width:139.5pt;border:none;border-right:solid windowtext 1.0pt;
   mso-border-top-alt:solid windowtext .5pt;mso-border-top-alt:solid windowtext .5pt;
@@ -436,7 +421,21 @@
   padding:0in 5.4pt 0in 5.4pt'>
                                         <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
   normal'>
-                                                <o:p>&nbsp;</o:p>
+                                                <% if(extraVar.results.my_model.consignee_no
+                                                !=extraVar.results.my_model.buyer){ %>
+                                                <%=
+                                                        extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%>
+                                                        <br />
+                                                        <%=
+                                                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].address%>
+                                                                <br />
+                                                                GSTIN: <%=
+                                                                        extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].gstin%>
+                                                                        <br />
+                                                                        PAN No.: <%=
+                                                                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%>
+                                                                                <br />
+                                                                                <% } %>
                                         </p>
                                         <p class=MsoNormal style='margin-bottom:0in;margin-bottom:.0001pt;line-height:
   normal'>

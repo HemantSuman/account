@@ -841,6 +841,7 @@ router.get('/print/:id', function(req, res, next) {
       });
     },
   }, function (err, results) {
+      console.log(results.accountKeyValue['6'])
       extraVar['results'] = results;
       extraVar['helper'] = helper;
       ejs.renderFile(path.join('views/admin/invoices/', "invoice-template.ejs"), {extraVar: extraVar}, (err, data) => {
