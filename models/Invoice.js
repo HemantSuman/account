@@ -250,6 +250,7 @@ module.exports = function (sequelize, DataTypes) {
         req.where.company_id = req.siteVariable.session.user.Company.id;
         var invoiceItemToInvoice = myModel.hasMany(sequelize.models.InvoiceItem, {foreignKey: 'invoice_id'});
         var otherTaxToInvoice = myModel.hasMany(sequelize.models.OtherTax, {foreignKey: 'invoice_id'});
+        var AccountToGroup = sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
         // if( !myModel.hasAlias('Consignee') ){
         //     var consigneeToInvoice = myModel.belongsTo(sequelize.models.Account, {as: "Consignee", foreignKey: 'consignee_no'});
         // }
@@ -264,6 +265,7 @@ module.exports = function (sequelize, DataTypes) {
                 // buyerToInvoice,
                 otherTaxToInvoice,
                 {association: invoiceItemToInvoice, include: [{association: InvoiceItemToItem, include: []}]},
+                {model: sequelize.models.Account, as: 'Buyer', include: [{association: AccountToGroup, include: []}]}
             ]
         }).then(function (results) {
             res(results);

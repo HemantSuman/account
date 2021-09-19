@@ -172,6 +172,9 @@
                 .border-bottom-lite {
                         border-bottom: 1px #e0d8d8 solid !important;    
                 }
+                .border-left-lite {
+                        border-left: 1px #e0d8d8 solid !important;    
+                }
                 .border-top {
                         border-top: 1px #e0d8d8 solid !important;   
                 }
@@ -393,7 +396,7 @@
                          </p>
                       </td>
                    </tr>
-                   <tr style='mso-yfti-irow:9'>
+                   <tr class="border-left-lite" style='mso-yfti-irow:9'>
                       <td class="no-border-right" width=195 valign=top style='width:135.9pt;padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                             normal'>&nbsp;</p>
@@ -433,7 +436,7 @@
                          </p>
                       </td>
                    </tr>
-                   <tr style='mso-yfti-irow:10'>
+                   <tr class="border-left-lite" style='mso-yfti-irow:10'>
                       <td class="no-border-right" width=195 valign=top style='width:135.9pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
@@ -449,7 +452,7 @@
                          </p>
                       </td>
                    </tr>
-                   <tr style='mso-yfti-irow:11;mso-yfti-lastrow:yes;height:28.75pt'>
+                   <tr class="border-bottom-lite border-left-lite" style='mso-yfti-irow:11;mso-yfti-lastrow:yes;height:28.75pt'>
                       <td colspan=2 valign=top style='width:275.4pt;
                          padding:0in 5.4pt 0in 5.4pt;
                          height:28.75pt'>
@@ -688,8 +691,7 @@
                             <%= extraVar.helper.getNumber(Math.round(extraVar.results.my_model.total_GST))%> only                            
                          </p>
                       </td>
-                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
-                         '>
+                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>CGST @ x%</p>
                       </td>
@@ -910,7 +912,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal
                             style='margin-bottom:.0001pt;line-height:
-                            normal'>Ttoal Rupees (In Words) :<span style='mso-spacerun:yes'>
+                            normal'>Total Rupees (In Words) :<span style='mso-spacerun:yes'>
                             </span>
                             <%=
                                extraVar.helper.getNumber(Math.round(extraVar.results.my_model.net_amount))%>
