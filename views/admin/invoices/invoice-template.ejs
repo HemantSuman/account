@@ -229,19 +229,18 @@
                       </td>
                    </tr>
                    <tr style='mso-yfti-irow:1'>
-                      <td width=195 valign=top style='width:135.9pt;
-                         padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
-                            normal'>Challan No &amp; Date</p>
-                      </td>
-                      <td width=200 valign=top style='width:139.5pt;;
-                         padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
-                            normal'>
-                            <%=extraVar.results.my_model.challan_no%><span
-                               style='mso-spacerun:yes'></span>
-                         </p>
-                      </td>
+                     <td width=195 valign=top style='width:135.9pt;;
+                        padding:0in 5.4pt 0in 5.4pt'>
+                        <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                           normal'>Order No/ Date</p>
+                     </td>
+                     <td width=200 valign=top style='width:139.5pt;;
+                        padding:0in 5.4pt 0in 5.4pt'>
+                        <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                           normal'>
+                           <o:p>&nbsp;</o:p>
+                        </p>
+                     </td>
                       <td class="border-bottom-lite" colspan=2 valign=top style='width:279.9pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
@@ -257,13 +256,13 @@
                       <td width=195 valign=top style='width:135.9pt;;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
-                            normal'>Order No/ Date</p>
+                            normal'>Displatch Through</p>
                       </td>
                       <td width=200 valign=top style='width:139.5pt;;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                             normal'>
-                            <o:p>&nbsp;</o:p>
+                            <o:p><%=extraVar.results.my_model.dispach_through%></o:p>
                          </p>
                       </td>
                       <td class="border-bottom-lite" colspan=2 rowspan=4 valign=top style='width:279.9pt;;
@@ -284,7 +283,7 @@
                          </p>
                       </td>
                    </tr>
-                   <tr style='mso-yfti-irow:3'>
+                   <!-- <tr style='mso-yfti-irow:3'>
                       <td width=195 valign=top style='width:135.9pt;;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
@@ -297,7 +296,7 @@
                             <%=extraVar.results.my_model.dispach_through%>
                          </p>
                       </td>
-                   </tr>
+                   </tr> -->
                    <tr style='mso-yfti-irow:4'>
                       <td width=195 valign=top style='width:135.9pt;;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -312,6 +311,22 @@
                          </p>
                       </td>
                    </tr>
+                   <tr style='mso-yfti-irow:5'>
+                     <td width=195 valign=top style='width:135.9pt;;
+                        padding:0in 5.4pt 0in 5.4pt'>
+                        <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                           normal'>Driver Mobile No.</p>
+                     </td>
+                     <td width=200 valign=top style='width:139.5pt;;
+                        padding:0in 5.4pt 0in 5.4pt'>
+                        <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                           normal'>
+                           <o:p>
+                              <%=extraVar.results.my_model.driver_no%>
+                           </o:p>
+                        </p>
+                     </td>
+                  </tr>
                    <tr style='mso-yfti-irow:5'>
                       <td width=195 valign=top style='width:135.9pt;;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -527,7 +542,7 @@
                       </td>
                    </tr>
                    <% }); if(extraVar.results.my_model.InvoiceItems.length < 10){ %>
-                   <tr height="<%= (10 - extraVar.results.my_model.InvoiceItems.length) * 10 %>" + "px">
+                   <tr height="<%= (10 - extraVar.results.my_model.InvoiceItems.length) * 11 %>" + "px">
                       <td class="">
                       </td>
                       <td class="border-bottom">

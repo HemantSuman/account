@@ -67,12 +67,12 @@ module.exports = function (sequelize, DataTypes) {
             //     },   
             // }
         },
-        challan_no: {
+        driver_no: {
             type: DataTypes.STRING,            
         },
-        challan_date: {
-            type: DataTypes.DATEONLY,
-        },
+        // challan_date: {
+        //     type: DataTypes.DATEONLY,
+        // },
         time_of_remeber: {
             type: DataTypes.STRING,
         },

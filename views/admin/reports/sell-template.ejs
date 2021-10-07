@@ -162,11 +162,11 @@
             <td class="item-name for-left"><%= rows.invoice_no%></td>
             <td width="10%" class="hideextra"><%= rows.date %></td>
             <td><%= rows.Buyer.account_name %></td>
-            <td><%= rows.sub_total %></td>
-            <td><%= rows.igst_amount?parseFloat(rows.igst_amount):"" %></td>
-            <td><%= rows.cgst_amount?parseFloat(rows.cgst_amount):"" %></td>
-            <td><%= rows.sgst_amount?parseFloat(rows.sgst_amount):"" %></td>
-            <td><%= rows.net_amount %></td>
+            <td><%= Math.round(rows.sub_total) %></td>
+            <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
+            <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
+            <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
+            <td><%= Math.round(rows.net_amount) %></td>
             
           </tr>
           <% }); %> <% } else { %>

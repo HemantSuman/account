@@ -67,7 +67,7 @@
                 <div class="col-sm-3">
                   <div class="form-group">
                     <label for="">Buyer</label>
-                    <select name="buyer" class="form-control select2">
+                    <select name="buyer" class="form-control select2 buyerAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
                         <option gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
@@ -88,18 +88,18 @@
                 
                 <div class="col-sm-2">
                   <div class="form-group">
-                    <label for="">Challan No.</label>
-                    <input name="challan_no" type="text" class="form-control"  placeholder="">
-                    <div class="challan_no-error-message error-message"></div>
+                    <label for="">Driver No.</label>
+                    <input name="driver_no" type="text" class="form-control"  placeholder="">
+                    <div class="driver_no-error-message error-message"></div>
                   </div>
                 </div>
-                <div class="col-sm-2">
+                <!-- <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">Challan Date</label>
                     <input name="challan_date" type="text" class="form-control date1"  placeholder="">
                     <div class="challan_date-error-message error-message"></div>
                   </div>
-                </div>
+                </div> -->
                 <div class="col-sm-2">
                   <div class="form-group">
                     <label for="">Time of Remeber</label>
@@ -800,6 +800,7 @@
   $(document).on("change", ".consigneeAccount", function(){
     calculateTotal();
     $(".buyer_add").val($(".consigneeAccount option:selected").attr("address"));
+    $(".buyerAccount").val($(".consigneeAccount").val()).trigger("change");
   });
 
   $(document).on("keyup", ".discountField", function(){

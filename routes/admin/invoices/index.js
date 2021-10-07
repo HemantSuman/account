@@ -93,7 +93,7 @@ router.get('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), fu
 router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     req.body.date = helper.changeDateFormate(req.body.date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-    req.body.challan_date = helper.changeDateFormate(req.body.challan_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+    // req.body.challan_date = helper.changeDateFormate(req.body.challan_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     req.body.order_date = helper.changeDateFormate(req.body.order_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     req.body.rr_date = helper.changeDateFormate(req.body.rr_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     console.log(req.body);
@@ -430,7 +430,7 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
 router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar), function(req, res, next) {
   ImageUpload.uploadFile(req, res, function (err) {
     req.body.date = helper.changeDateFormate(req.body.date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-    req.body.challan_date = helper.changeDateFormate(req.body.challan_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+    // req.body.challan_date = helper.changeDateFormate(req.body.challan_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     req.body.order_date = helper.changeDateFormate(req.body.order_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     req.body.rr_date = helper.changeDateFormate(req.body.rr_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
     console.log(req.body);
