@@ -140,6 +140,7 @@ router.get('/sell', function(req, res, next) {
       } else {
         extraVar['query'] = {};
       }
+      console.log("@!", extraVar.results.invoices)
       res.render('admin/'+viewDirectory+'/sell', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  

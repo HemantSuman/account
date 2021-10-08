@@ -80,10 +80,10 @@
                       <td class="noWrape"><%= rows.purchase_invoice_date %></td>
                       <td><%= rows.Account.account_name %></td>
                       <td><%= rows.Account.gstin %></td>
-                      <td><%= rows.total_value %></td>
-                      <td><%= rows.igst_amount?parseFloat(rows.igst_amount):"" %></td>
-                      <td><%= rows.cgst_amount?parseFloat(rows.cgst_amount):"" %></td>
-                      <td><%= rows.sgst_amount?parseFloat(rows.sgst_amount):"" %></td>
+                      <td><%= Math.round(rows.total_value) %></td>
+                      <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
+                      <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
+                      <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
                     </tr>                
                     <% }); %>
                   <% } else { %>

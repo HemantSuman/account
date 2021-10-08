@@ -161,12 +161,12 @@
           <tr class="item-row">
             <td class="item-name for-left"><%= rows.purchase_invoice_no%></td>
             <td width="10%" class="hideextra"><%= rows.purchase_invoice_date %></td>
-            <td><%= Math.round(rows.Account.account_name) %></td>
+            <td><%= rows.Account.account_name %></td>
             <td><%= Math.round(rows.total_value) %></td>
             <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
             <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
             <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
-            <td><%= Math.round(rows.Account.gstin) %></td>
+            <td><%= rows.Account.gstin %></td>
             
           </tr>
           <% }); %> <% } else { %>

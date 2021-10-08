@@ -246,7 +246,7 @@
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                             normal'>
                             <b style='mso-bidi-font-weight:normal'>
-                               Buyer
+                               Buyer ( AC00<%= extraVar.results.accountKeyValue[extraVar.results.my_model.buyer]['id']%>)
                                <o:p></o:p>
                             </b>
                          </p>
@@ -542,7 +542,7 @@
                       </td>
                    </tr>
                    <% }); if(extraVar.results.my_model.InvoiceItems.length < 10){ %>
-                   <tr height="<%= (10 - extraVar.results.my_model.InvoiceItems.length) * 11 %>" + "px">
+                   <tr height="<%= (10 - extraVar.results.my_model.InvoiceItems.length) * 10 %>" + "px">
                       <td class="">
                       </td>
                       <td class="border-bottom">

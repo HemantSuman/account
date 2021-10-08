@@ -79,8 +79,8 @@
                       <td><%= rows.invoice_no %></td>
                       <td class="noWrape"><%= rows.date %></td>
                       <td><%= rows.Consignee.account_name %></td>
-                      <td><%= Math.round(rows.Consignee.gstin) %></td>
-                      <td><%= Math.round(rows.total_value) %></td>
+                      <td><%= rows.Consignee.gstin %></td>
+                      <td><%= Math.round(rows.net_amount) %></td>
                       <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
                       <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
                       <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
