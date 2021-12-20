@@ -58,7 +58,7 @@
                     <select name="consignee_no" class="form-control select2 consigneeAccount">
                       <option value="">Select Account</option>
                       <% extraVar.results.accounts.forEach(function(data){ %>
-                        <option address="<%= data.address %>" gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %></option>
+                        <option address="<%= data.address %>" gstin="<%= data.gstin %>" value="<%= data.id %>"><%= data.account_name %>-AC00<%=data.id %></option>
                       <% }); %>                  
                     </select>
                     <div class="consignee_no-error-message error-message"></div>
@@ -875,7 +875,7 @@
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
         otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((totalGST + totalPrice) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
       })
-      withTcs = parseFloat(((totalGST + totalPrice) * otherTax) / 100);
+      withTcs = parseFloat(((totalGST + totalPrice + transportation) * otherTax) / 100);
       $(".otherTaxInfo").html(otherTaxInfo);
       // total_value = parseFloat(total_value + withTcs);
     } else {
