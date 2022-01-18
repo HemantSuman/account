@@ -964,7 +964,6 @@ $('.date1').daterangepicker({
 
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
-      console.log("@@", buyerGstAmt)
       let buyerGst = buyerGstAmt.substring(0, 2);
       let sessionObj = JSON.parse($("#sessionObj").html());
       let userGst = sessionObj.session.user.Company.gstin.substring(0, 2);

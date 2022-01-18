@@ -806,7 +806,6 @@ router.get('/print/:id', function(req, res, next) {
     my_model: function (callback) {
         req.where = {'id': id}
         models[modelName].getFirstValues(req, function (data) {
-          console.log("@#@#", data.Buyer)
             callback(null, data);
         });
     },

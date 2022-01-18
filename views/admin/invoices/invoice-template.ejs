@@ -513,7 +513,9 @@
                             normal'>Amount</p>
                       </td>
                    </tr>
-                     <% if(extraVar.results.my_model.InvoiceItems.length> 0) { %> <%
+                     <% if(extraVar.results.my_model.InvoiceItems.length> 0) { %> 
+                     <% var itemGstPer = extraVar.results.my_model.InvoiceItems[0].gst; %>
+                     <%
                         extraVar.results.my_model.InvoiceItems.forEach(function(rows, index){ %>
                            <tr height="12px" style='mso-yfti-irow:1'>
                               <td class="no-border-bottom"  valign=top style='padding:0in 5.4pt 0in 5.4pt'>
@@ -720,7 +722,7 @@
                       </td>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
-                            text-align:right;line-height:normal'>CGST @ x%</p>
+                            text-align:right;line-height:normal'>CGST @ <%=itemGstPer/2%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -742,7 +744,7 @@
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
-                            text-align:right;line-height:normal'>SGST @ x%</p>
+                            text-align:right;line-height:normal'>SGST @ x<%=itemGstPer/2%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -764,7 +766,7 @@
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
-                            text-align:right;line-height:normal'>IGST @ x%</p>
+                            text-align:right;line-height:normal'>IGST @ <%=itemGstPer%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
                          padding:0in 5.4pt 0in 5.4pt'>
