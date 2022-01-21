@@ -835,7 +835,7 @@
                               style='margin-bottom:.0001pt;
                               text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
                               </span>
-                              <% let othTax=extraVar.helper.setFloatValAfterDecimal((parseFloat(extraVar.results.my_model.sub_total) * parseFloat(rows.percentage) / 100), 2) %>
+                              <% let othTax=extraVar.helper.setFloatValAfterDecimal((parseFloat(extraVar.results.my_model.net_amount) * parseFloat(rows.percentage) / 100), 2) %>
                               <% if(othTax){ %>
                                  <%= othTax%> 
                               <% } %>
