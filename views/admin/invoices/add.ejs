@@ -873,9 +873,9 @@
       $(".tcs_value option:selected").each(function(val, index){
 
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((totalGST + totalPrice) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((totalGST + withDiscount + transportation) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
       })
-      withTcs = parseFloat(((totalGST + totalPrice + transportation) * otherTax) / 100);
+      withTcs = parseFloat(((totalGST + withDiscount + transportation) * otherTax) / 100);
       $(".otherTaxInfo").html(otherTaxInfo);
       // total_value = parseFloat(total_value + withTcs);
     } else {

@@ -422,7 +422,7 @@ router.get('/edit/:id', PermissionModule.Permission('edit', moduleSlug,  extraVa
   }, function (err, results) {
       extraVar['results'] = results;
       extraVar['OtherTaxesIds'] = results.my_model.OtherTaxes.map(i => i.tax_id);
-      console.log(results.my_model);
+      console.log("@@@",results.my_model);
       res.render('admin/' + viewDirectory + '/edit', {extraVar, layout: 'admin/layout/layout'});
   });
 });
@@ -570,37 +570,40 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
 
           async.parallel([
             function(callback) {
-              if(results.headerStatus && req.body.tcs_check && req.body.tcs.length > 0){
+              if(results.headerStatus){
 
                 req.where = {'invoice_id': req.body.id};
                 models.OtherTax.deleteAllValues(req, function (data) {
 
-                  let bulkData1 = [];
-                  async.forEachOf(req.body.tcs, function (value1, key, callback1) {
-                    if(typeof  value1 != "undefined"){
+                  if(req.body.tcs_check && req.body.tcs.length > 0){
+                    let bulkData1 = [];
+                    async.forEachOf(req.body.tcs, function (value1, key, callback1) {
+                      if(typeof  value1 != "undefined"){
 
-                      let tmpObj = {};
-                      tmpObj.invoice_id = req.body.id;
-                      tmpObj.purchase_id = null;
-                      tmpObj.tax_id = value1;
-                      tmpObj.percentage = taxObj[value1];
-                      bulkData1.push(tmpObj);                  
-                    }
-                    callback1();
-                  }, function (err) {
-                    if (err) {
-                      console.error(err.message);
-                      callback();
-                    } else {
-                      models.OtherTax.saveAllBulkValues(bulkData1, function (results){
+                        let tmpObj = {};
+                        tmpObj.invoice_id = req.body.id;
+                        tmpObj.purchase_id = null;
+                        tmpObj.tax_id = value1;
+                        tmpObj.percentage = taxObj[value1];
+                        bulkData1.push(tmpObj);                  
+                      }
+                      callback1();
+                    }, function (err) {
+                      if (err) {
+                        console.error(err.message);
                         callback();
-                      });
-                    }
-                  });
-
+                      } else {
+                        models.OtherTax.saveAllBulkValues(bulkData1, function (results){
+                          callback();
+                        });
+                      }
+                    });
+                  } else {
+                    callback();
+                  }
                 });                
               } else {
-                callback()
+                callback();
               }
             },
             function(callback) {
