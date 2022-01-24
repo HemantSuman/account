@@ -712,7 +712,7 @@
                       </td>
                    </tr>
                    <tr style='mso-yfti-irow:12'>
-                      <td class="border-bottom"  rowspan=5 valign=top style='width:329.3pt;
+                      <td class="border-bottom"  rowspan=4 valign=top style='width:329.3pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                             normal'>GST Rupees (In Words) :<span style='mso-spacerun:yes'> </span>
@@ -807,13 +807,13 @@
                    </tr>
                      <% if(extraVar.results.my_model.OtherTaxes.length > 0) { %>
                      <% var othTaxPer=0; %>
-                     <% extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){ 
-                        othTaxPer=parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
+                     <% extraVar.results.my_model.OtherTaxes.forEach(function(rows, index){ %>
+                     <% othTaxPer=parseFloat(othTaxPer) + parseFloat(rows.percentage); %>
                    <tr
                       style='mso-yfti-irow:15'>
                       <td width=150
                         class="border-right-lite border-bottom-lite"
-                         colspan=2
+                         colspan=3
                          valign=top
                          style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>

@@ -933,10 +933,13 @@ $('.date1').daterangepicker({
   function calculateTotal(){
     let totalPrice = 0;
     let totalGST = 0;
+    let gstPercentageOfItem = 0;
     $(".itemRow").each(function(index, val){
       let rate = parseFloat($(".rate", val).val());
       let qty = parseFloat($(".qty", val).val());
       let gst = parseFloat($(".gst", val).val());
+      //gstPercentageOfItem - get from any one item - this will be same for all items
+      gstPercentageOfItem = parseFloat($(".gst", val).val());
       totalPrice = parseFloat(totalPrice) + parseFloat(rate * qty);
       let gstPerItem = ((rate * qty) * gst) / 100;
       $(".gstAmount", val).val(setFloatValAfterDecimal(gstPerItem, 2));
@@ -944,7 +947,7 @@ $('.date1').daterangepicker({
       $(".itemValue", val).val(setFloatValAfterDecimal(parseFloat(rate * qty) + parseFloat(gstPerItem), 2))
       
     });
-    $(".totalGST").val(setFloatValAfterDecimal(totalGST, 2));
+    
 
     $(".SubTotal").val(setFloatValAfterDecimal(totalPrice, 2));
     let discountValue = parseFloat($(".discountField").val());
@@ -961,7 +964,8 @@ $('.date1').daterangepicker({
     if(isNaN(transportation)){
       transportation = 0;
     }
-
+    let calculatedGst = setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100));
+    $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
       let buyerGst = buyerGstAmt.substring(0, 2);
@@ -972,11 +976,11 @@ $('.date1').daterangepicker({
 
         $(".sameStates").show();
         $(".diffStates").hide();
-        $(".cgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 2));
-        $(".sgstAmount").val(setFloatValAfterDecimal(totalGST / 2, 2));
+        $(".cgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 2));
+        $(".sgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 2));
         $(".igstAmount").val("");
       } else {
-        $(".igstAmount").val(setFloatValAfterDecimal(totalGST, 2));
+        $(".igstAmount").val(setFloatValAfterDecimal(calculatedGst, 2));
         $(".cgstAmount").val("");
         $(".sgstAmount").val("");
         $(".diffStates").show();
@@ -991,17 +995,16 @@ $('.date1').daterangepicker({
       $(".tcs_value option:selected").each(function(val, index){
 
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((totalGST + withDiscount + transportation) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((calculatedGst + withDiscount + transportation) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
       })
-      withTcs = parseFloat(((totalGST + withDiscount + transportation) * otherTax) / 100);
+      withTcs = parseFloat(((calculatedGst + withDiscount + transportation) * otherTax) / 100);
       $(".otherTaxInfo").html(otherTaxInfo);
       // total_value = parseFloat(total_value + withTcs);
     } else {
       $(".otherTaxInfo").html("");
     }
-    console.log(transportation , withDiscount , withTcs , totalGST)
 
-    $(".netAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + totalGST, 2));
+    $(".netAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + calculatedGst, 2));
     // $(".totalGST").val(totalGST);
   }
 
