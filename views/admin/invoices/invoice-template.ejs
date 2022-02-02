@@ -592,8 +592,9 @@
                          </p>
                       </td>
                    </tr>
-                   <% if(extraVar.results.my_model.transportation && parseInt(extraVar.results.my_model.transportation) > 0){%>
                    <% var transP=0 %>
+                   <% if(extraVar.results.my_model.transportation && parseInt(extraVar.results.my_model.transportation) > 0){%>
+                     <%=  transP=extraVar.results.my_model.transportation; %>
                    <tr style='mso-yfti-irow:7'>
                       <td class="border-bottom border-right-lite border-bottom-lite border-top"   valign=top style='padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
@@ -611,7 +612,7 @@
                            <% if(extraVar.results.my_model.transportation !="" ){ %>
                               <%=  transP=extraVar.results.my_model.transportation; %>
                            <% } else { %>
-                            0
+                            <%= transP%>
                            <% } %>
                          </p>
                       </td>
@@ -661,7 +662,10 @@
                       </td>
                    </tr>
                    <% } %>
-                   <% if(extraVar.results.my_model.discount && parseInt(extraVar.results.my_model.discount) > 0){ %>
+                   <% var tmpDiscount = 0;%>
+                   <% if(extraVar.results.my_model.discount && parseInt(extraVar.results.my_model.discount) > 0){ 
+                     tmpDiscount = extraVar.results.my_model.discount;    
+                  %>
                    <tr style='mso-yfti-irow:10'>
                       <td class="border-bottom border-right-lite"  valign=top style='width:329.3pt;padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
@@ -679,7 +683,7 @@
                          <p class=MsoNormal align=right
                             style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=extraVar.results.my_model.discount%>
+                            <%=tmpDiscount%>
                          </p>
                          
                       </td>
@@ -707,7 +711,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=(parseFloat(extraVar.results.my_model.sub_total) + parseFloat(transP)) - parseFloat(extraVar.results.my_model.discount)%>
+                            <%=(parseFloat(extraVar.results.my_model.sub_total) + parseFloat(transP)) - parseFloat(tmpDiscount)%>
                            </p>
                       </td>
                    </tr>
@@ -834,7 +838,7 @@
                               style='margin-bottom:.0001pt;
                               text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
                               </span>
-                              <% let othTax=extraVar.helper.setFloatValAfterDecimal(((parseFloat(extraVar.results.my_model.total_GST) + parseFloat(extraVar.results.my_model.amount) + parseFloat(extraVar.results.my_model.transportation)) * parseFloat(rows.percentage) / 100), 2) %>
+                              <% let othTax=extraVar.helper.setFloatValAfterDecimal(((parseFloat(extraVar.results.my_model.total_GST) + parseFloat(extraVar.results.my_model.amount) + parseFloat(transP)) * parseFloat(rows.percentage) / 100), 2) %>
                               <% if(othTax){ %>
                                  <%= othTax%> 
                               <% } %>
