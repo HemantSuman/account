@@ -91,13 +91,15 @@ router.get('/sell', function(req, res, next) {
       });    
     } else if(req.query.submit === "xls"){
       let writeArr = [];
-      let qty = 0;
+      
       
       async.forEachOf(results.invoices, function (value, key, callback) {
-        console.log(value.InvoiceItems)
         if(value.InvoiceItems && value.InvoiceItems.length != 0){
+          let qty = 0;
+          async.forEachOf(value.InvoiceItems, function (value1, key1, callback1) {
+            qty = qty + parseFloat(value1.quantity);
+          })
           let writeObj = {};
-          qty = qty + parseFloat(value.InvoiceItems[0].quantity);
           writeObj["Invoice Number"] = value.invoice_no;
           writeObj["Invoice Date"] = value.date;
           writeObj["Name"] = value.Consignee.account_name;
