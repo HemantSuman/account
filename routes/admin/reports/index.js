@@ -103,7 +103,8 @@ router.get('/sell', function(req, res, next) {
           writeObj["Invoice Number"] = value.invoice_no;
           writeObj["Invoice Date"] = value.date;
           writeObj["Name"] = value.Consignee.account_name;
-          writeObj["GSTIN/UIN of Recipient"] = helper.gstStateCode()[value.Consignee.gstin.substring(0, 2)];
+          writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
+          writeObj["State of Recipient"] = helper.gstStateCode()[value.Consignee.gstin.substring(0, 2)];
           writeObj["Invoice Value"] = Math.round(value.net_amount);
           writeObj["Rate %"] = value.InvoiceItems[0].gst;
           writeObj["Taxable Value"] = value.total_GST;
