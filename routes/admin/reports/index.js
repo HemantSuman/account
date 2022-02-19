@@ -98,12 +98,12 @@ router.get('/sell', function(req, res, next) {
         console.log(value.InvoiceItems)
         if(value.InvoiceItems && value.InvoiceItems.length != 0){
           let writeObj = {};
-          qty = qty + value.InvoiceItems[0].quantity;
+          qty = qty + parseFloat(value.InvoiceItems[0].quantity);
           writeObj["Invoice Number"] = value.invoice_no;
           writeObj["Invoice Date"] = value.date;
           writeObj["Name"] = value.Consignee.account_name;
           writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
-          writeObj["Invoice Value"] = value.net_amount;
+          writeObj["Invoice Value"] = Math.round(value.net_amount);
           writeObj["Rate %"] = value.InvoiceItems[0].gst;
           writeObj["Taxable Value"] = value.total_GST;
           writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
