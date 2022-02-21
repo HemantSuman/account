@@ -178,6 +178,9 @@
                 .border-top {
                         border-top: 1px #e0d8d8 solid !important;   
                 }
+                .strongText {
+                  font-weight: bold;
+                }
         </style>
 
 </head>
@@ -492,23 +495,23 @@
                    mso-yfti-tbllook:1184;mso-padding-alt:0in 2.4pt 0in 2.4pt'>
                    <tr style='mso-yfti-irow:0;mso-yfti-firstrow:yes;'>
                       <td  valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                         <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>Item Description</p>
                       </td>
                       <td  valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                         <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>HSN</p>
                       </td>
                       <td width="10%" valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                         <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>Quantity</p>
                       </td>
                       <td width="10%" valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                         <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>Rate</p>
                       </td>
                       <td width="10%" valign=top style='padding:0in 2.4pt 0in 2.4pt;height:19.3pt'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                         <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>Amount</p>
                       </td>
                    </tr>
@@ -582,7 +585,7 @@
                         <td class="border-right">
                         </td>
                       <td class="border-bottom" colspan="3" valign=top style='padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Total</p>
                       </td>
                       <td class="border-bottom"  valign=top style='padding:0in 5.4pt 0in 5.4pt'>
@@ -594,14 +597,14 @@
                    </tr>
                    <% var transP=0 %>
                    <% if(extraVar.results.my_model.transportation && parseInt(extraVar.results.my_model.transportation) > 0){%>
-                     <%=  transP=extraVar.results.my_model.transportation; %>
+                     <%  transP=extraVar.results.my_model.transportation; %>
                    <tr style='mso-yfti-irow:7'>
                       <td class="border-bottom border-right-lite border-bottom-lite border-top"   valign=top style='padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Add</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite" colspan=2 valign=top style='padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
                             </span>Transport
                         </p>
@@ -668,14 +671,14 @@
                   %>
                    <tr style='mso-yfti-irow:10'>
                       <td class="border-bottom border-right-lite"  valign=top style='width:329.3pt;padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Less<span style='mso-spacerun:yes'>
                             </span>
                          </p>
                       </td>
                       <td class="border-bottom border-right-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                       padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Discount</p>
                       </td>
                       <td class="border-bottom border-right-lite"  valign=top style='width:54.05pt;'>
@@ -704,7 +707,7 @@
                       </td>
                       <td class="border-bottom" width=222 colspan=3 valign=top style='width:166.85pt;
                          '>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Invoice Taxable Value</p>
                       </td>
                       <td class="border-bottom"  valign=top style='width:59.15pt;;
@@ -718,13 +721,13 @@
                    <tr style='mso-yfti-irow:12'>
                       <td class="border-bottom"  rowspan=4 valign=top style='width:329.3pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
-                            normal'>GST Rupees (In Words) :<span style='mso-spacerun:yes'> </span>
+                         <p class="MsoNormal" style='margin-bottom:.0001pt;line-height:
+                            normal'><span class="strongText">GST Rupees (In Words) :</span><span style='mso-spacerun:yes'> </span>
                             <%= extraVar.helper.getNumber(Math.round(extraVar.results.my_model.total_GST))%> only                            
                          </p>
                       </td>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>CGST @ <%=itemGstPer/2%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
@@ -746,7 +749,7 @@
                    <tr style='mso-yfti-irow:13'>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>SGST @ <%=itemGstPer/2%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
@@ -768,7 +771,7 @@
                    <tr style='mso-yfti-irow:13'>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>IGST @ <%=itemGstPer%>%</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
@@ -790,7 +793,7 @@
                    <tr style='mso-yfti-irow:14'>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal align=right style='margin-bottom:.0001pt;
+                         <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Total GST</p>
                       </td>
                       <td class="border-right-lite border-bottom-lite"  valign=top style='width:54.05pt;
@@ -821,7 +824,7 @@
                          valign=top
                          style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal
+                         <p class="MsoNormal strongText"
                             align=right
                             style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
@@ -833,7 +836,7 @@
                         class="border-right-lite border-bottom-lite"
                          valign=top
                          style='width:54.05pt;padding:0in 5.4pt 0in 5.4pt'>
-                           <p class=MsoNormal
+                           <p class="MsoNormal"
                               align=right
                               style='margin-bottom:.0001pt;
                               text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
@@ -869,7 +872,7 @@
                          valign=top
                          style='width:166.85pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal
+                         <p class="MsoNormal strongText"
                             align=right
                             style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Total Value</p></td>
@@ -897,9 +900,9 @@
                          valign=top
                          style='width:555.3pt;
                          padding:0in 5.4pt 0in 5.4pt'>
-                         <p class=MsoNormal
+                         <p class="MsoNormal"
                             style='margin-bottom:.0001pt;line-height:
-                            normal'>Total Rupees (In Words) :<span style='mso-spacerun:yes'>
+                            normal'><span class="strongText">Total Rupees (In Words) :</span><span style='mso-spacerun:yes'>
                             </span>
                             <%=
                                extraVar.helper.getNumber(Math.round(extraVar.results.my_model.net_amount))%>
