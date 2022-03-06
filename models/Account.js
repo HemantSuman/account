@@ -110,6 +110,12 @@ module.exports = function (sequelize, DataTypes) {
         registration_no: {
             type: DataTypes.STRING,
         },
+        district: {
+            type: DataTypes.STRING,
+        },
+        creadit_days: {
+            type: DataTypes.STRING,
+        },
         status: {
             type: DataTypes.STRING,
         },

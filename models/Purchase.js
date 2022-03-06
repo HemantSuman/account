@@ -64,6 +64,9 @@ module.exports = function (sequelize, DataTypes) {
             //     },   
             // }
         },
+        eway_bill_no: {
+            type: DataTypes.STRING,
+        },
         vehicle_no: {
             type: DataTypes.STRING,
             // validate: {

@@ -85,6 +85,9 @@ module.exports = function (sequelize, DataTypes) {
         transaction_mode: {
             type: DataTypes.STRING,
         },
+        eway_bill_no: {
+            type: DataTypes.STRING,
+        },
         dispach_through: {
             type: DataTypes.STRING,
         },
