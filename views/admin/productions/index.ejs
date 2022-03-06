@@ -30,6 +30,8 @@
               <tr>
                 <th>No.</th>
                 <th>Brand</th>
+                <th>Quantity</th>
+                <th>Production Date</th>
                 <th>Actions</th>
               </tr>
               </thead>
@@ -39,6 +41,8 @@
                     <tr>
                       <td><%= ++index %></td>
                       <td><%= rows.Brand.name %></td>
+                      <td><%= rows.quantity %></td>
+                      <td><%= rows.date_of_production %></td>
                       <td>
                         <!-- <a href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>" data-toggle="tooltip" title="Edit" ><i class="fas fa-edit"></i></a> -->
                         <!-- <a class="deleteEntry" action="/admin/<%= extraVar.viewDirectory %>/delete/<%= rows.id %>" href="javascript:void(0);" data-toggle="tooltip" title="Delete" ><i class="fas fa-times"></i></a> -->

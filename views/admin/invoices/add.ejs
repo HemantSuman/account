@@ -206,6 +206,13 @@
                     <div class="payment_terms-error-message error-message"></div>
                   </div>
                 </div>
+                <div class="col-sm-2">
+                  <div class="form-group">
+                    <label for="">IRN No.</label>
+                    <input name="irn" type="text" class="form-control"  placeholder="">
+                    <div class="irn-error-message error-message"></div>
+                  </div>
+                </div>
               </div>
               
               <div class="itemCantainer">
@@ -884,9 +891,9 @@
       $(".tcs_value option:selected").each(function(val, index){
 
         otherTax = parseFloat(otherTax) + parseFloat($(this).attr("percentage"));
-        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((calculatedGst + withDiscount + transportation) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
+        otherTaxInfo += $(this).text() + "-"+ parseFloat($(this).attr("percentage"))+"%: " + setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * parseFloat($(this).attr("percentage"))) / 100), 2) + ", ";
       })
-      withTcs = parseFloat(((calculatedGst + withDiscount + transportation) * otherTax) / 100);
+      withTcs = parseFloat(((withDiscount + transportation) * otherTax) / 100);
       $(".otherTaxInfo").html(otherTaxInfo);
       // total_value = parseFloat(total_value + withTcs);
     } else {

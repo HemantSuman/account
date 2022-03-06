@@ -423,8 +423,7 @@
                          ;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
-                            normal'><b style='mso-bidi-font-weight:normal'>Delivery Address (If other
-                            than buyer address)</b>
+                            normal'><b style='mso-bidi-font-weight:normal'>Delivery Address</b>
                          </p>
                       </td>
                    </tr>
@@ -442,7 +441,6 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                             normal'>
-                            <% if(extraVar.results.my_model.consignee_no !=extraVar.results.my_model.buyer){ %>
                             <%=
                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].account_name%>
                             <br />
@@ -455,7 +453,6 @@
                             PAN No.: <%=
                                extraVar.results.accountKeyValue[extraVar.results.my_model.buyer].pan_no%>
                             <br />
-                            <% } %>
                          </p>
                       </td>
                    </tr>
@@ -829,7 +826,7 @@
                             style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
                             <%= extraVar.results.taxKeyValue[rows.tax_id] %>
-                            (<%= rows.percentage%> %)
+                            (<%= parseFloat(rows.percentage)%> %)
                          </p>
                       </td>
                       <td 
@@ -841,7 +838,7 @@
                               style='margin-bottom:.0001pt;
                               text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
                               </span>
-                              <% let othTax=extraVar.helper.setFloatValAfterDecimal(((parseFloat(extraVar.results.my_model.total_GST) + parseFloat(extraVar.results.my_model.amount) + parseFloat(transP)) * parseFloat(rows.percentage) / 100), 2) %>
+                              <% let othTax=extraVar.helper.setFloatValAfterDecimal(((parseFloat(extraVar.results.my_model.amount) + parseFloat(transP)) * parseFloat(rows.percentage) / 100), 2) %>
                               <% if(othTax){ %>
                                  <%= othTax%> 
                               <% } %>

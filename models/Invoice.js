@@ -112,6 +112,9 @@ module.exports = function (sequelize, DataTypes) {
         payment_terms: {
             type: DataTypes.STRING,
         },
+        irn: {
+            type: DataTypes.STRING,
+        },
         sub_total: {
             type: DataTypes.STRING,
             validate: {

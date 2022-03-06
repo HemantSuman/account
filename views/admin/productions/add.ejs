@@ -100,8 +100,14 @@
                             <label for="">Item</label>
                             <div class="items-error-message error-message"></div>
                           </div>
-                          <div class="col-sm-1">
+                          <div class="col-sm-2">
                             <label for="">Quantity</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Wastage(In %)</label>
+                          </div>
+                          <div class="col-sm-2">
+                            <label for="">Total</label>
                           </div>
                           <div class="col-sm-2">
                           </div>
@@ -174,6 +180,17 @@
             
             let itemHtml = "";
             response.map(function(v, itemIndexValue){
+
+              let rowQty = parseFloat(v.quantity);
+              let totalQty;
+              if(v.Item.wastage != ''){
+                let percentValue = (rowQty * parseFloat(v.Item.wastage)) / 100;
+                totalQty = parseFloat(rowQty + percentValue);
+              } else {
+                totalQty = rowQty;
+              }
+              
+
               itemHtml += "<div class='row itemRow'>";
               itemHtml += "<div class='col-sm-2'><div class='form-group'>";
               itemHtml += "<input disabled type='text' value='"+v.Item.item_name+"' class='form-control' >";
@@ -181,9 +198,19 @@
               itemHtml += "</div></div>";
 
               itemHtml += "<div class='col-sm-2'><div class='form-group'>";
-              itemHtml += "<input type='hidden' value='"+v.quantity+"' class='form-control quantity_hidden_"+itemIndexValue+"' >";
-              itemHtml += "<input readonly type='text' name='items["+itemIndexValue+"][quantity]' value='"+v.quantity+"' class='form-control quantity_"+itemIndexValue+"' >";
+              // itemHtml += "<input type='hidden' value='"+v.quantity+"' class='form-control quantity_hidden_"+itemIndexValue+"' >";
+              itemHtml += "<input readonly type='text' value='"+setFloatValAfterDecimal(v.quantity, 2)+"' class='form-control' >";
               itemHtml += "<div class='quantity_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+
+              itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+              // itemHtml += "<input type='hidden' value='"+v.quantity+"' class='form-control quantity_hidden_"+itemIndexValue+"' >";
+              itemHtml += "<input readonly type='text' name='items["+itemIndexValue+"][wastage]' value='"+v.Item.wastage+"' class='form-control wastage_"+itemIndexValue+"' >";
+              itemHtml += "</div></div>";
+
+              itemHtml += "<div class='col-sm-2'><div class='form-group'>";
+              itemHtml += "<input type='hidden' value='"+totalQty+"' class='form-control quantity_hidden_"+itemIndexValue+"' >";
+              itemHtml += "<input readonly type='text' name='items["+itemIndexValue+"][quantity]' value='"+totalQty+"' class='form-control quantity_"+itemIndexValue+"' >";
+              itemHtml += "</div></div>";
 
               itemHtml += "</div>";
             });
