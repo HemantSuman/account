@@ -53,7 +53,7 @@ router.post('/', function(req, res, next) {
           if (err) {
               console.log(err);
           }
-          res.status(201).send({status: true, msg: 'login done', 'url': 'accounts', data: []});
+          res.status(201).send({status: true, msg: 'login done', 'url': 'dashboards', data: []});
       });
     }
 
