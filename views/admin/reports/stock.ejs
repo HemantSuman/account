@@ -75,7 +75,7 @@
                       <td><%= ++index %></td>
                       <td><%= rows.Item.item_name %></td>
                       <td><%= rows.SubItem ? rows.SubItem.name : '' %></td>
-                      <td><%= rows.quantity %></td>
+                      <td><%= helper.setFloatValAfterDecimal(rows.quantity, 2) %></td>
                       <!-- <td><%= rows.no_of_pkg %></td> -->
                       <td><%= rows.type %></td>
                     </tr>                
