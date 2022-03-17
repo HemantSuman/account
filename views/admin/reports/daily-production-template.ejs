@@ -147,41 +147,22 @@
         <table id="items">
           <tr>
             <th>SNo.</th>
-            <th>Name</th>
-            <th>GST In</th>
             <th width="10%">Date</th>
-            <th>Invoice No.</th>
-            <th>HSN</th>
-            <th>Qty</th>
-            <th>Unit</th>
-            
-            
-            <th>IGST</th>
-            <th>CGST</th>
-            <th>SGST</th>
-            <th>Total GST</th>
-            <th>Net</th>
+            <th>Item</th>
+            <th>SubItem</th>
+            <th>Brand</th>
+            <th>Quantity</th>
           </tr>
-          <% if(extraVar.results.purchases.length > 0) { %> <%
-          extraVar.results.purchases.forEach(function(rows, index){ %>
+          <% if(extraVar.results.productions.length > 0) { %> <%
+          extraVar.results.productions.forEach(function(rows, index){ %>
 
           <tr class="item-row">
             <td><%= ++index %></td>
-            <td><%= rows.Account.account_name %></td>
-            <td><%= rows.Account.gstin %></td>
-            <td width="10%" class="hideextra"><%= rows.purchase_invoice_date %></td>
-            <td class="item-name for-left"><%= rows.purchase_invoice_no%></td>
-            <td><%= rows.PurchaseItems[0].Item.hsn_code%></td>
-            <td><%= Math.round(rows.PurchaseItems[0].quantity)%></td>
-            <td><%= rows.PurchaseItems[0].Item.unit%></td>
-            
-            
-            <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
-            <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
-            <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
-            <td><%= rows.igst_amount?Math.round(rows.igst_amount) : Math.round(parseInt(rows.cgst_amount) + parseInt(rows.sgst_amount)) %></td>
-            <td><%= Math.round(rows.total_value) %></td>
-            
+            <td width="10%" class="hideextra"><%= rows.date_of_production %></td>
+            <td><%= rows.Item.item_name%></td>
+            <td><%= rows.SubItem?rows.SubItem.name:""%></td>
+            <td><%= rows.Brand.name%></td>
+            <td><%= rows.quantity%></td>
           </tr>
           <% }); %> <% } else { %>
           <tr class="item-row">

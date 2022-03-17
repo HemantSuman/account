@@ -50,7 +50,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         date_of_production: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
@@ -72,9 +72,15 @@ module.exports = function (sequelize, DataTypes) {
   myModel.getAllValues = function (req, res) {
     req.where.company_id = req.siteVariable.session.user.Company.id;
     var brandToProduction = myModel.belongsTo(sequelize.models.Brand, {foreignKey: 'brand_id'});
+    var itemToProduction = myModel.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var subitemToProduction = myModel.belongsTo(sequelize.models.SubItem, {foreignKey: 'sub_item_id'});
+    // var companyToProduction = myModel.belongsTo(sequelize.models.Company, {foreignKey: 'company_id'});
+    
     this.findAll({where: req.where, 
             include: [
-                brandToProduction
+                brandToProduction,
+                itemToProduction,
+                subitemToProduction
             ]
         })
         .then(function(results){

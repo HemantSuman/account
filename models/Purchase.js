@@ -99,54 +99,6 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        // pay_date: {
-        //     type: DataTypes.DATE,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        // pay_amount: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        // pay_mode: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        // description: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        // settlement: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
-        // discount: {
-        //     type: DataTypes.STRING,
-        //     validate: {
-        //         notEmpty: {
-        //             msg: i18n_Validation.__('required')
-        //         },   
-        //     }
-        // },
         taxable_value: {
             type: DataTypes.STRING,
             validate: {
@@ -256,14 +208,14 @@ module.exports = function (sequelize, DataTypes) {
     var purchaseItemToPurchae = myModel.hasMany(sequelize.models.PurchaseItems, {foreignKey: 'purchase_id'});
     var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
     var AccountToGroup = sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
-    // var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
     this.findAll({
             where: req.where,
             include: [
                 // {model: sequelize.models.Account, as: 'Account'}
                 accountToPurchae,
-                purchaseItemToPurchae,
                 paymentToPurchae,
+                {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
                 {association: accountToPurchae, include: [{association: AccountToGroup, include: []}]},
             ],
             order: req.order    

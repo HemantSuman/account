@@ -172,6 +172,7 @@ router.get('/accounts', function(req, res, next) {
     if(req.query.submit === "print"){
       extraVar['results'] = results;
       extraVar['helper'] = helper;
+      console.log("@@@@@@@", results.purchases[0].PurchaseItems);
       ejs.renderFile(path.join('views/admin/reports/', "purchase-template.ejs"), {extraVar: extraVar}, (err, data) => {
         console.log(err)
         if (err) {
@@ -207,14 +208,21 @@ router.get('/accounts', function(req, res, next) {
       let writeArr = [];
       async.forEachOf(results.purchases, function (value, key, callback) {
         let writeObj = {};
-        writeObj["Invoice No."] = value.purchase_invoice_no;
-        writeObj["Date"] = value.purchase_invoice_date;
+        writeObj["SNo."] = ++key;
         writeObj["Name"] = value.Account.account_name;
         writeObj["GST In"] = value.Account.gstin;
+        writeObj["Date"] = value.purchase_invoice_date;
+        writeObj["Invoice No."] = value.purchase_invoice_no;
+        writeObj["HSN"] = value.PurchaseItems[0].Item.hsn_code;
+        writeObj["Qty"] = Math.round(value.PurchaseItems[0].quantity);
+        writeObj["Unit"] = value.PurchaseItems[0].Item.unit;
+        
+        writeObj["IGST"] = value.igst_amount?Math.round(value.igst_amount):"";
+        writeObj["CGST"] = value.cgst_amount?Math.round(value.cgst_amount):"";
+        writeObj["SGST"] = value.sgst_amount?Math.round(value.sgst_amount):"";
+        writeObj["Total GST"] = value.igst_amount?Math.round(value.igst_amount) : Math.round(parseInt(value.cgst_amount) + parseInt(value.sgst_amount))
+
         writeObj["Total Value"] = value.total_value;
-        writeObj["IGST"] = value.igst_amount?parseFloat(value.igst_amount):"";
-        writeObj["CGST"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
-        writeObj["SGST"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
         writeArr.push(writeObj);
         callback();
       }, function (err) {
@@ -486,6 +494,101 @@ router.get('/stock', function(req, res, next) {
         extraVar['query'] = {};
       }
       res.render('admin/'+viewDirectory+'/stock', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
+router.get('/daily-production', function(req, res, next) {
+  async.parallel({
+    productions: function (callback) {
+      req.where = {};
+      if(req.query.date_of_production){
+
+
+        req.query.date_of_production = helper.changeDateFormate(req.query.date_of_production.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        // req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+        req.where = {
+          date_of_production: req.query.date_of_production,
+        };
+      }      
+      models.Production.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },            
+  }, function (err, results) {
+    // console.log("@@@", JSON.stringify(results)); return;
+    if(req.query.submit === "print"){
+      // console.log("@@@", JSON.stringify(results)); return;
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "daily-production-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/daily-production-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    // console.log(data);
+                    res.redirect("/reports/daily-production-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      
+      
+      async.forEachOf(results.productions, function (value, key, callback) {
+          let writeObj = {};
+          writeObj["Date"] = value.date_of_production;
+          writeObj["Item"] = value.Item.item_name;
+          writeObj["SubItem"] = value.SubItem?value.SubItem.name:"";
+          writeObj["Brand"] = value.Brand.name;
+          writeObj["Quantity"] = value.quantity;
+          writeArr.push(writeObj);
+        callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          
+          const ws = reader.utils.json_to_sheet(writeArr);
+  
+          let wb = reader.utils.book_new();
+          reader.utils.book_append_sheet(wb, ws);
+          reader.writeFile(wb, "public/reports/daily-production-report.xlsx");
+          res.redirect("/reports/daily-production-report.xlsx");
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.date_of_production){
+        //again convert date format for dispaly input - filled
+        req.query.date_of_production = helper.changeDateFormate(req.query.date_of_production.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/daily-production', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
 });
