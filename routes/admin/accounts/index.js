@@ -192,4 +192,12 @@ router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  ex
   });
 });
 
+router.post('/accountByGroup', function(req, res, next) {
+  req.where = {group_id: req.body.group_id};
+  models.Account.getAllValues(req, function (results) {
+    res.json(results);
+    // res.render('admin/'+viewDirectory+'/index', {results, extraVar, helper, layout: false });
+  });   
+});
+
 module.exports = router;

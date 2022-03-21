@@ -121,7 +121,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
         payentArr.body.pay_mode = req.body.pay_mode;
         payentArr.body.pay_amount = req.body.pay_amount;
         payentArr.body.remark = req.body.remark;
-        payentArr.company_id = extraVar.siteVariable.session.user.Company.id;
+        payentArr.body.company_id = extraVar.siteVariable.session.user.Company.id;
         models[modelName].saveAllValues(payentArr, function (results3) {
 
           req.where = {

@@ -31,7 +31,7 @@ router.use(function(req, res, next) {
 
 /* GET home page. */
 router.get('/', function(req, res, next) {
-  res.redirect('/admin/reports/accounts');
+  res.redirect('/admin/reports/purchase');
 });
 
 router.get('/sell', function(req, res, next) {
@@ -148,7 +148,7 @@ router.get('/sell', function(req, res, next) {
   })  
 });
 
-router.get('/accounts', function(req, res, next) {
+router.get('/purchase', function(req, res, next) {
   async.parallel({
     purchases: function (callback) {
       req.where = {};
@@ -250,7 +250,7 @@ router.get('/accounts', function(req, res, next) {
       } else {
         extraVar['query'] = {};
       }
-      res.render('admin/'+viewDirectory+'/accounts', { extraVar,helper, layout:'admin/layout/layout' });
+      res.render('admin/'+viewDirectory+'/purchase', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
 });
@@ -589,6 +589,230 @@ router.get('/daily-production', function(req, res, next) {
         extraVar['query'] = {};
       }
       res.render('admin/'+viewDirectory+'/daily-production', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
+router.get('/payment', function(req, res, next) {
+  async.parallel({
+    payments: function (callback) {
+        req.where = {};
+        models.Payment.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },
+    payment_received: function (callback) {
+        req.where = {};
+        models.PaymentReceived.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },            
+  }, function (err, results) {
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "payment-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/payment-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    // console.log(data);
+                    res.redirect("/reports/payment-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      
+      
+      async.forEachOf(results.payments, function (value, key, callback) {
+          let writeObj = {};
+          writeObj["Type"] = "Paid";
+          writeObj["Date"] = value.pay_date;
+          writeObj["Mode"] = value.pay_mode;
+          writeObj["Amount"] = value.pay_amount;
+          if(extraVar.query.type == 'paid' || extraVar.query.type == 'both'){
+            writeArr.push(writeObj);
+          }
+          callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          
+          async.forEachOf(results.payment_received, function (value1, key1, callback1) {
+            let writeObj1 = {};
+            writeObj1["Type"] = "Received";
+            writeObj1["Date"] = value1.pay_date;
+            writeObj1["Mode"] = value1.pay_mode;
+            writeObj1["Amount"] = value1.pay_amount;
+            if(extraVar.query.type == 'received' || extraVar.query.type == 'both'){
+              writeArr.push(writeObj1);
+            }
+            callback1();
+          }, function (err1) {
+            const ws = reader.utils.json_to_sheet(writeArr);
+  
+            let wb = reader.utils.book_new();
+            reader.utils.book_append_sheet(wb, ws);
+            reader.writeFile(wb, "public/reports/payment-report.xlsx");
+            res.redirect("/reports/payment-report.xlsx");
+          })
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.type){
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {type:"both"};
+      }
+      res.render('admin/'+viewDirectory+'/payment', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
+router.get('/party-wise', function(req, res, next) {
+  async.parallel({
+    groups: function (callback) {
+      req.where = {}
+      models.Group.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },
+    accounts: function (callback) {
+      if(req.query && req.query.group_id){
+        req.where = {group_id: req.query.group_id}
+      } else {
+        req.where = {}
+      }
+      models.Account.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },
+    payments: function (callback) {
+        if(req.query && req.query.account_id){
+          req.where = {account_id: req.query.account_id};
+        } else {
+          req.where = {};
+        }
+        models.Payment.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },
+    payment_received: function (callback) {
+        if(req.query && req.query.account_id){
+          req.where = {account_id: req.query.account_id};
+        } else {
+          req.where = {};
+        }
+        models.PaymentReceived.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },            
+  }, function (err, results) {
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "party-wise-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/party-wise-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    // console.log(data);
+                    res.redirect("/reports/party-wise-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      
+      
+      async.forEachOf(results.payments, function (value, key, callback) {
+          let writeObj = {};
+          writeObj["Party"] = value.Account.account_name;
+          writeObj["Type"] = "Paid";
+          writeObj["Date"] = value.pay_date;
+          writeObj["Mode"] = value.pay_mode;
+          writeObj["Amount"] = value.pay_amount;
+          writeArr.push(writeObj);
+          callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          
+          async.forEachOf(results.payment_received, function (value1, key1, callback1) {
+            let writeObj1 = {};
+            writeObj1["Party"] = value1.Account.account_name;
+            writeObj1["Type"] = "Received";
+            writeObj1["Date"] = value1.pay_date;
+            writeObj1["Mode"] = value1.pay_mode;
+            writeObj1["Amount"] = value1.pay_amount;
+            writeArr.push(writeObj1);
+            callback1();
+          }, function (err1) {
+            const ws = reader.utils.json_to_sheet(writeArr);
+  
+            let wb = reader.utils.book_new();
+            reader.utils.book_append_sheet(wb, ws);
+            reader.writeFile(wb, "public/reports/part-wise-report.xlsx");
+            res.redirect("/reports/part-wise-report.xlsx");
+          })
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.account_id){
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/party-wise', { extraVar,helper, layout:'admin/layout/layout' });
     }
   })  
 });
