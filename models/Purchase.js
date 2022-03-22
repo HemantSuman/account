@@ -209,19 +209,21 @@ module.exports = function (sequelize, DataTypes) {
     var paymentToPurchae = myModel.hasMany(sequelize.models.PaymentPurchase, {foreignKey: 'purchase_id'});
     var AccountToGroup = sequelize.models.Account.belongsTo(sequelize.models.Group, {foreignKey: 'group_id'});
     var purchaseItemToItem = sequelize.models.PurchaseItems.belongsTo(sequelize.models.Item, {foreignKey: 'item_id'});
+    var ItemToCategory = sequelize.models.Item.belongsTo(sequelize.models.Category, {foreignKey: 'category_id'});
     this.findAll({
             where: req.where,
             include: [
                 // {model: sequelize.models.Account, as: 'Account'}
                 accountToPurchae,
                 paymentToPurchae,
-                {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: []}]},
+                {association: purchaseItemToPurchae, include: [{association: purchaseItemToItem, include: [{association: ItemToCategory}]}]},
                 {association: accountToPurchae, include: [{association: AccountToGroup, include: []}]},
             ],
             order: req.order    
         },    
     )
         .then(function(results){
+            console.log(JSON.stringify(results));
             res(results);
         })
     }    

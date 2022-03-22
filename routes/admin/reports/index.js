@@ -817,6 +817,197 @@ router.get('/party-wise', function(req, res, next) {
   })  
 });
 
+router.get('/purchase-item-type', function(req, res, next) {
+  async.parallel({
+    categories: function (callback) {
+      req.where = {}
+      models.Category.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },
+    purchases: function (callback) {
+      req.where = {};
+      if(req.query.category_id){
+
+        req.where = {'$PurchaseItems.Item.category_id$': req.query.category_id}
+      }      
+      models.Purchase.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },            
+  }, function (err, results) {
+
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "purchase-item-type-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/purchase-item-type-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    console.log(data);
+                    res.redirect("/reports/purchase-item-type-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      async.forEachOf(results.purchases, function (value, key, callback) {
+        let writeObj = {};
+        writeObj["SNo."] = ++key;
+        writeObj["Invoice No."] = value.purchase_invoice_no;
+        writeObj["Date"] = value.purchase_invoice_date;
+        writeObj["Name"] = value.Account.account_name;
+        writeObj["GST In"] = value.Account.gstin;
+        writeObj["Total Value"] = Math.round(value.total_value);
+        writeObj["IGST"] = value.igst_amount?Math.round(value.igst_amount):"";
+        writeObj["CGST"] = value.cgst_amount?Math.round(value.cgst_amount):"";
+        writeObj["SGST"] = value.sgst_amount?Math.round(value.sgst_amount):"";
+        writeArr.push(writeObj);
+        callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          const ws = reader.utils.json_to_sheet(writeArr);
+  
+          let wb = reader.utils.book_new();
+          reader.utils.book_append_sheet(wb, ws);
+          reader.writeFile(wb, "public/invoices/purchase-item-wise-report.xlsx");
+          res.redirect("/invoices/purchase-item-wise-report.xlsx");
+          // reader.utils.book_append_sheet(file,ws,"Sheet3");
+          // reader.writeFile(file,'public/invoices/purchase-report.xlsx')
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.category_id){
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/purchase-item-type', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
+router.get('/production-item-type', function(req, res, next) {
+  async.parallel({
+    categories: function (callback) {
+      req.where = {}
+      models.Category.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },
+    invoices: function (callback) {
+      req.where = {};
+      if(req.query.category_id){
+        req.where = {'$InvoiceItems.Item.category_id$': req.query.category_id}
+      }
+      models.Invoice.getAllValues(req, function (data) {
+          callback(null, data);
+      });
+    },            
+  }, function (err, results) {
+
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "production-item-type-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/production-item-type-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    console.log(data);
+                    res.redirect("/reports/production-item-type-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      async.forEachOf(results.purchases, function (value, key, callback) {
+        let writeObj = {};
+        writeObj["SNo."] = ++key;
+        writeObj["Invoice No."] = value.purchase_invoice_no;
+        writeObj["Date"] = value.purchase_invoice_date;
+        writeObj["Name"] = value.Account.account_name;
+        writeObj["GST In"] = value.Account.gstin;
+        writeObj["Total Value"] = Math.round(value.total_value);
+        writeObj["IGST"] = value.igst_amount?Math.round(value.igst_amount):"";
+        writeObj["CGST"] = value.cgst_amount?Math.round(value.cgst_amount):"";
+        writeObj["SGST"] = value.sgst_amount?Math.round(value.sgst_amount):"";
+        writeArr.push(writeObj);
+        callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          const ws = reader.utils.json_to_sheet(writeArr);
+  
+          let wb = reader.utils.book_new();
+          reader.utils.book_append_sheet(wb, ws);
+          reader.writeFile(wb, "public/invoices/production-item-wise-report.xlsx");
+          res.redirect("/invoices/production-item-wise-report.xlsx");
+          // reader.utils.book_append_sheet(file,ws,"Sheet3");
+          // reader.writeFile(file,'public/invoices/purchase-report.xlsx')
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.category_id){
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/production-item-type', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
 // router.get('/print', function(req, res, next) {
 //   const file = reader.readFile('public/images/purchase-sample.xlsx');
 //   let writeArr = [];

@@ -1,0 +1,184 @@
+<!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Transitional//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-transitional.dtd">
+<html xmlns="http://www.w3.org/1999/xhtml">
+  <head>
+    <meta http-equiv="Content-Type" content="text/html; charset=UTF-8" />
+
+    <title>Editable Invoice</title>
+
+    <link rel="stylesheet" type="text/css" href="css/style.css" />
+    <style>
+      
+      body {
+        font: 8px Georgia, serif;
+      }
+      #page-wrap {
+         width: 580px;
+        /*height: 800px;*/
+        margin: 0 auto; 
+        display: block; 
+      }
+
+      /* table {
+        border-collapse: collapse;
+      }
+      #items table td,
+      #items table th {
+        border: 1px solid black;
+        padding: 5px;
+      } */      
+      #items {
+        clear: both;
+        width: 100%;
+        margin: 0px 0 0 0;
+        /* height: 250px; */
+        border-bottom: 1px #ccc solid;
+        /* border: 1px solid black; */
+      }
+      #items th {
+        height: 20px;
+        background: #eee;
+        width: 5px;
+        overflow: hidden;
+      }
+      .hideextra {
+        white-space: nowrap;
+      }
+      #items tr.item-row td {
+        vertical-align: top;
+      }
+      #items td.description {
+        width: 300px;
+      }
+      /* #items td.item-name {
+        width: 175px;
+      } */
+      
+      #items td.total-line {
+        border-right: 0;
+        text-align: right;
+      }
+      #items td.total-value {
+        border-left: 0;
+        padding: 5px;
+      }
+      #items td.balance {
+        background: #eee;
+      }
+      #items td.blank {
+        border: 0;
+      }
+      #items tr td {
+        text-align: center;
+      }
+      .table0 {
+        width: 99%;
+        float: left;
+        border: 1px #ccc solid;
+        padding: 2px 2px;
+        text-align: right;
+        border-collapse: collapse;
+        border-bottom: none;
+      }
+      .table0 tr td {
+        padding: 5px 0;
+      }
+      .table1 {
+        display: inline-block;
+        width: 49%;
+        float: left;
+        border: 1px #ccc solid;
+        padding: 2px;
+        border-collapse: collapse;
+        border-right: none;
+      }
+      .table1 tr td {
+        padding: 2px 0;
+      }
+      .table2 {
+        display: inline-block;
+        width: 48%;
+        float: left;
+        border: 1px #ccc solid;
+        font-size: 11px;
+        padding: 2px;
+        border-collapse: collapse;
+        border-bottom: none;
+      }
+      .table3 {
+        display: inline-block;
+        width: 48%;
+        float: left;
+        border: 1px #ccc solid;
+        padding: 2px;
+        min-height: 70px;
+        border-collapse: collapse;
+        border-bottom: none;
+      }
+      .table4 {
+        width: 100%;
+        float: left;
+        border: 1px #ccc solid;
+        border-collapse: collapse;
+      }
+      .table4 tr td {
+        border: 1px #ccc solid;
+      }
+      .table4 tr td {
+        padding: 4px;
+      }
+      .noWrape {
+        width: 10%;
+      }
+      #pageHeader {
+        padding: 5px;
+      }
+      #pageFooter {
+        padding: 5px;
+      }
+      .for-left {
+        text-align: left !important;
+      }
+    </style>
+  </head>
+
+  <body>
+    <div id="page-wrap" >
+      <div style="min-height: 210px;display: inline-block;border: 1px #ccc solid">
+        <table id="items">
+          <tr>
+            <th>No.</th>
+            <th>Invoice No.</th>
+            <th>Date</th>
+            <th>Name</th>
+            <th>GST In</th>
+            <th>Total Value</th>
+            <th>IGST</th>
+            <th>CGST</th>
+            <th>SGST</th>
+          </tr>
+          <% if(extraVar.results.purchases.length > 0) { %> <%
+          extraVar.results.purchases.forEach(function(rows, index){ %>
+            <tr>
+              <td><%= ++index %></td>
+              <td><%= rows.purchase_invoice_no %></td>
+              <td class="noWrape"><%= rows.purchase_invoice_date %></td>
+              <td><%= rows.Account.account_name %></td>
+              <td><%= rows.Account.gstin %></td>
+              <td><%= Math.round(rows.total_value) %></td>
+              <td><%= rows.igst_amount?Math.round(rows.igst_amount):"" %></td>
+              <td><%= rows.cgst_amount?Math.round(rows.cgst_amount):"" %></td>
+              <td><%= rows.sgst_amount?Math.round(rows.sgst_amount):"" %></td>
+            </tr>
+          <% }); } %>
+        </table>
+      </div>
+    </div>
+
+    <!-- <div id="pageFooter">
+      <div id="terms">
+        <h5>Terms</h5>
+        <span>Lorem Ipsum is simply dummy text of the printing and typesetting industry. Lorem Ipsum has been the industry's standard dummy text ever since the 1500s, when an unknown printer took a galley of type and scrambled it to make a type specimen book</span>
+      </div>
+    </div> -->
+  </body>
+</html>
