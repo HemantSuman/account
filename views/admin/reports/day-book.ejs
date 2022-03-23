@@ -1,0 +1,130 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Party wise Report</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/day-book">
+            <div class="card-body">
+                <div class="row">      
+                  <div class="col-sm-3">
+                    <div class="form-group">
+                        <label for="">Date</label>
+                        <input name="pay_date" value="<%=extraVar.query? extraVar.query.pay_date: ''%>" type="text" class="form-control date1">
+                    </div>
+                  </div>           
+                </div>          
+            </div>
+            <div class="card-footer">
+              <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button>
+              <a href="/admin/reports/day-book" class="btn btn-primary">Clear</a>
+              <button type="submit" name="submit" value="xls" class="btn btn-primary submitBtn">XLS</button>
+              <button type="submit" formtarget="_blank" name="submit" value="print" class="btn btn-primary submitBtn">Print Report</button>
+            </div>
+          </form>
+        </div>
+      </div>
+
+
+      <div class="col-12">
+
+        <div class="card">          
+          <!-- <div class="card-header">
+            <h3 class="card-title">DataTable with default features</h3>
+          </div>-->
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>SNo.</th>
+                <th>Party</th>
+                <th>Type</th>
+                <th>Date</th>
+                <th>Mode</th>
+                <th>Debit</th>
+                <th>Credit</th>
+              </tr>
+              </thead>
+                <tbody>
+                  <% if(extraVar.results.payments.length > 0) { %>
+                    <% extraVar.results.payments.forEach(function(rows, index){ %>
+                    <tr>
+                      <td><%= ++index %></td>
+                      <td><%= rows.Account.account_name%></td>
+                      <td>Paid</td>
+                      <td width="10%" class="hideextra"><%= rows.pay_date %></td>
+                      <td><%= rows.pay_mode%></td>
+                      <td><%= rows.pay_amount%></td>
+                      <td></td>
+                    </tr>                
+                    <% }); %>
+                  <% } %>
+                  <% if(extraVar.results.payment_received.length > 0) { %>
+                    <% extraVar.results.payment_received.forEach(function(rows, index){ %>
+                    <tr>
+                      <td><%= ++index %></td>
+                      <td><%= rows.Account.account_name%></td>
+                      <td>Received</td>
+                      <td width="10%" class="hideextra"><%= rows.pay_date %></td>
+                      <td><%= rows.pay_mode%></td>
+                      <td></td>
+                      <td><%= rows.pay_amount%></td>
+                    </tr>
+                    <% }); %>
+                  <% } %>
+                </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+  });
+
+  $('.date1').daterangepicker({
+    singleDatePicker: true,
+    // startDate: moment().subtract(1, "month"),
+    autoUpdateInput: false,
+    locale: {
+      format: 'DD-MM-YYYY'
+    }
+  });
+
+
+  $('.date1').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD-MM-YYYY'));
+  });
+
+  
+</script>

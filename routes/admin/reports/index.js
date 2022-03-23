@@ -817,6 +817,114 @@ router.get('/party-wise', function(req, res, next) {
   })  
 });
 
+router.get('/day-book', function(req, res, next) {
+
+  req.where = {};
+  if(req.query.pay_date){
+
+    req.query.pay_date = helper.changeDateFormate(req.query.pay_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+    req.where = {
+      pay_date: req.query.pay_date,
+    };
+  }
+  async.parallel({
+    payments: function (callback) {
+        models.Payment.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },
+    payment_received: function (callback) {
+        models.PaymentReceived.getAllValues(req, function (data) {
+            callback(null, data);
+        });
+    },            
+  }, function (err, results) {
+    if(req.query.submit === "print"){
+      extraVar['results'] = results;
+      extraVar['helper'] = helper;
+      ejs.renderFile(path.join('views/admin/reports/', "day-book-template.ejs"), {extraVar: extraVar}, (err, data) => {
+        console.log(err)
+        if (err) {
+              res.send(err);
+        } else {
+            let options = {
+              "format": "A4", 
+              // "orientation": "portrait",
+              // "width": "400px",
+              // "header": {
+              //     "height": "55mm"
+              // },
+              "footer": {
+                  "height": "45mm",
+              },
+            };
+            pdf.create(data, options).toFile("public/reports/day-book-report.pdf", function (err, data) {
+                if (err) {
+                    res.send(err);
+                } else {
+                  // fs.open('public/invoices/report.pdf', function (err, file) {
+                  //   if (err) throw err;
+                  //   console.log('Saved!');
+                  // });
+                    // console.log(data);
+                    res.redirect("/reports/day-book-report.pdf");
+                    // res.send("File created successfully");
+                }
+            });
+        }
+      });    
+    } else if(req.query.submit === "xls"){
+      let writeArr = [];
+      
+      
+      async.forEachOf(results.payments, function (value, key, callback) {
+          let writeObj = {};
+          writeObj["Party"] = value.Account.account_name;
+          writeObj["Type"] = "Paid";
+          writeObj["Date"] = value.pay_date;
+          writeObj["Mode"] = value.pay_mode;
+          writeObj["Amount"] = value.pay_amount;
+          writeArr.push(writeObj);
+          callback();
+      }, function (err) {
+        if (err) {
+          console.error(err.message);
+        } else {
+          
+          async.forEachOf(results.payment_received, function (value1, key1, callback1) {
+            let writeObj1 = {};
+            writeObj1["Party"] = value1.Account.account_name;
+            writeObj1["Type"] = "Received";
+            writeObj1["Date"] = value1.pay_date;
+            writeObj1["Mode"] = value1.pay_mode;
+            writeObj1["Amount"] = value1.pay_amount;
+            writeArr.push(writeObj1);
+            callback1();
+          }, function (err1) {
+            const ws = reader.utils.json_to_sheet(writeArr);
+  
+            let wb = reader.utils.book_new();
+            reader.utils.book_append_sheet(wb, ws);
+            reader.writeFile(wb, "public/reports/day-book-report.xlsx");
+            res.redirect("/reports/day-book-report.xlsx");
+          })
+        }
+      });      
+    } else {
+      extraVar['results'] = results;
+      
+      if(req.query.pay_date){
+        //again convert date format for dispaly input - filled
+        req.query.pay_date = helper.changeDateFormate(req.query.pay_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+        extraVar['query'] = req.query;
+      } else {
+        extraVar['query'] = {};
+      }
+      res.render('admin/'+viewDirectory+'/day-book', { extraVar,helper, layout:'admin/layout/layout' });
+    }
+  })  
+});
+
 router.get('/purchase-item-type', function(req, res, next) {
   async.parallel({
     categories: function (callback) {

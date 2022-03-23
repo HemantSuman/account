@@ -26,7 +26,7 @@ module.exports = function (sequelize, DataTypes) {
             }
         },
         pay_date: {
-            type: DataTypes.DATE,
+            type: DataTypes.DATEONLY,
             validate: {
                 notEmpty: {
                     msg: i18n_Validation.__('required')
