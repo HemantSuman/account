@@ -73,38 +73,31 @@
               <thead>
               <tr>
                 <th>SNo.</th>
-                <th>Party</th>
-                <th>Type</th>
                 <th>Date</th>
+                <th>Particulars</th>
+                <th>Type</th>
+                
                 <th>Mode</th>
-                <th>Amount</th>
+                <th>Debit</th>
+                <th>Credit</th>
               </tr>
               </thead>
                 <tbody>
-                  <% if(extraVar.results.payments.length > 0) { %>
-                    <% extraVar.results.payments.forEach(function(rows, index){ %>
+                  <% if(extraVar.results.temp.length > 0) { %>
+                    <% extraVar.results.temp.forEach(function(rows, index){ %>
                     <tr>
                       <td><%= ++index %></td>
-                      <td><%= rows.Account.account_name%></td>
-                      <td>Paid</td>
                       <td width="10%" class="hideextra"><%= rows.pay_date %></td>
+                      <td><%= rows.Account.account_name%></td>
+                      <td><%= rows.pay_type%></td>
+                      
                       <td><%= rows.pay_mode%></td>
-                      <td><%= rows.pay_amount%></td>
+                      <td><%= (rows.pay_type == 'Received' ? rows.pay_amount: '' )%></td>
+                      <td><%= (rows.pay_type == 'Paid' ? rows.pay_amount: '' )%></td>
                     </tr>                
                     <% }); %>
                   <% } %>
-                  <% if(extraVar.results.payment_received.length > 0) { %>
-                    <% extraVar.results.payment_received.forEach(function(rows, index){ %>
-                    <tr>
-                      <td><%= ++index %></td>
-                      <td><%= rows.Account.account_name%></td>
-                      <td>Received</td>
-                      <td width="10%" class="hideextra"><%= rows.pay_date %></td>
-                      <td><%= rows.pay_mode%></td>
-                      <td><%= rows.pay_amount%></td>
-                    </tr>                
-                    <% }); %>
-                  <% } %>
+                  
                 </tbody>
             </table>
           </div>

@@ -46,6 +46,12 @@
       #items tr.item-row td {
         vertical-align: top;
       }
+      #items tr.item-row td {
+        text-align: left;
+      }
+      #items tr.item-row td.amountTd {
+        text-align: right;
+      }
       #items td.description {
         width: 300px;
       }
@@ -138,32 +144,53 @@
       .for-left {
         text-align: left !important;
       }
+      .centerText {
+        text-align: center;
+      }
+      .fontW300 {
+        font-size: 11px;
+        font-weight: 200;
+      }
+      .infoHead h2 {
+        line-height: 10px;
+        margin: 5px;
+      }
     </style>
   </head>
 
   <body>
     <div id="page-wrap" >
-      <div style="min-height: 210px;display: inline-block;border: 1px #ccc solid">
+
+      <div class="infoHead">
+        <h2 class="centerText">Jain Welding Electronics( P ) Ltd.(1.4.08)</h2>
+        <h2 class="centerText fontW300">G1-318 (C) INDRAPRASTHA IND.</h2>
+        <h2 class="centerText fontW300">AREA, ROAD NO.6 KOTA(RAJ.)</h2>
+        <h2 class="centerText fontW300">INDIA</h2>
+        <h2 class="centerText fontW300">CIN: U31909RJ2008PTC025758</h2>
+        <h2 class="centerText">Day Book</h2>
+      </div>
+      <div style="min-height: 210px;display: inline-block; width: 95%; margin-left: 5px;">
         <table id="items">
           <tr>
             <th>SNo.</th>
-            <th>Party</th>
-            <th>Type</th>
             <th width="10%">Date</th>
+            <th>Particulars</th>
+            <th>Type</th>
             <th>Mode</th>
             <th>Debit</th>
             <th>Credit</th>
           </tr>
+          <% var sno = 0;%>
           <% if(extraVar.results.payments.length > 0) { %> <%
           extraVar.results.payments.forEach(function(rows, index){ %>
 
           <tr class="item-row">
-            <td><%= ++index %></td>
-            <td><%= rows.Account.account_name%></td>
-            <td>Paid</td>
+            <td class="amountTd"><%= ++sno %></td>
             <td width="10%" class="hideextra"><%= rows.pay_date %></td>
+            <td><%= rows.Account.account_name%></td>
+            <td>Payment</td>
             <td><%= rows.pay_mode%></td>
-            <td><%= rows.pay_amount%></td>
+            <td class="amountTd"><%= rows.pay_amount%></td>
             <td></td>
           </tr>
           <% }); } %>
@@ -171,13 +198,13 @@
           extraVar.results.payment_received.forEach(function(rows, index){ %>
 
           <tr class="item-row">
-            <td><%= ++index %></td>
-            <td><%= rows.Account.account_name%></td>
-            <td>Received</td>
+            <td class="amountTd"><%= ++sno %></td>
             <td width="10%" class="hideextra"><%= rows.pay_date %></td>
+            <td><%= rows.Account.account_name%></td>
+            <td>Sales</td>
             <td><%= rows.pay_mode%></td>
             <td></td>
-            <td><%= rows.pay_amount%></td>
+            <td class="amountTd"><%= rows.pay_amount%></td>
           </tr>
           <% }); } %>
         </table>

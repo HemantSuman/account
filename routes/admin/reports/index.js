@@ -733,8 +733,21 @@ router.get('/party-wise', function(req, res, next) {
         });
     },            
   }, function (err, results) {
-    if(req.query.submit === "print"){
+    
+      let pay = JSON.parse(JSON.stringify(results.payments))
+      let rec = JSON.parse(JSON.stringify(results.payment_received))
+      let finalArr = pay.concat(rec);
+      let temp = finalArr.sort(function(a,b){
+        // Turn your strings into dates, and then subtract them
+        // to get a value that is either negative, positive, or zero.
+        return new Date(b.paydate_string) - new Date(a.paydate_string);
+      });
+      // console.log("$$$$$", temp);
       extraVar['results'] = results;
+      extraVar['results']["temp"] = temp;     
+
+    if(req.query.submit === "print"){
+       
       extraVar['helper'] = helper;
       ejs.renderFile(path.join('views/admin/reports/', "party-wise-template.ejs"), {extraVar: extraVar}, (err, data) => {
         console.log(err)
@@ -770,42 +783,26 @@ router.get('/party-wise', function(req, res, next) {
     } else if(req.query.submit === "xls"){
       let writeArr = [];
       
-      
-      async.forEachOf(results.payments, function (value, key, callback) {
-          let writeObj = {};
-          writeObj["Party"] = value.Account.account_name;
-          writeObj["Type"] = "Paid";
-          writeObj["Date"] = value.pay_date;
-          writeObj["Mode"] = value.pay_mode;
-          writeObj["Amount"] = value.pay_amount;
-          writeArr.push(writeObj);
-          callback();
-      }, function (err) {
-        if (err) {
-          console.error(err.message);
-        } else {
-          
-          async.forEachOf(results.payment_received, function (value1, key1, callback1) {
-            let writeObj1 = {};
-            writeObj1["Party"] = value1.Account.account_name;
-            writeObj1["Type"] = "Received";
-            writeObj1["Date"] = value1.pay_date;
-            writeObj1["Mode"] = value1.pay_mode;
-            writeObj1["Amount"] = value1.pay_amount;
-            writeArr.push(writeObj1);
-            callback1();
-          }, function (err1) {
-            const ws = reader.utils.json_to_sheet(writeArr);
-  
-            let wb = reader.utils.book_new();
-            reader.utils.book_append_sheet(wb, ws);
-            reader.writeFile(wb, "public/reports/part-wise-report.xlsx");
-            res.redirect("/reports/part-wise-report.xlsx");
-          })
-        }
-      });      
+      async.forEachOf(temp, function (value1, key1, callback1) {
+        let writeObj1 = {};
+        writeObj1["Party"] = value1.Account.account_name;
+        writeObj1["Type"] = value1.pay_type;
+        writeObj1["Date"] = value1.pay_date;
+        writeObj1["Mode"] = value1.pay_mode;
+        writeObj1["Debit"] = value1.pay_type == 'Received' ? value1.pay_amount: '';
+        writeObj1["Credit"] = value1.pay_type == 'Paid' ? value1.pay_amount: '';
+        writeArr.push(writeObj1);
+        callback1();
+      }, function (err1) {
+        const ws = reader.utils.json_to_sheet(writeArr);
+
+        let wb = reader.utils.book_new();
+        reader.utils.book_append_sheet(wb, ws);
+        reader.writeFile(wb, "public/reports/part-wise-report.xlsx");
+        res.redirect("/reports/part-wise-report.xlsx");
+      })
     } else {
-      extraVar['results'] = results;
+      // extraVar['results'] = results;
       
       if(req.query.account_id){
         extraVar['query'] = req.query;
@@ -879,11 +876,13 @@ router.get('/day-book', function(req, res, next) {
       
       async.forEachOf(results.payments, function (value, key, callback) {
           let writeObj = {};
-          writeObj["Party"] = value.Account.account_name;
-          writeObj["Type"] = "Paid";
           writeObj["Date"] = value.pay_date;
+          writeObj["Particulars"] = value.Account.account_name;
+          writeObj["Type"] = "Payment";
+          
           writeObj["Mode"] = value.pay_mode;
-          writeObj["Amount"] = value.pay_amount;
+          writeObj["Debit"] = value.pay_amount;
+          writeObj["Credit"] = "";
           writeArr.push(writeObj);
           callback();
       }, function (err) {
@@ -893,11 +892,13 @@ router.get('/day-book', function(req, res, next) {
           
           async.forEachOf(results.payment_received, function (value1, key1, callback1) {
             let writeObj1 = {};
-            writeObj1["Party"] = value1.Account.account_name;
-            writeObj1["Type"] = "Received";
             writeObj1["Date"] = value1.pay_date;
+            writeObj1["Particulars"] = value1.Account.account_name;
+            writeObj1["Type"] = "Sales";
+            
             writeObj1["Mode"] = value1.pay_mode;
-            writeObj1["Amount"] = value1.pay_amount;
+            writeObj1["Debit"] = "";
+            writeObj1["Credit"] = value1.pay_amount;
             writeArr.push(writeObj1);
             callback1();
           }, function (err1) {

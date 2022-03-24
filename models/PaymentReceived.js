@@ -3,7 +3,7 @@ var i18n_Validation = new (require('i18n-2'))({
   // setup some locales - other locales default to the first locale
   locales: ['en_valiation']
 });
-
+var moment = require('moment');
 i18n_Validation.setLocale('en_valiation');
 
 module.exports = function (sequelize, DataTypes) {
@@ -32,6 +32,21 @@ module.exports = function (sequelize, DataTypes) {
                     msg: i18n_Validation.__('required')
                 },   
             }
+        },
+        paydate_string: {
+            type: DataTypes.VIRTUAL,
+            get() {
+              return moment(`${this.pay_date}`).format("X");
+            },
+            // set(value) {
+            //   throw new Error('Do not try to set the `fullName` value!');
+            // }
+        },
+        pay_type: {
+            type: DataTypes.VIRTUAL,
+            get() {
+              return 'Received';
+            },
         },
         pay_mode: {
             type: DataTypes.STRING,     

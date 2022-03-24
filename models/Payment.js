@@ -41,15 +41,21 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
-        // paydate_string: {
-        //     type: DataTypes.VIRTUAL,
-        //     get() {
-        //       return `${this.pay_date}`;
-        //     },
-        //     // set(value) {
-        //     //   throw new Error('Do not try to set the `fullName` value!');
-        //     // }
-        // },
+        paydate_string: {
+            type: DataTypes.VIRTUAL,
+            get() {
+              return moment(`${this.pay_date}`).format("X");
+            },
+            // set(value) {
+            //   throw new Error('Do not try to set the `fullName` value!');
+            // }
+        },
+        pay_type: {
+            type: DataTypes.VIRTUAL,
+            get() {
+              return 'Paid';
+            },
+        },
         pay_mode: {
             type: DataTypes.STRING,     
             validate: {
