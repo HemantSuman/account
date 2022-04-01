@@ -855,11 +855,11 @@ router.get('/print/:id', function(req, res, next) {
               "format": "A4", 
               // "orientation": "portrait",
               // "width": "8.5in",
-              // "header": {
-              //     "height": "55mm"
-              // },
+              "header": {
+                  "height": "55mm"
+              },
               "footer": {
-                  "height": "50mm",
+                  "height": "60mm",
               },
             };
             pdf.create(data, options).toFile("public/invoices/report.pdf", function (err, data) {
