@@ -859,7 +859,7 @@ router.get('/print/:id', function(req, res, next) {
                   "height": "55mm"
               },
               "footer": {
-                  "height": "60mm",
+                  "height": "70mm",
               },
             };
             pdf.create(data, options).toFile("public/invoices/report.pdf", function (err, data) {
