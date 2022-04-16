@@ -484,12 +484,16 @@
                         </div>
 
                         <div class="row">
-                          <div class="col-sm-3">
+                          <div class="col-sm-4">
                             <div class="form-group">
                               <label for="">Net Amount</label>
                               <input readonly name="net_amount" type="number" class="form-control netAmount"  placeholder="">
+                              <input class="realNetAmount" type="hidden">
                               <div class="net_amount-error-message error-message"></div>
                             </div>
+                            Round <input type="button" value="UP" class="roundOffBtn" />
+                            <input type="button" value="DOWN" class="roundOffBtn" />
+                            <input type="button" value="CLEAR" class="roundOffBtn" />
                           </div>
                         </div>
 
@@ -673,6 +677,17 @@
       $(".tcs_value").attr("disabled", true);
     }
     calculateTotal();
+  });
+
+  $(document).on("click", ".roundOffBtn", function(){
+    console.log($(this).val())
+    if($(this).val() === 'UP'){
+      $(".netAmount").val(Math.ceil($(".realNetAmount").val()));
+    } else if($(this).val() === 'DOWN'){
+      $(".netAmount").val(Math.floor($(".realNetAmount").val()));
+    } else {
+      $(".netAmount").val($(".realNetAmount").val());
+    }
   });
 
   $(document).on("change", ".tcs_value", function(){
@@ -901,6 +916,7 @@
     }
 
     $(".netAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + calculatedGst, 2));
+    $(".realNetAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + calculatedGst, 2));
     // $(".totalGST").val(totalGST);
   }
 

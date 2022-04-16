@@ -47,14 +47,14 @@ module.exports = function (sequelize, DataTypes) {
             //     },   
             // }
         },
-        no_of_pkg: {
-            type: DataTypes.STRING,
-            validate: {
-                notEmpty: {
-                    msg: i18n_Validation.__('required')
-                },   
-            }
-        },
+        // no_of_pkg: {
+        //     type: DataTypes.STRING,
+        //     validate: {
+        //         notEmpty: {
+        //             msg: i18n_Validation.__('required')
+        //         },   
+        //     }
+        // },
         unit: {
             type: DataTypes.INTEGER,
             validate: {

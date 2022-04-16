@@ -83,8 +83,8 @@
                   <td class="noWrape"><%= rows.date %></td>
                   <td><%= rows.Consignee.account_name %></td>
                   <td><%= rows.Buyer ? rows.Buyer.account_name : '' %></td>
-                  <td><%= Math.round(rows.net_amount) %></td>
-                  <td><%= Math.round(rows.total_GST) %></td>
+                  <td><%= rows.net_amount %></td>
+                  <td><%= rows.total_GST %></td>
                   <td>
                     <a
                       href="/admin/<%= extraVar['viewDirectory']%>/edit/<%= rows.id %>"
