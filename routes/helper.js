@@ -29,11 +29,12 @@ function compareDate(dateA, dateB, givenFormate) {
     else return 0;
 }
 function setFloatValAfterDecimal(str,val) {
-    str = str.toString();
-    if(str.indexOf(".") > 0 ){
-        str = str.slice(0, (str.indexOf(".")) + val + 1); 
-    }
-    return Number(str);   
+    // str = str.toString();
+    // console.log("STRRR", str, str.indexOf("."), str.slice(0, (str.indexOf(".")) + val + 1))
+    // if(str.indexOf(".") > 0 ){
+    //     str = str.slice(0, (str.indexOf(".")) + val + 1); 
+    // }
+    return parseFloat(Number.parseFloat(str).toFixed(val));
 }
 function html(key) {
     return "<div class='form-group'><label>Email address</label><input type='email' class='form-control' id='' placeholder='Enter email'></div>";

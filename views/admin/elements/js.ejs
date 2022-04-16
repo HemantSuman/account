@@ -35,11 +35,12 @@
     $('.select2').select2()
 
     function setFloatValAfterDecimal(str,val) {
-        str = str.toString();
-        if(str.indexOf(".") != -1){
-            str = str.slice(0, (str.indexOf(".")) + val + 1); 
-        }
-        return Number(str);   
+        // str = str.toString();
+        // console.log("STRRR", str, str.indexOf("."), str.slice(0, (str.indexOf(".")) + val + 1))
+        // if(str.indexOf(".") > 0 ){
+        //     str = str.toFixed(2); 
+        // }
+        return parseFloat(Number.parseFloat(str).toFixed(val));
     }
 
     $(document).on("click", ".deleteEntry", function (e) {

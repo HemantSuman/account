@@ -274,13 +274,13 @@
                                       <div class="item_description_<%= index%>-error-message error-message"></div>
                                   </div>
                               </div>
-                              <div class="col-sm-2">
+                              <!-- <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>No.: </b></small>
                                       <input readonly name="item[<%= index%>][no_of_pkg]" type="number" value="<%= item.no_of_pkg%>" class="form-control pkt item_no_of_pkg_<%= index%>" placeholder="">
                                       <div class="item_no_of_pkg_<%= index%>-error-message error-message"></div>
                                   </div>
-                              </div>
+                              </div> -->
                               <div class="col-sm-2">
                                   <div class="form-group">
                                       <small><b>Quantity: </b></small>
@@ -372,13 +372,13 @@
                                   <div class="item_description_-error-message error-message"></div>
                               </div>
                           </div>                          
-                          <div class="col-sm-2">
+                          <!-- <div class="col-sm-2">
                               <div class="form-group">
                                   <small><b>No.: </b></small>
                                   <input type="text" class="form-control itemNoOfPkt item_no_of_pkg_<%=extraVar.results.my_model.InvoiceItems.length%>" placeholder="">
                                   <div class="item_no_of_pkg_-error-message error-message"></div>
                               </div>
-                          </div>
+                          </div> -->
                           <!-- <div class="col-sm-1">
                             <div class="form-group">
                               <select class="form-control item_unit_ select2 selectUnit">
@@ -627,7 +627,7 @@ $('.date1').daterangepicker({
 
     let selectItem = $('.item_item_id_'+itemIndexValue ).val();
     let itemDescription = $('.itemDescription').val();
-    let itemNoOfPkt = $('.itemNoOfPkt').val();
+    // let itemNoOfPkt = $('.itemNoOfPkt').val();
     let itemUnit = $('.itemUnit').val();
     let itemQuantity = $('.itemQuantity').val();
     let itemRate = $('.itemRate').val();
@@ -703,9 +703,9 @@ $('.date1').daterangepicker({
       itemHtml += "<input readonly name='item["+itemIndexValue+"][description]' type='text' value='"+itemDescription+"' class='form-control desc item_description_"+itemIndexValue+"' placeholder=''>";
       itemHtml += "<div class='item_description_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
-      itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>No.: </b></small>";
-      itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
-      itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
+      // itemHtml += "<div class='col-sm-2'><div class='form-group'><small><b>No.: </b></small>";
+      // itemHtml += "<input readonly name='item["+itemIndexValue+"][no_of_pkg]' type='number' value='"+itemNoOfPkt+"' class='form-control pkt item_no_of_pkg_"+itemIndexValue+"' placeholder=''>";
+      // itemHtml += "<div class='item_no_of_pkg_"+itemIndexValue+"-error-message error-message'></div></div></div>";
       
       // itemHtml += "<div class='col-sm-1'><div class='form-group'>";
       // itemHtml += "<select disabled onchange='changeUnit(this, "+itemIndexValue+")' class='form-control select2 item_unit_"+itemIndexValue+"'>"+unitOptions+"</select>";
@@ -778,7 +778,7 @@ $('.date1').daterangepicker({
     $('.item_item_id_'+indexvalue).val("").trigger('change');
     $('.item_sub_item_id_'+indexvalue).val("").trigger('change');
     $('.item_description_'+indexvalue).val("");
-    $('.item_no_of_pkg_'+indexvalue).val("");
+    // $('.item_no_of_pkg_'+indexvalue).val("");
     // $('.item_unit_'+indexvalue).val("").trigger('change');
     $('.item_quantity_'+indexvalue).val("");
     $('.item_quantity_display_'+indexvalue).text("");
@@ -802,14 +802,14 @@ $('.date1').daterangepicker({
     //   $('.item_sub_item_id_'+itemIndexValue+'-error-message').html("This field is required!");
     //   valid = false;
     // }
-    if($('.item_description_'+itemIndexValue).val() === ""){
-      $('.item_description_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
+    // if($('.item_description_'+itemIndexValue).val() === ""){
+    //   $('.item_description_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
     }
-    if($('.item_no_of_pkg_'+itemIndexValue).val() === ""){
-      $('.item_no_of_pkg_'+itemIndexValue+'-error-message').html("This field is required!");
-      valid = false;
-    }
+    // if($('.item_no_of_pkg_'+itemIndexValue).val() === ""){
+    //   $('.item_no_of_pkg_'+itemIndexValue+'-error-message').html("This field is required!");
+    //   valid = false;
+    // }
     // if($('.item_unit_'+itemIndexValue).val() === ""){
     //   $('.item_unit_'+itemIndexValue+'-error-message').html("This field is required!");
     //   valid = false;
@@ -833,7 +833,7 @@ $('.date1').daterangepicker({
     $('.item_item_id_').val("").trigger('change');
     $('.item_sub_item_id_').val("").trigger('change');
     $('.itemDescription').val("");
-    $('.itemNoOfPkt').val("");
+    // $('.itemNoOfPkt').val("");
     $('.itemUnit').val("");
     $('.itemQuantity').val("");
     $('.itemRate').val("");
@@ -888,7 +888,7 @@ $('.date1').daterangepicker({
     $('.item_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_sub_item_id_'+itemIndexValue).attr("disabled", false);
     $('.item_description_'+itemIndexValue).attr("readonly", false);
-    $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
+    // $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", false);
     // $('.item_unit_'+itemIndexValue).attr("disabled", false);
     $('.item_quantity_'+itemIndexValue).attr("readonly", false);
     $('.item_rate_'+itemIndexValue).attr("readonly", false);
@@ -910,7 +910,7 @@ $('.date1').daterangepicker({
       $('.item_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_sub_item_id_'+itemIndexValue).attr("disabled", true);
       $('.item_description_'+itemIndexValue).attr("readonly", true);
-      $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
+      // $('.item_no_of_pkg_'+itemIndexValue).attr("readonly", true);
       // $('.item_unit_'+itemIndexValue).attr("disabled", true);
       $('.item_quantity_'+itemIndexValue).attr("readonly", true);
       $('.item_rate_'+itemIndexValue).attr("readonly", true);
@@ -978,8 +978,8 @@ $('.date1').daterangepicker({
     if(isNaN(transportation)){
       transportation = 0;
     }
-    let calculatedGst = setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100));
-    $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
+    let calculatedGst = setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100), 2);
+    $(".totalGST").val(calculatedGst);
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
       let buyerGst = buyerGstAmt.substring(0, 2);

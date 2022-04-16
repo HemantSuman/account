@@ -149,6 +149,7 @@
             <th>No.</th>
             <th>Item Name</th>
             <th>SubItem Name</th>
+            <th>Type</th>
             <th>Opening</th>
             <th>Purchase(Today)</th>
             <th>Sale</th>
@@ -162,7 +163,7 @@
           <tr class="item-row">
             <td><%= ++index %></td>
             <td><%= extraVar.itemKeyValue[rows.item_id] %></td>
-            <td></td>
+            <td><%= extraVar.itemKeyValue[rows.sub_item_id] ? extraVar.itemKeyValue[rows.sub_item_id] : "" %></td>
             <td><%= rows.type %></td>
             <td><%= rows.oldIn %></td>
             <td><%= rows.todayIn %></td>
