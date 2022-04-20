@@ -1,0 +1,136 @@
+<!-- Content Header (Page header) -->
+<div class="content-header">
+  <div class="container-fluid">
+    <div class="row mb-2">
+      <div class="col-sm-6">
+        <h1 class="m-0 text-dark">Day Book</h1>
+      </div><!-- /.col -->
+      <div class="col-sm-6">
+        <a href="/admin/<%= extraVar.viewDirectory %>" class="btn btn-primary float-right">Back</a>
+      </div><!-- /.col -->
+    </div><!-- /.row -->
+  </div><!-- /.container-fluid -->
+</div>
+
+<!-- Main content -->
+<section class="content">
+  <div class="container-fluid">
+    
+    <div class="row">
+
+      <div class="col-md-12">
+        <div class="card card-primary">
+          <form method="get" id="formId" action="/admin/<%=extraVar.viewDirectory%>/stock">
+            <div class="card-body">
+                <div class="row">                
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                          <label for="">From Date</label>
+                          <input name="from_date" value="<%=extraVar.query? extraVar.query.from_date: ''%>" type="text" class="form-control date1">
+                      </div>
+                    </div>              
+                    <div class="col-sm-3">
+                      <div class="form-group">
+                          <label for="">From Date</label>
+                          <input name="to_date" value="<%=extraVar.query? extraVar.query.to_date:''%>" type="text" class="form-control date2">
+                      </div>
+                    </div>              
+                </div>          
+            </div>
+            <div class="card-footer">
+              <button type="submit" name="submit" value="submit" class="btn btn-primary submitBtn">Submit</button>
+              <a href="/admin/reports/stock" class="btn btn-primary">Clear</a>
+              <!-- <button type="submit" name="submit" value="xls" class="btn btn-primary submitBtn">XLS</button> -->
+              <button type="submit" formtarget="_blank" name="submit" value="print_day_book" class="btn btn-primary submitBtn">Print Report</button>
+            </div>
+          </form>
+        </div>
+      </div>
+      <div class="col-12">
+
+        <div class="card">          
+          <!-- <div class="card-header">
+            <h3 class="card-title">DataTable with default features</h3>
+          </div>-->
+          <!-- /.card-header -->
+          <div class="card-body">
+            <table id="example1" class="table table-bordered table-striped">
+              <thead>
+              <tr>
+                <th>No.</th>
+                <th>Item Name</th>
+                <th>SubItem Name</th>
+                <th>Opening</th>
+                <th>Purchase(Today)</th>
+                <th>Sale</th>
+                <th>Sale(Today)</th>
+                <!-- <th>Sale</th> -->
+                <th>Remaining</th>
+              </tr>
+              </thead>
+                <tbody>
+                  <% if(extraVar.remainingStock.length > 0) { %>
+                    <% extraVar.remainingStock.forEach(function(rows, index){ %>
+                    <tr>
+                      <td><%= ++index %></td>
+                      <td><%= extraVar.itemKeyValue[rows.item_id] %></td>
+                      <td><%= rows.type %></td>
+                      <td><%= rows.oldIn %></td>
+                      <td><%= rows.todayIn %></td>
+                      <td><%= rows.oldOut %></td>
+                      <td><%= rows.todayOut %></td>
+                      <!-- <td><%= rows.sale %></td> -->
+                      <td><%= rows.remaining %></td>
+                    </tr>                
+                    <% }); %>
+                  <% } else { %>
+                    <td colspan="13" class="text-center">No Record Found.</td>
+                  <% } %>
+                </tbody>
+            </table>
+          </div>
+          <!-- /.card-body -->
+        </div>
+        <!-- /.card -->
+      </div>
+      <!-- /.col -->
+    </div>
+    <!-- /.row -->
+  </div>
+  <!-- /.container-fluid -->
+</section>
+<!-- /.content -->
+
+<script>
+  $(function () {
+    $("#example1").DataTable({
+      "responsive": true,
+      "autoWidth": false,
+    });
+  });
+
+  $('.date1').daterangepicker({
+    singleDatePicker: true,
+    // startDate: moment().subtract(1, "month"),
+    autoUpdateInput: false,
+    locale: {
+      format: 'DD-MM-YYYY'
+    }
+  });
+
+  $('.date2').daterangepicker({
+    singleDatePicker: true,
+    autoUpdateInput: false,
+    locale: {
+      format: 'DD-MM-YYYY'
+    }
+  });
+
+  $('.date1').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD-MM-YYYY'));
+  });
+
+  $('.date2').on('apply.daterangepicker', function(ev, picker) {
+      $(this).val(picker.startDate.format('DD-MM-YYYY'));
+  });
+</script>

@@ -245,7 +245,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             type: "purchase",
                             sub_item_id: value1.sub_item_id,
                             quantity: parseFloat(value1.quantity) + parseFloat(data1.quantity),
-                            no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                            // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                            no_of_pkg: 0,
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
@@ -258,7 +259,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
-                            no_of_pkg: value1.no_of_pkg,
+                            // no_of_pkg: value1.no_of_pkg,
+                            no_of_pkg: 0,
                             company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
@@ -282,7 +284,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: parseFloat(value1.quantity) + parseFloat(data.quantity),
-                            no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                            // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                            no_of_pkg: 0,
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
@@ -295,7 +298,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                             type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
-                            no_of_pkg: value1.no_of_pkg,
+                            // no_of_pkg: value1.no_of_pkg,
+                            no_of_pkg: 0,
                             company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
@@ -609,7 +613,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: "purchase",
                               sub_item_id: value1.sub_item_id,
                               quantity: qty,
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                             console.log("sub exist22222222", stockDataUpdate)
                           } else {
@@ -619,7 +624,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: "purchase",
                               sub_item_id: value1.sub_item_id,
                               quantity: parseFloat(value1.quantity) + parseFloat(data1.quantity),
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                           }
                           console.log("sub exist3333", stockDataUpdate)
@@ -634,7 +640,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
-                            no_of_pkg: value1.no_of_pkg,
+                            // no_of_pkg: value1.no_of_pkg,
+                            no_of_pkg: 0,
                             company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){
@@ -671,7 +678,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: "purchase",
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                               quantity: qty,
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                             console.log('exist', stockDataUpdate);
                           } else {
@@ -683,7 +691,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: "purchase",
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                               quantity: parseFloat(value1.quantity) + parseFloat(data.quantity),
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                           }
                           console.log("########", stockDataUpdate)
@@ -698,7 +707,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             type: "purchase",
                             sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                             quantity: value1.quantity,
-                            no_of_pkg: value1.no_of_pkg,
+                            // no_of_pkg: value1.no_of_pkg,
+                            no_of_pkg: 0,
                             company_id: extraVar.siteVariable.session.user.Company.id
                           };
                           models.Stock.saveAllValues(stockData, function (results){

@@ -289,7 +289,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           stockDataUpdate.body = {
                             id: data1.id,
                             quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) - parseFloat(value1.quantity), 4),
-                            no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                            // no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                            no_of_pkg: 0,
                           };
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
@@ -311,8 +312,10 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                           stockDataUpdate.body = {
                             id: data.id,
                             quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) - parseFloat(value1.quantity), 4),
-                            no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                            // no_of_pkg: helper.setFloatValAfterDecimal(parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg), 2),
+                            no_of_pkg: 0,
                           };
+                          console.log("@@@@@@@@@@@@", stockDataUpdate)
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
                             callback1();
                           });
@@ -680,7 +683,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             stockDataUpdate.body = {
                               id: data1.id,
                               quantity: helper.setFloatValAfterDecimal(qty, 4),
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data1.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                             console.log('exist33', stockDataUpdate);
                           } else {
@@ -689,7 +693,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                             stockDataUpdate.body = {
                               id: data1.id,
                               quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) - parseFloat(value1.quantity), 4),
-                              no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                              // no_of_pkg: parseFloat(data1.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
@@ -729,7 +734,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                               quantity: helper.setFloatValAfterDecimal(qty, 4),
-                              no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              // no_of_pkg: parseFloat(value1.no_of_pkg) + parseFloat(data.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                             console.log('exist', stockDataUpdate);
                           } else {
@@ -741,7 +747,8 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
                               type: value1.type,
                               sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                               quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) - parseFloat(value1.quantity), 4),
-                              no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                              // no_of_pkg: parseFloat(data.no_of_pkg) - parseFloat(value1.no_of_pkg),
+                              no_of_pkg: 0,
                             };
                           }
                           models.Stock.updateAllValues(stockDataUpdate, function (results) {
@@ -908,7 +915,8 @@ router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  ex
               stockDataUpdate.body = {
                 id: data1.id,
                 quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) + parseFloat(value1.quantity), 4),
-                no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(value1.no_of_pkg),
+                // no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(value1.no_of_pkg),
+                no_of_pkg: 0,
               };
             models.Stock.updateAllValues(stockDataUpdate, function (results) {
               callback1();
@@ -932,7 +940,8 @@ router.post('/delete/:id', PermissionModule.Permission('delete', moduleSlug,  ex
                 type: value1.type,
                 sub_item_id: value1.sub_item_id !== "" ? value1.sub_item_id : null,
                 quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) + parseFloat(value1.quantity), 4),
-                no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(value1.no_of_pkg),
+                // no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(value1.no_of_pkg),
+                no_of_pkg: 0,
               };
             models.Stock.updateAllValues(stockDataUpdate, function (results) {
               callback1();
@@ -992,7 +1001,8 @@ router.post('/deleteInvoiceItem/:id', PermissionModule.Permission('delete', modu
               stockDataUpdate.body = {
                 id: data1.id,
                 quantity: helper.setFloatValAfterDecimal(parseFloat(data1.quantity) + parseFloat(results.invoiceItem.quantity), 4),
-                no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+                // no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+                no_of_pkg: 0,
               };
               models.Stock.updateAllValues(stockDataUpdate, function (results) {
                 callback();
@@ -1014,7 +1024,8 @@ router.post('/deleteInvoiceItem/:id', PermissionModule.Permission('delete', modu
               stockDataUpdate.body = {
                 id: data.id,
                 quantity: helper.setFloatValAfterDecimal(parseFloat(data.quantity) + parseFloat(results.invoiceItem.quantity), 4),
-                no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+                // no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(results.invoiceItem.no_of_pkg),
+                no_of_pkg: 0,
               };
               console.log("#@", stockDataUpdate)
               models.Stock.updateAllValues(stockDataUpdate, function (results) {

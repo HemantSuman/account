@@ -163,7 +163,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       stockDataUpdate.body = {
                         id: data1.id,
                         quantity: parseFloat(data1.quantity) + parseFloat(req.body.quantity),
-                        no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(req.body.no_of_pkg),
+                        // no_of_pkg: parseFloat(data1.no_of_pkg) + parseFloat(req.body.no_of_pkg),
+                        no_of_pkg: 0,
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -176,7 +177,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         type: "production",
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
-                        no_of_pkg: req.body.no_of_pkg,
+                        // no_of_pkg: req.body.no_of_pkg,
+                        no_of_pkg: 0,
                         company_id: extraVar.siteVariable.session.user.Company.id
                       };
                       models.Stock.saveAllValues(stockData, function (results){
@@ -196,7 +198,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                       stockDataUpdate.body = {
                         id: data.id,
                         quantity: parseFloat(data.quantity) + parseFloat(req.body.quantity),
-                        no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(req.body.no_of_pkg),
+                        // no_of_pkg: parseFloat(data.no_of_pkg) + parseFloat(req.body.no_of_pkg),
+                        no_of_pkg: 0,
                       };
                       models.Stock.updateAllValues(stockDataUpdate, function (results) {
                         callback();
@@ -209,7 +212,8 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
                         type: "production",
                         sub_item_id: req.body.sub_item_id !== "" ? req.body.sub_item_id : null,
                         quantity: req.body.quantity,
-                        no_of_pkg: req.body.no_of_pkg,
+                        // no_of_pkg: req.body.no_of_pkg,
+                        no_of_pkg: 0,
                         company_id: extraVar.siteVariable.session.user.Company.id
                       };
                       models.Stock.saveAllValues(stockData, function (results){

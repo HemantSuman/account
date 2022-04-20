@@ -388,115 +388,403 @@ router.post('/edit-gst2a', function(req, res, next) {
 });
 
 router.get('/stock', function(req, res, next) {
-  async.parallel({
-    invoices: function (callback) {
+  let purchaseItemsObj = {};
+  let productionItemsObj = {};
+  let invoiceItemsObj = {};
+  let itemKeyValue = {};
+  async.parallel([
+    function (callback1) {
       req.where = {};
-      if(req.query.from_date && req.query.to_date){
+      
+      models.PurchaseItems.getAllValues(req, function (results) {
+        results.map(function(val, index){
+          if(val.sub_item_id){
+            if(purchaseItemsObj[val.sub_item_id+'_purchase']){
+              purchaseItemsObj[val.sub_item_id+'_purchase']['quantity'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['quantity']) + parseFloat(val.quantity);
+              purchaseItemsObj[val.sub_item_id+'_purchase'] = purchaseItemsObj[val.sub_item_id+'_purchase'];
 
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              } else {
+                purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['old']) + parseFloat(val.quantity);
+              }
+              // purchaseItemsObj[val.sub_item_id+'_purchase'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']) + parseFloat(val.quantity);
+            } else {
+              purchaseItemsObj[val.sub_item_id+'_purchase'] = {};
+              purchaseItemsObj[val.sub_item_id+'_purchase']['quantity'] = parseFloat(val.quantity);
+              purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = 0;
+              purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = 0;
 
-        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-        req.where = {
-          createdAt: {
-            [Op.between]: [req.query.from_date, req.query.to_date],
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              } else {
+                purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['old']) + parseFloat(val.quantity);
+              }
+              
+            }
+          } else {
+            if(purchaseItemsObj[val.item_id+'_purchase']){
+              purchaseItemsObj[val.item_id+'_purchase']['quantity'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['quantity']) + parseFloat(val.quantity);
+              purchaseItemsObj[val.item_id+'_purchase'] = purchaseItemsObj[val.item_id+'_purchase'];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              } else {
+                purchaseItemsObj[val.item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['old']) + parseFloat(val.quantity);
+              }
+              // purchaseItemsObj[val.item_id+'_purchase'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']) + parseFloat(val.quantity);
+            } else {
+              purchaseItemsObj[val.item_id+'_purchase'] = {};
+              purchaseItemsObj[val.item_id+'_purchase']['quantity'] = parseFloat(val.quantity);
+              purchaseItemsObj[val.item_id+'_purchase']['today'] = 0;
+              purchaseItemsObj[val.item_id+'_purchase']['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                console.log(val.item_id+'_purchase', val.quantity)
+                purchaseItemsObj[val.item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              } else {
+                purchaseItemsObj[val.item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['old']) + parseFloat(val.quantity);
+              }
+            }
           }
-        };
-      }      
-      models.Stock.getAllValues(req, function (data) {
-          callback(null, data);
-      });
-    },            
-  }, function (err, results) {
-    // console.log("@@@", JSON.stringify(results)); return;
-    if(req.query.submit === "print"){
-      
-      extraVar['results'] = results;
-      extraVar['helper'] = helper;
-      ejs.renderFile(path.join('views/admin/reports/', "stock-template.ejs"), {extraVar: extraVar}, (err, data) => {
-        console.log(err)
-        if (err) {
-              res.send(err);
-        } else {
-            let options = {
-              "format": "A4", 
-              // "orientation": "portrait",
-              // "width": "400px",
-              // "header": {
-              //     "height": "55mm"
-              // },
-              "footer": {
-                  "height": "45mm",
-              },
-            };
-            pdf.create(data, options).toFile("public/reports/stock-report.pdf", function (err, data) {
-                if (err) {
-                    res.send(err);
-                } else {
-                  // fs.open('public/invoices/report.pdf', function (err, file) {
-                  //   if (err) throw err;
-                  //   console.log('Saved!');
-                  // });
-                    console.log(data);
-                    res.redirect("/reports/stock-report.pdf");
-                    // res.send("File created successfully");
-                }
-            });
-        }
-      });    
-    } else if(req.query.submit === "xls"){
-      let writeArr = [];
-      let qty = 0;
-      
-      async.forEachOf(results.invoices, function (value, key, callback) {
-        console.log(value.InvoiceItems)
-        if(value.InvoiceItems && value.InvoiceItems.length != 0){
-          let writeObj = {};
-          qty = qty + value.InvoiceItems[0].quantity;
-          writeObj["Invoice Number"] = value.invoice_no;
-          writeObj["Invoice Date"] = value.date;
-          writeObj["Name"] = value.Consignee.account_name;
-          writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
-          writeObj["Invoice Value"] = value.net_amount;
-          writeObj["Rate %"] = value.InvoiceItems[0].gst;
-          writeObj["Taxable Value"] = value.total_GST;
-          writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
-          writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
-          writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
-          writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
-          writeObj["Description"] = value.InvoiceItems[0].description;
-          writeObj["UQC"] = 'BOX';
-          writeObj["Total Quantity"] = qty;
-          writeArr.push(writeObj);
-        }
-        callback();
-      }, function (err) {
-        if (err) {
-          console.error(err.message);
-        } else {
-          
-          const ws = reader.utils.json_to_sheet(writeArr);
-  
-          let wb = reader.utils.book_new();
-          reader.utils.book_append_sheet(wb, ws);
-          reader.writeFile(wb, "public/invoices/sell-report.xlsx");
-          res.redirect("/invoices/sell-report.xlsx");
-        }
+        });
+        callback1();
+        // res.render('admin/'+viewDirectory+'/stock_movement', {results, extraVar, helper, layout:'admin/layout/layout' });
       });      
-    } else {
-      extraVar['results'] = results;
+    },
+    function (callback2) {
+      req.where = {};
       
-      if(req.query.from_date && req.query.to_date){
-        //again convert date format for dispaly input - filled
-        req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
-        req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
-        extraVar['query'] = req.query;
+      models.Production.getAllValues(req, function (results) {
+        results.map(function(val, index){
+          if(val.sub_item_id){
+            if(productionItemsObj[val.sub_item_id+'_production']){
+              productionItemsObj[val.sub_item_id+'_production']['quantity'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['quantity']) + parseFloat(val.quantity);
+              productionItemsObj[val.sub_item_id+'_production'] = productionItemsObj[val.sub_item_id+'_production'];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.sub_item_id+'_production']['today'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['today']) + parseFloat(val.quantity);
+              } else {
+                productionItemsObj[val.sub_item_id+'_production']['old'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['old']) + parseFloat(val.quantity);
+              }
+              // productionItemsObj[val.sub_item_id+'_production'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']) + parseFloat(val.quantity);
+            } else {
+              productionItemsObj[val.sub_item_id+'_production'] = {};
+              productionItemsObj[val.sub_item_id+'_production']['quantity'] = parseFloat(val.quantity);
+              productionItemsObj[val.sub_item_id+'_production']['today'] = 0;
+              productionItemsObj[val.sub_item_id+'_production']['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.sub_item_id+'_production']['today'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['today']) + parseFloat(val.quantity);
+              } else {
+                productionItemsObj[val.sub_item_id+'_production']['old'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['old']) + parseFloat(val.quantity);
+              }
+            }            
+          } else {
+            if(productionItemsObj[val.item_id+'_production']){
+              productionItemsObj[val.item_id+'_production']['quantity'] = parseFloat(productionItemsObj[val.item_id+'_production']['quantity']) + parseFloat(val.quantity);
+              productionItemsObj[val.item_id+'_production'] = productionItemsObj[val.item_id+'_production'];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.item_id+'_production']['today'] = parseFloat(productionItemsObj[val.item_id+'_production']['today']) + parseFloat(val.quantity);
+              } else {
+                productionItemsObj[val.item_id+'_production']['old'] = parseFloat(productionItemsObj[val.item_id+'_production']['old']) + parseFloat(val.quantity);
+              }
+              // productionItemsObj[val.item_id+'_production'] = parseFloat(productionItemsObj[val.item_id+'_production']) + parseFloat(val.quantity);
+            } else {
+              productionItemsObj[val.item_id+'_production'] = {};
+              productionItemsObj[val.item_id+'_production']['quantity'] = parseFloat(val.quantity);
+              productionItemsObj[val.item_id+'_production']['today'] = 0;
+              productionItemsObj[val.item_id+'_production']['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.item_id+'_production']['today'] = parseFloat(productionItemsObj[val.item_id+'_production']['today']) + parseFloat(val.quantity);
+              } else {
+                productionItemsObj[val.item_id+'_production']['old'] = parseFloat(productionItemsObj[val.item_id+'_production']['old']) + parseFloat(val.quantity);
+              }
+            }
+          }
+        });
+        callback2();
+        // res.render('admin/'+viewDirectory+'/stock_movement', {results, extraVar, helper, layout:'admin/layout/layout' });
+      });      
+    },
+    function (callback2) {
+      req.where = {};
+      
+      models.InvoiceItem.getAllValues(req, function (results) {
+        results.map(function(val, index){
+          if(val.sub_item_id){
+            if(invoiceItemsObj[val.sub_item_id+'_'+val.type]){
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity']) + parseFloat(val.quantity);
+              invoiceItemsObj[val.sub_item_id+'_'+val.type] = invoiceItemsObj[val.sub_item_id+'_'+val.type];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              } else {
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+              }
+              // invoiceItemsObj[val.sub_item_id+'_'+val.type] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]) + parseFloat(val.quantity);
+            } else {
+              // invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
+              // invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
+              invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = 0;
+              invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              } else {
+                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+              }
+            }
+          } else {
+            if(invoiceItemsObj[val.item_id+'_'+val.type]) {
+              invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['quantity']) + parseFloat(val.quantity);
+              invoiceItemsObj[val.item_id+'_'+val.type] = invoiceItemsObj[val.item_id+'_'+val.type];
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              } else {
+                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+              }
+              // invoiceItemsObj[val.item_id+'_'+val.type] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]) + parseFloat(val.quantity);
+            } else {
+              // invoiceItemsObj[val.item_id+'_'+val.type] = {};
+              // invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
+              invoiceItemsObj[val.item_id+'_'+val.type] = {};
+              invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
+              invoiceItemsObj[val.item_id+'_'+val.type]['today'] = 0;
+              invoiceItemsObj[val.item_id+'_'+val.type]['old'] = 0;
+
+              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              } else {
+                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+              }
+            }            
+          }
+        });
+        callback2();
+        // res.render('admin/'+viewDirectory+'/stock_movement', {results, extraVar, helper, layout:'admin/layout/layout' });
+      });      
+    },
+    function (callback) {
+      req.where = {};
+      models['Item'].getAllValues(req, function (data2) {
+        data2.map(function(val2){
+          itemKeyValue[val2.id] = val2.item_name;
+        });
+        callback();
+      });     
+    },
+    function (callback) {
+      req.where = {};
+      models['SubItem'].getAllValues(req, function (data2) {
+        data2.map(function(val2){
+          itemKeyValue[val2.id] = val2.name;
+        });
+        callback();
+      });     
+    },
+  ], function (err) {
+
+    let stockIn = {...purchaseItemsObj, ...productionItemsObj};
+    console.log('in', stockIn);
+    console.log('out', invoiceItemsObj);
+    let remainingStock = [];
+    async.forEachOf(stockIn, function (value, key, cb){
+      let tmpObj = {};
+      let arr = key.split('_');
+      tmpObj.item_id = arr[0];
+      tmpObj.type = arr[1];
+      tmpObj.todayIn = value.today;
+      tmpObj.oldIn = value.old;
+      
+
+      if(invoiceItemsObj[key]){
+        tmpObj.sale = parseFloat(invoiceItemsObj[key]['quantity']);
+        tmpObj.oldOut = parseFloat(invoiceItemsObj[key]['old']);
+        tmpObj.todayOut = parseFloat(invoiceItemsObj[key]['today']);
+        tmpObj.remaining = parseFloat(value.quantity) - parseFloat(invoiceItemsObj[key]['quantity']);
       } else {
-        extraVar['query'] = {};
+        tmpObj.sale = 0;
+        tmpObj.oldOut = 0;
+        tmpObj.todayOut = 0;
+        tmpObj.remaining = value.quantity;
       }
-      res.render('admin/'+viewDirectory+'/stock', { extraVar,helper, layout:'admin/layout/layout' });
-    }
-  })  
+      remainingStock.push(tmpObj);
+      cb();
+    }, function (err) {
+      if (err) {
+        console.error(err);
+        callback();
+      } else {
+        console.error("next", remainingStock);
+        extraVar['remainingStock'] = remainingStock;
+        extraVar['itemKeyValue'] = itemKeyValue;
+        extraVar['helper'] = helper;
+        console.log("@@@@@@@@@@@@@@@@", req.query)
+        if(req.query.submit == 'print_day_book'){
+
+          ejs.renderFile(path.join('views/admin/'+viewDirectory+'/', "day_book_template.ejs"), {extraVar: extraVar}, (err, data) => {
+            console.log(err)
+            if (err) {
+                  res.send(err);
+            } else {
+                let options = {
+                  "format": "A4", 
+                  // "orientation": "portrait",
+                  // "width": "400px",
+                  // "header": {
+                  //     "height": "55mm"
+                  // },
+                  "footer": {
+                      "height": "45mm",
+                  },
+                };
+                pdf.create(data, options).toFile("public/reports/day-book-template.pdf", function (err, data) {
+                    if (err) {
+                        res.send(err);
+                    } else {
+                      // fs.open('public/invoices/report.pdf', function (err, file) {
+                      //   if (err) throw err;
+                      //   console.log('Saved!');
+                      // });
+                        console.log(data);
+                        res.redirect("/reports/day-book-template.pdf");
+                        // res.send("File created successfully");
+                    }
+                });
+            }
+          });
+        } else {
+            if(req.query.from_date && req.query.to_date){
+                //again convert date format for dispaly input - filled
+                req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+                req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+                extraVar['query'] = req.query;
+            } else {
+                extraVar['query'] = {};
+            }
+            res.render('admin/'+viewDirectory+'/stock_movement', {extraVar, helper, layout:'admin/layout/layout' });
+        }
+      }
+    });
 });
+});
+
+// router.get('/stock', function(req, res, next) {
+//   async.parallel({
+//     invoices: function (callback) {
+//       req.where = {};
+//       if(req.query.from_date && req.query.to_date){
+
+
+//         req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+//         req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
+//         req.where = {
+//           createdAt: {
+//             [Op.between]: [req.query.from_date, req.query.to_date],
+//           }
+//         };
+//       }      
+//       models.Stock.getAllValues(req, function (data) {
+//           callback(null, data);
+//       });
+//     },            
+//   }, function (err, results) {
+//     // console.log("@@@", JSON.stringify(results)); return;
+//     if(req.query.submit === "print"){
+      
+//       extraVar['results'] = results;
+//       extraVar['helper'] = helper;
+//       ejs.renderFile(path.join('views/admin/reports/', "stock-template.ejs"), {extraVar: extraVar}, (err, data) => {
+//         console.log(err)
+//         if (err) {
+//               res.send(err);
+//         } else {
+//             let options = {
+//               "format": "A4", 
+//               // "orientation": "portrait",
+//               // "width": "400px",
+//               // "header": {
+//               //     "height": "55mm"
+//               // },
+//               "footer": {
+//                   "height": "45mm",
+//               },
+//             };
+//             pdf.create(data, options).toFile("public/reports/stock-report.pdf", function (err, data) {
+//                 if (err) {
+//                     res.send(err);
+//                 } else {
+//                   // fs.open('public/invoices/report.pdf', function (err, file) {
+//                   //   if (err) throw err;
+//                   //   console.log('Saved!');
+//                   // });
+//                     console.log(data);
+//                     res.redirect("/reports/stock-report.pdf");
+//                     // res.send("File created successfully");
+//                 }
+//             });
+//         }
+//       });    
+//     } else if(req.query.submit === "xls"){
+//       let writeArr = [];
+//       let qty = 0;
+      
+//       async.forEachOf(results.invoices, function (value, key, callback) {
+//         console.log(value.InvoiceItems)
+//         if(value.InvoiceItems && value.InvoiceItems.length != 0){
+//           let writeObj = {};
+//           qty = qty + value.InvoiceItems[0].quantity;
+//           writeObj["Invoice Number"] = value.invoice_no;
+//           writeObj["Invoice Date"] = value.date;
+//           writeObj["Name"] = value.Consignee.account_name;
+//           writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
+//           writeObj["Invoice Value"] = value.net_amount;
+//           writeObj["Rate %"] = value.InvoiceItems[0].gst;
+//           writeObj["Taxable Value"] = value.total_GST;
+//           writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
+//           writeObj["Central Tax Amount"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
+//           writeObj["State/UT Tax Amount"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
+//           writeObj["HSN"] = value.InvoiceItems[0].Item.hsn_code;
+//           writeObj["Description"] = value.InvoiceItems[0].description;
+//           writeObj["UQC"] = 'BOX';
+//           writeObj["Total Quantity"] = qty;
+//           writeArr.push(writeObj);
+//         }
+//         callback();
+//       }, function (err) {
+//         if (err) {
+//           console.error(err.message);
+//         } else {
+          
+//           const ws = reader.utils.json_to_sheet(writeArr);
+  
+//           let wb = reader.utils.book_new();
+//           reader.utils.book_append_sheet(wb, ws);
+//           reader.writeFile(wb, "public/invoices/sell-report.xlsx");
+//           res.redirect("/invoices/sell-report.xlsx");
+//         }
+//       });      
+//     } else {
+//       extraVar['results'] = results;
+      
+//       if(req.query.from_date && req.query.to_date){
+//         //again convert date format for dispaly input - filled
+//         req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+//         req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+//         extraVar['query'] = req.query;
+//       } else {
+//         extraVar['query'] = {};
+//       }
+//       res.render('admin/'+viewDirectory+'/stock', { extraVar,helper, layout:'admin/layout/layout' });
+//     }
+//   })  
+// });
 
 router.get('/daily-production', function(req, res, next) {
   async.parallel({
@@ -1116,85 +1404,5 @@ router.get('/production-item-type', function(req, res, next) {
     }
   })  
 });
-
-// router.get('/print', function(req, res, next) {
-//   const file = reader.readFile('public/images/purchase-sample.xlsx');
-//   let writeArr = [];
-//   async.parallel({
-//     purchases: function (callback) {
-//       req.where = {};
-//       if(req.query.from_date && req.query.to_date){
-
-//         req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-//         req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-//         req.where = {
-//           purchase_invoice_date: {
-//             [Op.between]: [req.query.from_date, req.query.to_date],
-//           }
-//         };
-//       }      
-//       models.Purchase.getAllValues(req, function (data) {
-//           callback(null, data);
-//       });
-//     },            
-//   }, function (err, results) {
-
-//     async.forEachOf(results.purchases, function (value, key, callback) {
-//       // console.log("valuevalue", JSON.parse(JSON.stringify(value)), value.Account)
-//       let writeObj = {};
-//       writeObj["Invoice No."] = value.purchase_invoice_no;
-//       writeObj["Date"] = value.purchase_invoice_date;
-//       writeObj["Name"] = value.Account.account_name;
-//       writeObj["GST In"] = value.Account.gstin;
-//       writeObj["Total Value"] = value.total_value;
-//       writeObj["IGST"] = value.igst_amount?parseFloat(value.igst_amount):"";
-//       writeObj["CGST"] = value.cgst_amount?parseFloat(value.cgst_amount):"";
-//       writeObj["SGST"] = value.sgst_amount?parseFloat(value.sgst_amount):"";
-//       writeArr.push(writeObj);
-//       callback();
-//     }, function (err) {
-//       if (err) {
-//         console.error(err.message);
-//       } else {
-//         console.log("XXXXXXX", writeArr)
-//         const ws = reader.utils.json_to_sheet(writeArr);
-
-//         let wb = reader.utils.book_new();
-//         reader.utils.book_append_sheet(wb, ws);
-//         reader.writeFile(wb, "public/invoices/purchase-report.xlsx");
-//         res.redirect("/invoices/purchase-report.xlsx");
-//         // reader.utils.book_append_sheet(file,ws,"Sheet3");
-//         // reader.writeFile(file,'public/invoices/purchase-report.xlsx')
-//       }
-//     });
-    
-//     // extraVar['results'] = results;
-//     // res.render('admin/'+viewDirectory+'/accounts', { extraVar,helper, layout:'admin/layout/layout' });
-//   })  
-// });
-
-// router.get('/accounts/:search', function(req, res, next) {
-//   ImageUpload.uploadFile(req, res, function (err) {
-//     req.body.from_date = helper.changeDateFormate(req.body.from_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-//     req.body.to_date = helper.changeDateFormate(req.body.to_date.trim(), "DD-MM-YYYY", "YYYY-MM-DD");
-    
-//     async.parallel({
-//       purchases: function (callback) {
-//         req.where = {
-//           purchase_invoice_date: {
-//             [Op.between]: [req.body.from_date, req.body.to_date],
-//           }
-//         };
-//         models.Purchase.getAllValues(req, function (data) {
-//             callback(null, data);
-//         });
-//       },            
-//     }, function (err, results) {
-//       extraVar['results'] = results;
-//       res.render('admin/'+viewDirectory+'/accounts', { extraVar,helper, layout:'admin/layout/layout' });
-//     })
-//   });  
-// });
-
 
 module.exports = router;
