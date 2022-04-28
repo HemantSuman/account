@@ -725,7 +725,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal" style='margin-bottom:.0001pt;line-height:
                             normal'><span class="strongText">GST Rupees (In Words) :</span><span style='mso-spacerun:yes'> </span>
-                            <%= extraVar.helper.getNumber(Math.round(extraVar.results.my_model.total_GST))%> only                            
+                            <%= extraVar.helper.getNumber(extraVar.results.my_model.total_GST)%> only                            
                          </p>
                       </td>
                       <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
@@ -736,7 +736,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=Math.round(extraVar.results.my_model.cgst_amount)%>
+                            <%=extraVar.results.my_model.cgst_amount%>
                          </p>
                       </td>
                       <td class="border-bottom-lite"  valign=top style='width:59.15pt;
@@ -758,7 +758,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=Math.round(extraVar.results.my_model.sgst_amount)%>
+                            <%=extraVar.results.my_model.sgst_amount%>
                          </p>
                       </td>
                       <td class="border-bottom-lite"  valign=top style='width:59.15pt;
@@ -780,7 +780,7 @@
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=Math.round(extraVar.results.my_model.igst_amount)%>
+                            <%=extraVar.results.my_model.igst_amount%>
                          </p>
                       </td>
                       <td class="border-bottom-lite"  valign=top style='width:59.15pt;
@@ -802,7 +802,7 @@
                          background1;padding:0in 5.4pt 0in 5.4pt'>
                          <p class=MsoNormal align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>
-                            <%=Math.round(extraVar.results.my_model.total_GST)%>
+                            <%=extraVar.results.my_model.total_GST%>
                          </p>
                       </td>
                       <td class="border-bottom-lite"  valign=top style='width:59.15pt;
@@ -891,7 +891,7 @@
                          <p class=MsoNormal
                             align=right
                             style='margin-bottom:.0001pt;padding:0in 5.4pt 0in 5.4pt;
-                            text-align:right;line-height:normal'><%=Math.round(extraVar.results.my_model.net_amount)%></p>
+                            text-align:right;line-height:normal'><%=extraVar.results.my_model.net_amount%></p>
                       </td>
                    </tr>
                    <tr
@@ -907,7 +907,7 @@
                             normal'><span class="strongText">Total Rupees (In Words) :</span><span style='mso-spacerun:yes'>
                             </span>
                             <%=
-                               extraVar.helper.getNumber(Math.round(extraVar.results.my_model.net_amount))%>
+                               extraVar.helper.getNumber(extraVar.results.my_model.net_amount)%>
                             only
                          </p>
                       </td>
