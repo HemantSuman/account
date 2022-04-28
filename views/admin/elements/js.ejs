@@ -40,7 +40,7 @@
         // if(str.indexOf(".") > 0 ){
         //     str = str.toFixed(2); 
         // }
-        return parseFloat(Number.parseFloat(str).toFixed(val));
+        return Number.parseFloat(str).toFixed(val);
     }
 
     $(document).on("click", ".deleteEntry", function (e) {
