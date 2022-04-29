@@ -203,6 +203,9 @@ module.exports = function (sequelize, DataTypes) {
                 },   
             }
         },
+        round_off: {
+            type: DataTypes.STRING
+        },
         payment_status: {
             type: DataTypes.STRING,
             validate: {

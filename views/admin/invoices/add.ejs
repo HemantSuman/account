@@ -487,8 +487,9 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               <label for="">Net Amount</label>
-                              <input readonly name="net_amount" type="number" class="form-control netAmount"  placeholder="">
-                              <input class="realNetAmount" type="hidden">
+                              <input readonly type="number" class="form-control netAmount"  placeholder="">
+                              <input name="net_amount" class="realNetAmount" type="hidden">
+                              <input class="round_off" name="round_off" value="0" type="hidden">
                               <div class="net_amount-error-message error-message"></div>
                             </div>
                             Round <input type="button" value="UP" class="roundOffBtn" />
@@ -680,12 +681,14 @@
   });
 
   $(document).on("click", ".roundOffBtn", function(){
-    console.log($(this).val())
     if($(this).val() === 'UP'){
+      $(".round_off").val("+"+setFloatValAfterDecimal(Math.ceil($(".realNetAmount").val()) - parseFloat($(".realNetAmount").val()), 2));
       $(".netAmount").val(Math.ceil($(".realNetAmount").val()));
     } else if($(this).val() === 'DOWN'){
+      $(".round_off").val("-"+setFloatValAfterDecimal(parseFloat($(".realNetAmount").val()) - Math.floor($(".realNetAmount").val()), 2));
       $(".netAmount").val(Math.floor($(".realNetAmount").val()));
     } else {
+      $(".round_off").val(0);
       $(".netAmount").val($(".realNetAmount").val());
     }
   });
@@ -874,8 +877,8 @@
     if(isNaN(transportation)){
       transportation = 0;
     }
-    let calculatedGst = setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100), 2);
-    $(".totalGST").val(calculatedGst);
+    let calculatedGst = parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100);
+    $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
       console.log("@@", buyerGstAmt)

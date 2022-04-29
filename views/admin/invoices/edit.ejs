@@ -568,8 +568,9 @@
                           <div class="col-sm-4">
                             <div class="form-group">
                               <label for="">Net Amount</label>
-                              <input readonly name="net_amount" value="<%= extraVar.results.my_model.net_amount%>" type="number" class="form-control netAmount"  placeholder="">
-                              <input class="realNetAmount" type="hidden">
+                              <input readonly  value="<%= extraVar.helper.setFloatValAfterDecimal(parseFloat(extraVar.results.my_model.net_amount) + parseFloat(extraVar.results.my_model.round_off), 2)%>" type="number" class="form-control netAmount" >
+                              <input name="net_amount" class="realNetAmount" value="<%= extraVar.results.my_model.net_amount %>" type="hidden">
+                              <input class="round_off" name="round_off" value="<%= extraVar.results.my_model.round_off%>" type="hidden">
                               <div class="net_amount-error-message error-message"></div>
                             </div>
                             Round <input type="button" value="UP" class="roundOffBtn" />
@@ -769,12 +770,14 @@ $('.date1').daterangepicker({
   });
 
   $(document).on("click", ".roundOffBtn", function(){
-    console.log($(this).val())
     if($(this).val() === 'UP'){
+      $(".round_off").val("+"+setFloatValAfterDecimal(Math.ceil($(".realNetAmount").val()) - parseFloat($(".realNetAmount").val()), 2));
       $(".netAmount").val(Math.ceil($(".realNetAmount").val()));
     } else if($(this).val() === 'DOWN'){
+      $(".round_off").val("-"+setFloatValAfterDecimal(parseFloat($(".realNetAmount").val()) - Math.floor($(".realNetAmount").val()), 2));
       $(".netAmount").val(Math.floor($(".realNetAmount").val()));
     } else {
+      $(".round_off").val(0);
       $(".netAmount").val($(".realNetAmount").val());
     }
   });
@@ -993,8 +996,8 @@ $('.date1').daterangepicker({
     if(isNaN(transportation)){
       transportation = 0;
     }
-    let calculatedGst = setFloatValAfterDecimal(parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100), 2);
-    $(".totalGST").val(calculatedGst);
+    let calculatedGst = parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100);
+    $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
       let buyerGst = buyerGstAmt.substring(0, 2);
@@ -1038,6 +1041,7 @@ $('.date1').daterangepicker({
     } else {
 
     }
+    console.log(typeof transportation ,typeof withDiscount ,typeof withTcs ,typeof calculatedGst)
     // $(".netAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + calculatedGst, 2));
     $(".realNetAmount").val(setFloatValAfterDecimal(transportation + withDiscount + withTcs + calculatedGst, 2));
     // $(".totalGST").val(totalGST);

@@ -21,7 +21,7 @@ var PermissionModule = require('../../../middlewares/Permission');
 extraVar['modelName'] = modelName;
 extraVar['viewDirectory'] = viewDirectory;
 extraVar['titleName'] = titleName;
-
+extraVar['helper'] = helper;
 var adminAuth = require('../../../middlewares/Auth');
 router.use(adminAuth.isLogin);
 
@@ -212,7 +212,7 @@ router.post('/add', PermissionModule.Permission('add', moduleSlug,  extraVar), f
       if (errors.length > 0) {
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
       } else {  
-        req.body.payment_remaining = req.body.net_amount;  
+        req.body.payment_remaining = parseFloat(req.body.net_amount) + parseFloat(req.body.round_off);  
         req.body.company_id = extraVar.siteVariable.session.user.Company.id;  
         models[modelName].saveAllValues(req, function (results) {
 
@@ -569,6 +569,7 @@ router.post('/edit', PermissionModule.Permission('edit', moduleSlug,  extraVar),
         res.status(400).send({status: false, msg: ' saved failed', data: errors});
       } else {      
         // console.log("###", req.body);return;
+        req.body.payment_remaining = parseFloat(req.body.net_amount) + parseFloat(req.body.round_off);
         models[modelName].updateAllValues(req, function (results) {
 
           async.parallel([
@@ -866,7 +867,7 @@ router.get('/print/:id', function(req, res, next) {
                   "height": "55mm"
               },
               "footer": {
-                  "height": "70mm",
+                  "height": "65mm",
               },
             };
             pdf.create(data, options).toFile("public/invoices/report.pdf", function (err, data) {

@@ -28,6 +28,15 @@ function compareDate(dateA, dateB, givenFormate) {
     else if (momentA < momentB) return -1;
     else return 0;
 }
+function dateExistInDateRange(date, dateA, dateB, givenFormate) {
+    var date = moment(date, givenFormate);
+    var momentA = moment(dateA, givenFormate);
+    var momentB = moment(dateB, givenFormate);
+    console.log(momentA, date, momentB ,momentA <= date  && date <= momentB)
+    if (momentA <= date && date <= momentB) return 0;
+    else if (momentA > date ) return -1;
+    else if(momentB < date ) return +1;
+}
 function setFloatValAfterDecimal(str,val) {
     str = !str?0:str;
     console.log("STRRR", str, val)
@@ -175,5 +184,6 @@ module.exports = {
     compareDate,
     setFloatValAfterDecimal,
     getNumber,
-    gstStateCode
+    gstStateCode,
+    dateExistInDateRange
 }

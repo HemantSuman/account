@@ -105,7 +105,7 @@ router.get('/sell', function(req, res, next) {
           writeObj["Name"] = value.Consignee.account_name;
           writeObj["GSTIN/UIN of Recipient"] = value.Consignee.gstin;
           writeObj["State of Recipient"] = helper.gstStateCode()[value.Consignee.gstin.substring(0, 2)] + "-" + value.Consignee.gstin.substring(0, 2);
-          writeObj["Invoice Value"] = Math.round(value.net_amount);
+          writeObj["Invoice Value"] = parseFloat(value.net_amount) + parseFloat(value.round_off);
           writeObj["Rate %"] = value.InvoiceItems[0].gst;
           writeObj["Taxable Value"] = value.total_GST;
           writeObj["Integrated Tax Amount"] = value.igst_amount?parseFloat(value.igst_amount):"";
@@ -392,6 +392,7 @@ router.get('/stock', function(req, res, next) {
   let productionItemsObj = {};
   let invoiceItemsObj = {};
   let itemKeyValue = {};
+  //req.query.from_date && req.query.to_date
   async.parallel([
     function (callback1) {
       req.where = {};
@@ -403,22 +404,32 @@ router.get('/stock', function(req, res, next) {
               purchaseItemsObj[val.sub_item_id+'_purchase']['quantity'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['quantity']) + parseFloat(val.quantity);
               purchaseItemsObj[val.sub_item_id+'_purchase'] = purchaseItemsObj[val.sub_item_id+'_purchase'];
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['inrange'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['before'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+
               } else {
-                purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['old']) + parseFloat(val.quantity);
+                purchaseItemsObj[val.sub_item_id+'_purchase']['after'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['old']) + parseFloat(val.quantity);
               }
               // purchaseItemsObj[val.sub_item_id+'_purchase'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']) + parseFloat(val.quantity);
             } else {
               purchaseItemsObj[val.sub_item_id+'_purchase'] = {};
               purchaseItemsObj[val.sub_item_id+'_purchase']['quantity'] = parseFloat(val.quantity);
-              purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = 0;
-              purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = 0;
+              purchaseItemsObj[val.sub_item_id+'_purchase']['inrange'] = 0;
+              purchaseItemsObj[val.sub_item_id+'_purchase']['before'] = 0;
+              purchaseItemsObj[val.sub_item_id+'_purchase']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                purchaseItemsObj[val.sub_item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['inrange'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['inrange']) + parseFloat(val.quantity);
+              
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                purchaseItemsObj[val.sub_item_id+'_purchase']['before'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['before']) + parseFloat(val.quantity);
+
               } else {
-                purchaseItemsObj[val.sub_item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['old']) + parseFloat(val.quantity);
+                purchaseItemsObj[val.sub_item_id+'_purchase']['after'] = parseFloat(purchaseItemsObj[val.sub_item_id+'_purchase']['after']) + parseFloat(val.quantity);
               }
               
             }
@@ -426,24 +437,27 @@ router.get('/stock', function(req, res, next) {
             if(purchaseItemsObj[val.item_id+'_purchase']){
               purchaseItemsObj[val.item_id+'_purchase']['quantity'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['quantity']) + parseFloat(val.quantity);
               purchaseItemsObj[val.item_id+'_purchase'] = purchaseItemsObj[val.item_id+'_purchase'];
-
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                purchaseItemsObj[val.item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.item_id+'_purchase']['inrange'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                purchaseItemsObj[val.item_id+'_purchase']['before'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['before']) + parseFloat(val.quantity);
               } else {
-                purchaseItemsObj[val.item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['old']) + parseFloat(val.quantity);
+                purchaseItemsObj[val.item_id+'_purchase']['after'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['after']) + parseFloat(val.quantity);
               }
               // purchaseItemsObj[val.item_id+'_purchase'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']) + parseFloat(val.quantity);
             } else {
               purchaseItemsObj[val.item_id+'_purchase'] = {};
               purchaseItemsObj[val.item_id+'_purchase']['quantity'] = parseFloat(val.quantity);
-              purchaseItemsObj[val.item_id+'_purchase']['today'] = 0;
-              purchaseItemsObj[val.item_id+'_purchase']['old'] = 0;
+              purchaseItemsObj[val.item_id+'_purchase']['inrange'] = 0;
+              purchaseItemsObj[val.item_id+'_purchase']['before'] = 0;
+              purchaseItemsObj[val.item_id+'_purchase']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                console.log(val.item_id+'_purchase', val.quantity)
-                purchaseItemsObj[val.item_id+'_purchase']['today'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                purchaseItemsObj[val.item_id+'_purchase']['inrange'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                purchaseItemsObj[val.item_id+'_purchase']['before'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['before']) + parseFloat(val.quantity);
               } else {
-                purchaseItemsObj[val.item_id+'_purchase']['old'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['old']) + parseFloat(val.quantity);
+                purchaseItemsObj[val.item_id+'_purchase']['after'] = parseFloat(purchaseItemsObj[val.item_id+'_purchase']['after']) + parseFloat(val.quantity);
               }
             }
           }
@@ -462,22 +476,30 @@ router.get('/stock', function(req, res, next) {
               productionItemsObj[val.sub_item_id+'_production']['quantity'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['quantity']) + parseFloat(val.quantity);
               productionItemsObj[val.sub_item_id+'_production'] = productionItemsObj[val.sub_item_id+'_production'];
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                productionItemsObj[val.sub_item_id+'_production']['today'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.sub_item_id+'_production']['inrange'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                productionItemsObj[val.sub_item_id+'_production']['before'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                productionItemsObj[val.sub_item_id+'_production']['old'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['old']) + parseFloat(val.quantity);
+                productionItemsObj[val.sub_item_id+'_production']['after'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['after']) + parseFloat(val.quantity);
               }
+              
               // productionItemsObj[val.sub_item_id+'_production'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']) + parseFloat(val.quantity);
             } else {
               productionItemsObj[val.sub_item_id+'_production'] = {};
               productionItemsObj[val.sub_item_id+'_production']['quantity'] = parseFloat(val.quantity);
-              productionItemsObj[val.sub_item_id+'_production']['today'] = 0;
-              productionItemsObj[val.sub_item_id+'_production']['old'] = 0;
+              productionItemsObj[val.sub_item_id+'_production']['inrange'] = 0;
+              productionItemsObj[val.sub_item_id+'_production']['before'] = 0;
+              productionItemsObj[val.sub_item_id+'_production']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                productionItemsObj[val.sub_item_id+'_production']['today'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.sub_item_id+'_production']['inrange'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                productionItemsObj[val.sub_item_id+'_production']['before'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['before']) + parseFloat(val.quantity);
+
               } else {
-                productionItemsObj[val.sub_item_id+'_production']['old'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['old']) + parseFloat(val.quantity);
+                productionItemsObj[val.sub_item_id+'_production']['after'] = parseFloat(productionItemsObj[val.sub_item_id+'_production']['after']) + parseFloat(val.quantity);
               }
             }            
           } else {
@@ -485,22 +507,27 @@ router.get('/stock', function(req, res, next) {
               productionItemsObj[val.item_id+'_production']['quantity'] = parseFloat(productionItemsObj[val.item_id+'_production']['quantity']) + parseFloat(val.quantity);
               productionItemsObj[val.item_id+'_production'] = productionItemsObj[val.item_id+'_production'];
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                productionItemsObj[val.item_id+'_production']['today'] = parseFloat(productionItemsObj[val.item_id+'_production']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.item_id+'_production']['inrange'] = parseFloat(productionItemsObj[val.item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                productionItemsObj[val.item_id+'_production']['before'] = parseFloat(productionItemsObj[val.item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                productionItemsObj[val.item_id+'_production']['old'] = parseFloat(productionItemsObj[val.item_id+'_production']['old']) + parseFloat(val.quantity);
+                productionItemsObj[val.item_id+'_production']['after'] = parseFloat(productionItemsObj[val.item_id+'_production']['after']) + parseFloat(val.quantity);
               }
               // productionItemsObj[val.item_id+'_production'] = parseFloat(productionItemsObj[val.item_id+'_production']) + parseFloat(val.quantity);
             } else {
               productionItemsObj[val.item_id+'_production'] = {};
               productionItemsObj[val.item_id+'_production']['quantity'] = parseFloat(val.quantity);
-              productionItemsObj[val.item_id+'_production']['today'] = 0;
-              productionItemsObj[val.item_id+'_production']['old'] = 0;
+              productionItemsObj[val.item_id+'_production']['inrange'] = 0;
+              productionItemsObj[val.item_id+'_production']['before'] = 0;
+              productionItemsObj[val.item_id+'_production']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                productionItemsObj[val.item_id+'_production']['today'] = parseFloat(productionItemsObj[val.item_id+'_production']['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                productionItemsObj[val.item_id+'_production']['inrange'] = parseFloat(productionItemsObj[val.item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                productionItemsObj[val.item_id+'_production']['before'] = parseFloat(productionItemsObj[val.item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                productionItemsObj[val.item_id+'_production']['old'] = parseFloat(productionItemsObj[val.item_id+'_production']['old']) + parseFloat(val.quantity);
+                productionItemsObj[val.item_id+'_production']['after'] = parseFloat(productionItemsObj[val.item_id+'_production']['after']) + parseFloat(val.quantity);
               }
             }
           }
@@ -519,24 +546,31 @@ router.get('/stock', function(req, res, next) {
               invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity']) + parseFloat(val.quantity);
               invoiceItemsObj[val.sub_item_id+'_'+val.type] = invoiceItemsObj[val.sub_item_id+'_'+val.type];
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_production']['inrange'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                invoiceItemsObj[val.sub_item_id+'_production']['before'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+                invoiceItemsObj[val.sub_item_id+'_production']['after'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['after']) + parseFloat(val.quantity);
               }
-              // invoiceItemsObj[val.sub_item_id+'_'+val.type] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]) + parseFloat(val.quantity);
+
             } else {
               // invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
               // invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
               invoiceItemsObj[val.sub_item_id+'_'+val.type] = {};
               invoiceItemsObj[val.sub_item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
-              invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = 0;
-              invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = 0;
+              invoiceItemsObj[val.sub_item_id+'_production']['inrange'] = 0;
+              invoiceItemsObj[val.sub_item_id+'_production']['before'] = 0;
+              invoiceItemsObj[val.sub_item_id+'_production']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                invoiceItemsObj[val.sub_item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.sub_item_id+'_production']['inrange'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                invoiceItemsObj[val.sub_item_id+'_production']['before'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['before']) + parseFloat(val.quantity);
+
               } else {
-                invoiceItemsObj[val.sub_item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+                invoiceItemsObj[val.sub_item_id+'_production']['after'] = parseFloat(invoiceItemsObj[val.sub_item_id+'_production']['after']) + parseFloat(val.quantity);
               }
             }
           } else {
@@ -544,24 +578,30 @@ router.get('/stock', function(req, res, next) {
               invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['quantity']) + parseFloat(val.quantity);
               invoiceItemsObj[val.item_id+'_'+val.type] = invoiceItemsObj[val.item_id+'_'+val.type];
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_production']['inrange'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                invoiceItemsObj[val.item_id+'_production']['before'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+                invoiceItemsObj[val.item_id+'_production']['after'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['after']) + parseFloat(val.quantity);
               }
+
               // invoiceItemsObj[val.item_id+'_'+val.type] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]) + parseFloat(val.quantity);
             } else {
               // invoiceItemsObj[val.item_id+'_'+val.type] = {};
               // invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
               invoiceItemsObj[val.item_id+'_'+val.type] = {};
               invoiceItemsObj[val.item_id+'_'+val.type]['quantity'] = parseFloat(val.quantity);
-              invoiceItemsObj[val.item_id+'_'+val.type]['today'] = 0;
-              invoiceItemsObj[val.item_id+'_'+val.type]['old'] = 0;
+              invoiceItemsObj[val.item_id+'_production']['inrange'] = 0;
+              invoiceItemsObj[val.item_id+'_production']['before'] = 0;
+              invoiceItemsObj[val.item_id+'_production']['after'] = 0;
 
-              if(helper.compareDate(helper.curDate('DD-MM-YYYY'), helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), 'DD-MM-YYYY') === 0){
-                invoiceItemsObj[val.item_id+'_'+val.type]['today'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['today']) + parseFloat(val.quantity);
+              if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') === 0){
+                invoiceItemsObj[val.item_id+'_production']['inrange'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['inrange']) + parseFloat(val.quantity);
+              } else if(helper.dateExistInDateRange(helper.changeDateFormate(val.createdAt.trim(), "YYYY-MM-DD", "DD-MM-YYYY"), req.query.from_date, req.query.to_date, 'DD-MM-YYYY') < 0){
+                invoiceItemsObj[val.item_id+'_production']['before'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['before']) + parseFloat(val.quantity);
               } else {
-                invoiceItemsObj[val.item_id+'_'+val.type]['old'] = parseFloat(invoiceItemsObj[val.item_id+'_'+val.type]['old']) + parseFloat(val.quantity);
+                invoiceItemsObj[val.item_id+'_production']['after'] = parseFloat(invoiceItemsObj[val.item_id+'_production']['after']) + parseFloat(val.quantity);
               }
             }            
           }
@@ -599,8 +639,9 @@ router.get('/stock', function(req, res, next) {
       let arr = key.split('_');
       tmpObj.item_id = arr[0];
       tmpObj.type = arr[1];
-      tmpObj.todayIn = value.today;
-      tmpObj.oldIn = value.old;
+      tmpObj.inrange = value.inrange;
+      tmpObj.before = value.before;
+      tmpObj.after = value.after;
       
 
       if(invoiceItemsObj[key]){
@@ -662,8 +703,9 @@ router.get('/stock', function(req, res, next) {
         } else {
             if(req.query.from_date && req.query.to_date){
                 //again convert date format for dispaly input - filled
-                req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
-                req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+                // req.query.from_date = helper.changeDateFormate(req.query.from_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+                // req.query.to_date = helper.changeDateFormate(req.query.to_date.trim(), "YYYY-MM-DD", "DD-MM-YYYY");
+                console.log("@@@@@@@@@@@@@@@@", req.query)
                 extraVar['query'] = req.query;
             } else {
                 extraVar['query'] = {};

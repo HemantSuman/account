@@ -59,9 +59,10 @@
               <tr>
                 <th>No.</th>
                 <th>Item Name</th>
-                <th>SubItem Name</th>
+                <th>Type</th>
                 <th>Opening</th>
-                <th>Purchase(Today)</th>
+                <th>InRange</th>
+                <!-- <th>Closing</th> -->
                 <th>Sale</th>
                 <th>Sale(Today)</th>
                 <!-- <th>Sale</th> -->
@@ -75,8 +76,9 @@
                       <td><%= ++index %></td>
                       <td><%= extraVar.itemKeyValue[rows.item_id] %></td>
                       <td><%= rows.type %></td>
-                      <td><%= rows.oldIn %></td>
-                      <td><%= rows.todayIn %></td>
+                      <td><%= rows.before %></td>
+                      <td><%= rows.inrange %></td>
+                      <!-- <td><%= rows.after %></td> -->
                       <td><%= rows.oldOut %></td>
                       <td><%= rows.todayOut %></td>
                       <!-- <td><%= rows.sale %></td> -->
