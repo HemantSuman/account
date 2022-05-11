@@ -645,10 +645,11 @@ router.get('/stock', function(req, res, next) {
       
 
       if(invoiceItemsObj[key]){
-        tmpObj.sale = parseFloat(invoiceItemsObj[key]['quantity']);
+        tmpObj.sale = parseFloat(invoiceItemsObj[key]['inrange']);
         tmpObj.oldOut = parseFloat(invoiceItemsObj[key]['old']);
         tmpObj.todayOut = parseFloat(invoiceItemsObj[key]['today']);
-        tmpObj.remaining = parseFloat(value.quantity) - parseFloat(invoiceItemsObj[key]['quantity']);
+        tmpObj.remaining = parseFloat(value.quantity) - parseFloat(invoiceItemsObj[key]['inrange']);
+        // tmpObj.remaining = parseFloat(invoiceItemsObj[key]['after']);
       } else {
         tmpObj.sale = 0;
         tmpObj.oldOut = 0;
