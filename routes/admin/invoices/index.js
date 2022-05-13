@@ -840,6 +840,16 @@ router.get('/print/:id', function(req, res, next) {
           callback(null, taxKeyValue);
       });
     },
+    unitKeyValue: function (callback) {
+      req.where = {}
+      models.Unit.getAllValues(req, function (data) {
+        let unitKeyValue = {};
+        data.map(function(data) {
+          unitKeyValue[data.id] = data.name;
+        });
+          callback(null, unitKeyValue);
+      });
+    },
     accountKeyValue: function (callback) {
       req.where = {}
       models.Account.getAllValues(req, function (data) {
@@ -852,6 +862,7 @@ router.get('/print/:id', function(req, res, next) {
       });
     },
   }, function (err, results) {
+    console.log("!!!!!!!!!!!!!", results.unitKeyValue)
       extraVar['results'] = results;
       extraVar['helper'] = helper;
       ejs.renderFile(path.join('views/admin/invoices/', "invoice-template.ejs"), {extraVar: extraVar}, (err, data) => {
@@ -867,7 +878,7 @@ router.get('/print/:id', function(req, res, next) {
                   "height": "55mm"
               },
               "footer": {
-                  "height": "65mm",
+                  "height": "45mm",
               },
             };
             pdf.create(data, options).toFile("public/invoices/report.pdf", function (err, data) {

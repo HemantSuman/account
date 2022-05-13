@@ -17,7 +17,7 @@
         <style>
                 body {
                         font: 9px Georgia, serif;
-                        margin: 8px 8px;
+                        margin: 0px 0px;
                 }
                 #pageHeader {
                    margin-top: 15px;
@@ -509,6 +509,10 @@
                             normal'>Quantity</p>
                       </td>
                       <td width="10%" valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
+                        <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
+                           normal'>Unit</p>
+                     </td>
+                      <td width="10%" valign=top style='padding:0in 2.4pt 0in 2.4pt;'>
                          <p class="MsoNormal strongText" style='margin-bottom:.0001pt;line-height:
                             normal'>Rate</p>
                       </td>
@@ -538,6 +542,12 @@
                                  <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
                                     normal'>
                                     <%= rows.quantity%>
+                                 </p>
+                              </td>
+                              <td class="no-border-bottom"  valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+                                 <p class=MsoNormal style='margin-bottom:.0001pt;line-height:
+                                    normal'>
+                                    <%= extraVar.results.unitKeyValue[rows.Item.unit]%>
                                  </p>
                               </td>
                               <td class="no-border-bottom"  valign=top style='padding:0in 5.4pt 0in 5.4pt'>
@@ -586,7 +596,7 @@
                      <tr style='mso-yfti-irow:6'>
                         <td class="border-right">
                         </td>
-                      <td class="border-bottom" colspan="3" valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+                      <td class="border-bottom" colspan="4" valign=top style='padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Total</p>
                       </td>
@@ -605,7 +615,7 @@
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Add</p>
                       </td>
-                      <td class="border-right-lite border-bottom-lite" colspan=2 valign=top style='padding:0in 5.4pt 0in 5.4pt'>
+                      <td class="border-right-lite border-bottom-lite" colspan=3 valign=top style='padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'><span style='mso-spacerun:yes'>
                             </span>Transport
@@ -678,7 +688,7 @@
                             </span>
                          </p>
                       </td>
-                      <td class="border-bottom border-right-lite" width=150 colspan=2 valign=top style='width:112.8pt;
+                      <td class="border-bottom border-right-lite" width=150 colspan=3 valign=top style='width:112.8pt;
                       padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Discount</p>
@@ -707,7 +717,7 @@
                             <o:p>&nbsp;</o:p>
                          </p>
                       </td>
-                      <td class="border-bottom" width=222 colspan=3 valign=top style='width:166.85pt;
+                      <td class="border-bottom" width=222 colspan=4 valign=top style='width:166.85pt;
                          '>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Invoice Taxable Value</p>
@@ -728,7 +738,7 @@
                             <%= extraVar.helper.getNumber(extraVar.helper.setFloatValAfterDecimal(extraVar.results.my_model.total_GST, 2))%> only                            
                          </p>
                       </td>
-                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
+                      <td class="border-right-lite border-bottom-lite" width=150 colspan=3 valign=top style='width:112.8pt; padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>CGST @ <%=itemGstPer/2%>%</p>
                       </td>
@@ -749,7 +759,7 @@
                       </td>
                    </tr>
                    <tr style='mso-yfti-irow:13'>
-                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
+                      <td class="border-right-lite border-bottom-lite" width=150 colspan=3 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>SGST @ <%=itemGstPer/2%>%</p>
@@ -771,7 +781,7 @@
                       </td>
                    </tr>
                    <tr style='mso-yfti-irow:13'>
-                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
+                      <td class="border-right-lite border-bottom-lite" width=150 colspan=3 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>IGST @ <%=itemGstPer%>%</p>
@@ -793,7 +803,7 @@
                       </td>
                    </tr>
                    <tr style='mso-yfti-irow:14'>
-                      <td class="border-right-lite border-bottom-lite" width=150 colspan=2 valign=top style='width:112.8pt;
+                      <td class="border-right-lite border-bottom-lite" width=150 colspan=3 valign=top style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
                          <p class="MsoNormal strongText" align=right style='margin-bottom:.0001pt;
                             text-align:right;line-height:normal'>Total GST</p>
@@ -822,7 +832,7 @@
                       style='mso-yfti-irow:15'>
                       <td width=150
                         class="border-right-lite border-bottom-lite"
-                         colspan=3
+                         colspan=4
                          valign=top
                          style='width:112.8pt;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -880,7 +890,7 @@
                            </td>
                       <td width=222
                         class="border-right-lite border-bottom"
-                         colspan=2
+                         colspan=3
                          valign=top
                          style='width:166.85pt;
                          padding:0in 5.4pt 0in 5.4pt'>
@@ -908,7 +918,7 @@
                       style='mso-yfti-irow:17;mso-yfti-lastrow:yes'>
                       <td width=740
                          class="border-bottom"
-                         colspan=5
+                         colspan=6
                          valign=top
                          style='width:555.3pt;
                          padding:0in 5.4pt 0in 5.4pt'>
