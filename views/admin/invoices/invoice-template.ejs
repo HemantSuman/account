@@ -927,7 +927,7 @@
                             normal'><span class="strongText">Total Rupees (In Words) :</span><span style='mso-spacerun:yes'>
                             </span>
                             <%=
-                               extraVar.helper.getNumber(extraVar.helper.setFloatValAfterDecimal(extraVar.results.my_model.net_amount, 2))%>
+                               extraVar.helper.getNumber(extraVar.helper.setFloatValAfterDecimal(parseFloat(extraVar.results.my_model.net_amount) + parseFloat(extraVar.results.my_model.round_off), 2))%>
                             only
                          </p>
                       </td>
