@@ -997,6 +997,8 @@ $('.date1').daterangepicker({
       transportation = 0;
     }
     let calculatedGst = parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100);
+    calculatedGst = (calculatedGst.indexOf(".") > 0) ? (Number.parseInt(calculatedGst.split(".")[1]) % 2 == 0) ? Number(calculatedGst) : Number(calculatedGst) + 0.01 : Number(calculatedGst);
+
     $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
@@ -1008,8 +1010,8 @@ $('.date1').daterangepicker({
 
         $(".sameStates").show();
         $(".diffStates").hide();
-        $(".cgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 2));
-        $(".sgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 2));
+        $(".cgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 3));
+        $(".sgstAmount").val(setFloatValAfterDecimal(calculatedGst / 2, 3));
         $(".igstAmount").val("");
       } else {
         $(".igstAmount").val(setFloatValAfterDecimal(calculatedGst, 2));

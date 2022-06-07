@@ -877,7 +877,9 @@
     if(isNaN(transportation)){
       transportation = 0;
     }
-    let calculatedGst = parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100);
+    let calculatedGst = parseFloat(((withDiscount + transportation) * gstPercentageOfItem) / 100).toString();
+    calculatedGst = (calculatedGst.indexOf(".") > 0) ? (Number.parseInt(calculatedGst.split(".")[1]) % 2 == 0) ? Number(calculatedGst) : Number(calculatedGst) + 0.01 : Number(calculatedGst);
+
     $(".totalGST").val(setFloatValAfterDecimal(calculatedGst, 2));
     let buyerGstAmt = $(".consigneeAccount option:selected").attr('gstin');
     if(typeof buyerGstAmt !== "undefined"){
